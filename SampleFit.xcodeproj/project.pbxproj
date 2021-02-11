@@ -15,6 +15,8 @@
 		F6F9DFD925D4CC4800B578B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6F9DFD725D4CC4800B578B3 /* LaunchScreen.storyboard */; };
 		F6F9DFE425D4CC4800B578B3 /* SampleFitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFE325D4CC4800B578B3 /* SampleFitTests.swift */; };
 		F6F9DFEF25D4CC4800B578B3 /* SampleFitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFEE25D4CC4800B578B3 /* SampleFitUITests.swift */; };
+		F6F9E00025D4CCB200B578B3 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFFF25D4CCB200B578B3 /* AuthenticationView.swift */; };
+		F6F9E00B25D4DCC200B578B3 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9E00A25D4DCC200B578B3 /* UserData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,9 @@
 		F6F9DFEA25D4CC4800B578B3 /* SampleFitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampleFitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6F9DFEE25D4CC4800B578B3 /* SampleFitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleFitUITests.swift; sourceTree = "<group>"; };
 		F6F9DFF025D4CC4800B578B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F6F9DFFF25D4CCB200B578B3 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		F6F9E00A25D4DCC200B578B3 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		F6F9E01B25D4EE0F00B578B3 /* SampleFit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SampleFit.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +104,13 @@
 		F6F9DFCB25D4CC4700B578B3 /* SampleFit */ = {
 			isa = PBXGroup;
 			children = (
+				F6F9E01B25D4EE0F00B578B3 /* SampleFit.entitlements */,
 				F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */,
 				F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */,
+				F6F9E00A25D4DCC200B578B3 /* UserData.swift */,
 				F6F9DFD025D4CC4700B578B3 /* ContentView.swift */,
+				F6F9DFFF25D4CCB200B578B3 /* AuthenticationView.swift */,
+				F6F9E01F25D4EE3D00B578B3 /* Supporting Views */,
 				F6F9DFD225D4CC4800B578B3 /* Assets.xcassets */,
 				F6F9DFD725D4CC4800B578B3 /* LaunchScreen.storyboard */,
 				F6F9DFDA25D4CC4800B578B3 /* Info.plist */,
@@ -134,6 +143,13 @@
 				F6F9DFF025D4CC4800B578B3 /* Info.plist */,
 			);
 			path = SampleFitUITests;
+			sourceTree = "<group>";
+		};
+		F6F9E01F25D4EE3D00B578B3 /* Supporting Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Supporting Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +284,8 @@
 			files = (
 				F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */,
 				F6F9DFCF25D4CC4700B578B3 /* SceneDelegate.swift in Sources */,
+				F6F9E00025D4CCB200B578B3 /* AuthenticationView.swift in Sources */,
+				F6F9E00B25D4DCC200B578B3 /* UserData.swift in Sources */,
 				F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,6 +454,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SampleFit/SampleFit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"SampleFit/Preview Content\"";
 				DEVELOPMENT_TEAM = CJYVMFG9D9;
@@ -457,6 +476,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SampleFit/SampleFit.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"SampleFit/Preview Content\"";
 				DEVELOPMENT_TEAM = CJYVMFG9D9;
