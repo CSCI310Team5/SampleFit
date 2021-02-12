@@ -32,6 +32,7 @@ struct SignInView: View {
                         .font(.title3)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
+                        .frame(minHeight: 44)
                 }
 
                 // password field
@@ -42,6 +43,7 @@ struct SignInView: View {
                     SecureField("Password", text: $signInInformation.password)
                         .textContentType(.newPassword)
                         .font(.title3)
+                        .frame(minHeight: 44)
                 }
                 
                 // sign in button

@@ -19,7 +19,7 @@ struct SignUpView: View {
         VStack {
             
             // Custom sign in
-            VStack(spacing: 16) {
+            VStack(spacing: 8) {
                 // username field
                 HStack(spacing: 12) {
                     Image(systemName: "person.circle")
@@ -30,6 +30,7 @@ struct SignUpView: View {
                         .font(.title3)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
+                        .frame(minHeight: 44)
                 }
                 .overlay(
                     Group {
@@ -54,6 +55,7 @@ struct SignUpView: View {
                     SecureField("Password", text: $signUpInformation.password)
                         .textContentType(.newPassword)
                         .font(.title3)
+                        .frame(minHeight: 44)
                 }
                 // repeat password field
                 HStack(spacing: 12) {
@@ -63,6 +65,7 @@ struct SignUpView: View {
                     SecureField("Repeat password", text: $signUpInformation.repeatPassword)
                         .textContentType(.newPassword)
                         .font(.title3)
+                        .frame(minHeight: 44)
                 }
                 
                 // create account button
