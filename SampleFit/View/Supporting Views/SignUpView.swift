@@ -1,17 +1,17 @@
 //
-//  AuthenticationView.swift
+//  SignUpView.swift
 //  SampleFit
 //
-//  Created by Zihan Qi on 2/10/21.
+//  Created by Zihan Qi on 2/11/21.
 //
 
 import SwiftUI
 import AuthenticationServices
 import Combine
 
-
-struct AuthenticationView: View {
+struct SignUpView: View {
     @EnvironmentObject var userData: UserData
+    @ObservedObject var signUpInformation: UserData.SignUpInformation
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
     
@@ -24,8 +24,8 @@ struct AuthenticationView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "person.circle")
                         .font(.title)
-                        .foregroundColor(userData.usernameInputStatus.color)
-                    TextField("User name", text: $userData.username)
+                        .foregroundColor(signUpInformation.usernameInputStatus.signUpColor)
+                    TextField("User name", text: $signUpInformation.username)
                         .textContentType(.username)
                         .font(.title3)
                         .autocapitalization(.none)
@@ -33,14 +33,14 @@ struct AuthenticationView: View {
                 }
                 .overlay(
                     Group {
-                        if userData.usernameInputStatus == .validating {
+                        if signUpInformation.usernameInputStatus == .validating {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle())
                         }
-                        if userData.usernameInputStatus == .invalid {
+                        if signUpInformation.usernameInputStatus == .invalid {
                             Text("Not Available")
                                 .font(Font.callout.bold())
-                                .foregroundColor(userData.usernameInputStatus.color)
+                                .foregroundColor(signUpInformation.usernameInputStatus.signUpColor)
                         }
                     }
                     .padding(.trailing, 16)
@@ -50,8 +50,8 @@ struct AuthenticationView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "lock.circle")
                         .font(Font.title)
-                        .foregroundColor(userData.passwordInputStatus.color)
-                    SecureField("Password", text: $userData.password)
+                        .foregroundColor(signUpInformation.passwordInputStatus.signUpColor)
+                    SecureField("Password", text: $signUpInformation.password)
                         .textContentType(.newPassword)
                         .font(.title3)
                 }
@@ -59,14 +59,14 @@ struct AuthenticationView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "lock.circle")
                         .font(Font.title)
-                        .foregroundColor(userData.repeatPasswordInputStatus.color)
-                    SecureField("Repeat password", text: $userData.repeatPassword)
+                        .foregroundColor(signUpInformation.repeatPasswordInputStatus.signUpColor)
+                    SecureField("Repeat password", text: $signUpInformation.repeatPassword)
                         .textContentType(.newPassword)
                         .font(.title3)
                 }
                 
                 // create account button
-                Button(action: {}) {
+                Button(action: userData.signUpUsingDefaultMethod) {
                     Text("Create Account")
                         .font(.headline)
                         .foregroundColor(Color(UIColor.systemBackground))
@@ -74,10 +74,10 @@ struct AuthenticationView: View {
                         .frame(height: 44)
                         .background(
                             RoundedRectangle(cornerRadius: 7.5)
-                                .fill(userData.userAuthenticationSignUpStatusDidValidate ? Color.green : Color.secondary)
+                                .fill(signUpInformation.allowsSignUp ? signUpInformation.passwordInputStatus.signUpColor : Color.secondary)
                         )
                 }
-                .disabled(!userData.userAuthenticationSignUpStatusDidValidate)
+                .disabled(!signUpInformation.allowsSignUp)
                 .padding(.top, 24)
             }
             .padding(.top, 60)
@@ -89,9 +89,9 @@ struct AuthenticationView: View {
             
             // Sign up with Apple
             SignInWithAppleButton(.signUp, onRequest: { (request: ASAuthorizationAppleIDRequest) in
-                request.requestedScopes = [.email, .fullName]
+                request.requestedScopes = [.fullName]
             }, onCompletion: { (result: Result<ASAuthorization, Error>) in
-                userData.signUpwithAppleDidComplete(with: result)
+                userData.signInwithAppleDidComplete(with: result)
             })
             .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
             .frame(height: 44)
@@ -99,6 +99,7 @@ struct AuthenticationView: View {
 
             Spacer()
         }
+        // detects color scheme change and re-render
         .onReceive(CurrentValueSubject<ColorScheme, Never>(colorScheme), perform: { newValue in
             self.currentColorScheme = newValue
         })
@@ -107,29 +108,28 @@ struct AuthenticationView: View {
     }
 }
 
-struct AuthenticationView_Previews: PreviewProvider {
+struct SignUpView_Previews: PreviewProvider {
+    static var userData = UserData()
     static var previews: some View {
         Group {
             NavigationView {
-                AuthenticationView()
-                    .environmentObject(UserData())
+                SignUpView(signUpInformation: userData.signUpInformation)
             }
             .previewDisplayName("Light mode")
             
             NavigationView {
-                AuthenticationView()
-                    .environmentObject(UserData())
+                SignUpView(signUpInformation: userData.signUpInformation)
             }
             .environment(\.colorScheme, .dark)
             .previewDisplayName("Dark mode")
             
             NavigationView {
-                AuthenticationView()
-                    .environmentObject(UserData())
+                SignUpView(signUpInformation: userData.signUpInformation)
             }
             .previewDevice("iPhone 8")
             .previewDisplayName("iPhone 8")
         }
+        .environmentObject(userData)
         
     }
 }
