@@ -66,6 +66,8 @@ class UserData: ObservableObject {
     var repeatPasswordInputStatus: InputStatus = .notEntered
     var userAuthenticationSignUpStatusDidValidate = false
     
+    // MARK: - Initializers
+    
     init() {
         // when user is still typing in, limit username length and update the username input status to validating
         self.usernameWillSetCancellable =
@@ -75,7 +77,7 @@ class UserData: ObservableObject {
             .sink { [unowned self] newValue in
                 usernameInputStatus = .validating
                 _username = newValue
-                objectWillChange.send()
+                evaluateUserAuthenticationSignUpStatus()
             }
         
         // only validate username 1 second after user stopped typing
@@ -88,6 +90,8 @@ class UserData: ObservableObject {
                 self.validateUsername(newValue)
             }
     }
+    
+    // MARK: - Instance methods
     
     func validateUsername(_ newUsername: String) {
         

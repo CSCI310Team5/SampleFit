@@ -114,18 +114,21 @@ struct AuthenticationView_Previews: PreviewProvider {
                 AuthenticationView()
                     .environmentObject(UserData())
             }
+            .previewDisplayName("Light mode")
             
             NavigationView {
                 AuthenticationView()
                     .environmentObject(UserData())
             }
             .environment(\.colorScheme, .dark)
+            .previewDisplayName("Dark mode")
             
             NavigationView {
                 AuthenticationView()
                     .environmentObject(UserData())
             }
             .previewDevice("iPhone 8")
+            .previewDisplayName("iPhone 8")
         }
         
     }
