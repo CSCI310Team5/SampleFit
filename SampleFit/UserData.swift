@@ -10,17 +10,24 @@ import Combine
 import SwiftUI
 import AuthenticationServices
 
-/// Stores relavant information about the user
+/// Stores relavant information about the user.
 class UserData: ObservableObject {
+    
+    // MARK: Instance properties
+    
+    /// Notifies SwiftUI to re-render UI because of a data change.
+    var objectWillChange = ObservableObjectPublisher()
+    
     /// Indicates the input status of an entry of user information like username, password, etc.
     enum InputStatus {
         case notEntered
+        case validating
         case valid
         case invalid
         /// Color that represents the input status.
-        var imageColor: Color {
+        var color: Color {
             switch self {
-            case .notEntered:
+            case .notEntered, .validating:
                 return Color.primary
             case .valid:
                 return Color.green
@@ -29,29 +36,62 @@ class UserData: ObservableObject {
             }
         }
     }
-
-    @Published var username: String = "" {
-        willSet {
-            usernameWillSet(newValue)
+    
+    private var _username: String = ""
+    var username: String {
+        get { return _username }
+        set {
+            objectWillChange.send()
+            usernamePassthroughSubject.send(newValue)
+            
         }
     }
-    @Published var password: String = "" {
+    private let usernamePassthroughSubject = PassthroughSubject<String, Never>()
+    private var usernameWillSetCancellable: AnyCancellable?
+    private var usernameShouldValidateCancellable: AnyCancellable?
+    
+    var password: String = "" {
         willSet {
-            passwordWillSet(newValue)
+            validatePassword(newValue)
         }
     }
-    @Published var repeatPassword: String = "" {
+    var repeatPassword: String = "" {
         willSet {
-            repeatPasswordWillSet(newValue)
+            validateRepeatPassword(newValue)
         }
     }
     
-    @Published var usernameInputStatus: InputStatus = .notEntered
-    @Published var passwordInputStatus: InputStatus = .notEntered
-    @Published var repeatPasswordInputStatus: InputStatus = .notEntered
-    @Published var userAuthenticationSignUpStatusDidValidate = false
+    var usernameInputStatus: InputStatus = .notEntered
+    var passwordInputStatus: InputStatus = .notEntered
+    var repeatPasswordInputStatus: InputStatus = .notEntered
+    var userAuthenticationSignUpStatusDidValidate = false
     
-    func usernameWillSet(_ newUsername: String) {
+    init() {
+        // when user is still typing in, limit username length and update the username input status to validating
+        self.usernameWillSetCancellable =
+            usernamePassthroughSubject
+            .filter { $0.count < 16 }
+            .removeDuplicates()
+            .sink { [unowned self] newValue in
+                usernameInputStatus = .validating
+                _username = newValue
+                objectWillChange.send()
+            }
+        
+        // only validate username 1 second after user stopped typing
+        self.usernameShouldValidateCancellable =
+            usernamePassthroughSubject
+            .filter { $0.count < 16 }
+            .removeDuplicates()
+            .debounce(for: .seconds(1.0), scheduler: DispatchQueue.global())
+            .sink { newValue in
+                self.validateUsername(newValue)
+            }
+    }
+    
+    func validateUsername(_ newUsername: String) {
+        
+        // TODO: Check with backend to validate username
         if newUsername.count > 4 {
             usernameInputStatus = .valid
         } else {
@@ -61,7 +101,7 @@ class UserData: ObservableObject {
         evaluateUserAuthenticationSignUpStatus()
     }
     
-    func passwordWillSet(_ newPassword: String) {
+    func validatePassword(_ newPassword: String) {
         if !newPassword.isEmpty {
             passwordInputStatus = .valid
         } else {
@@ -81,7 +121,7 @@ class UserData: ObservableObject {
         evaluateUserAuthenticationSignUpStatus()
     }
         
-    func repeatPasswordWillSet(_ newRepeatPassword: String) {
+    func validateRepeatPassword(_ newRepeatPassword: String) {
         if password == newRepeatPassword {
             repeatPasswordInputStatus = .valid
         } else {
@@ -96,6 +136,8 @@ class UserData: ObservableObject {
         userAuthenticationSignUpStatusDidValidate = usernameInputStatus == .valid
             && passwordInputStatus == .valid
             && repeatPasswordInputStatus == .valid
+        
+        publishChangeOnMainThread()
     }
     
     func signUpwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
@@ -126,4 +168,14 @@ class UserData: ObservableObject {
         }
     }
     
+}
+
+// MARK: - Helpers
+
+extension UserData {
+    private func publishChangeOnMainThread() {
+        DispatchQueue.main.async {
+            self.objectWillChange.send()
+        }
+    }
 }

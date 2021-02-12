@@ -24,17 +24,33 @@ struct AuthenticationView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "person.circle")
                         .font(.title)
-                        .foregroundColor(userData.usernameInputStatus.imageColor)
+                        .foregroundColor(userData.usernameInputStatus.color)
                     TextField("User name", text: $userData.username)
                         .textContentType(.username)
                         .font(.title3)
+                        .autocapitalization(.none)
                         .disableAutocorrection(true)
                 }
+                .overlay(
+                    Group {
+                        if userData.usernameInputStatus == .validating {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                        }
+                        if userData.usernameInputStatus == .invalid {
+                            Text("Not Available")
+                                .font(Font.callout.bold())
+                                .foregroundColor(userData.usernameInputStatus.color)
+                        }
+                    }
+                    .padding(.trailing, 16)
+                    
+                , alignment: .trailing)
                 // password field
                 HStack(spacing: 12) {
                     Image(systemName: "lock.circle")
                         .font(Font.title)
-                        .foregroundColor(userData.passwordInputStatus.imageColor)
+                        .foregroundColor(userData.passwordInputStatus.color)
                     SecureField("Password", text: $userData.password)
                         .textContentType(.newPassword)
                         .font(.title3)
@@ -43,7 +59,7 @@ struct AuthenticationView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "lock.circle")
                         .font(Font.title)
-                        .foregroundColor(userData.repeatPasswordInputStatus.imageColor)
+                        .foregroundColor(userData.repeatPasswordInputStatus.color)
                     SecureField("Repeat password", text: $userData.repeatPassword)
                         .textContentType(.newPassword)
                         .font(.title3)
