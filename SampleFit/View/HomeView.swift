@@ -25,7 +25,12 @@ struct HomeView: View {
                 }
                 .tag(Tab.browse)
             
-            Text("Me")
+            NavigationView {
+                VStack {
+                    Text("Me")
+                    Button("Sign out", action: userData.signOut)
+                }
+            }
                 .tabItem {
                     Label("Me", systemImage: "person")
                 }

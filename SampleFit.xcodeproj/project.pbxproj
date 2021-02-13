@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F61BA67425D6205D00249ED1 /* SignInStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA67325D6205D00249ED1 /* SignInStatus.swift */; };
-		F61BA67F25D6305C00249ED1 /* NavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA67E25D6305C00249ED1 /* NavigationState.swift */; };
 		F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA69125D6358F00249ED1 /* HomeView.swift */; };
 		F61BA69725D639AF00249ED1 /* MultiplePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA69625D639AF00249ED1 /* MultiplePreview.swift */; };
 		F61BA6A225D6407D00249ED1 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA6A125D6407D00249ED1 /* BrowseView.swift */; };
@@ -17,6 +16,7 @@
 		F61BA6B825D75D5E00249ED1 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA6B725D75D5E00249ED1 /* SearchView.swift */; };
 		F61BA6C325D7795C00249ED1 /* Color+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA6C225D7795C00249ED1 /* Color+Helpers.swift */; };
 		F61BA6CB25D7870100249ED1 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61BA6CA25D7870100249ED1 /* SearchBar.swift */; };
+		F6597BA925D7CEE00069EB4B /* NavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6597BA825D7CEE00069EB4B /* NavigationState.swift */; };
 		F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3BA25D5F9630023D250 /* TestView.swift */; };
 		F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */; };
 		F6C7A3CD25D613F70023D250 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3CC25D613F70023D250 /* SignUpView.swift */; };
@@ -52,7 +52,6 @@
 
 /* Begin PBXFileReference section */
 		F61BA67325D6205D00249ED1 /* SignInStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInStatus.swift; sourceTree = "<group>"; };
-		F61BA67E25D6305C00249ED1 /* NavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationState.swift; sourceTree = "<group>"; };
 		F61BA69125D6358F00249ED1 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F61BA69625D639AF00249ED1 /* MultiplePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiplePreview.swift; sourceTree = "<group>"; };
 		F61BA6A125D6407D00249ED1 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
@@ -62,6 +61,7 @@
 		F61BA6B725D75D5E00249ED1 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		F61BA6C225D7795C00249ED1 /* Color+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Helpers.swift"; sourceTree = "<group>"; };
 		F61BA6CA25D7870100249ED1 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		F6597BA825D7CEE00069EB4B /* NavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationState.swift; sourceTree = "<group>"; };
 		F6C7A3BA25D5F9630023D250 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataEntryStatus.swift; sourceTree = "<group>"; };
 		F6C7A3CC25D613F70023D250 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
@@ -124,7 +124,7 @@
 				F6F9E00A25D4DCC200B578B3 /* UserData.swift */,
 				F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */,
 				F61BA67325D6205D00249ED1 /* SignInStatus.swift */,
-				F61BA67E25D6305C00249ED1 /* NavigationState.swift */,
+				F6597BA825D7CEE00069EB4B /* NavigationState.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -351,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6C7A3D225D616BC0023D250 /* SignInView.swift in Sources */,
+				F6597BA925D7CEE00069EB4B /* NavigationState.swift in Sources */,
 				F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */,
 				F61BA6AF25D643CD00249ED1 /* ExerciseCategoryRow.swift in Sources */,
 				F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */,
@@ -359,7 +360,6 @@
 				F61BA6B825D75D5E00249ED1 /* SearchView.swift in Sources */,
 				F61BA6C325D7795C00249ED1 /* Color+Helpers.swift in Sources */,
 				F6F9E00025D4CCB200B578B3 /* AuthenticationView.swift in Sources */,
-				F61BA67F25D6305C00249ED1 /* NavigationState.swift in Sources */,
 				F6C7A3CD25D613F70023D250 /* SignUpView.swift in Sources */,
 				F6F9E00B25D4DCC200B578B3 /* UserData.swift in Sources */,
 				F61BA67425D6205D00249ED1 /* SignInStatus.swift in Sources */,

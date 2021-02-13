@@ -31,7 +31,7 @@ enum DataEntryStatus {
         case .notEntered, .validating:
             return Color.primary
         case .valid:
-            return Color.blue
+            return Color.accentColor
         case .invalid:
             return Color.red
         }

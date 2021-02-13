@@ -190,9 +190,9 @@ class UserData: ObservableObject {
     }
     
     // MARK: - Navigation
-    var shouldPresentMainView: Bool {
-        get { return signInStatus == .signedIn }
-        set {  }
+    var shouldPresentAuthenticationView: Bool {
+        get { return signInStatus != .signedIn }
+        set {}
     }
     
     // MARK: - Sign in/out methods

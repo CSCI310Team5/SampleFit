@@ -23,14 +23,6 @@ struct AuthenticationView: View {
                     SignInView(signInInformation: userData.signInInformation)
                 }
             }
-            // controls navigation if user is signed in
-            NavigationLink(
-                "Sign In",
-                destination: HomeView().environmentObject(userData),
-                isActive: $userData.shouldPresentMainView
-            )
-            .frame(width: 0, height: 0)
-            
             
         }
         

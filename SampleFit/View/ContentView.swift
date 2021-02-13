@@ -11,9 +11,20 @@ struct ContentView: View {
     @StateObject var userData = UserData()
 
     var body: some View {
-        HomeView()
-            .environmentObject(userData)
-            .accentColor(.systemBlue)
+        // showing either the authentication or the home view
+        if userData.shouldPresentAuthenticationView {
+            NavigationView {
+                AuthenticationView()
+                    .environmentObject(userData)
+                    .accentColor(.systemBlue)
+            }
+            
+        } else {
+            HomeView()
+                .environmentObject(userData)
+                .transition(.opacity)
+        }
+            
     }
 }
 

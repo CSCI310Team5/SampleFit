@@ -61,14 +61,26 @@ struct SearchView: View {
                                     ) {
                                         // section content
                                         ForEach(0...10, id: \.self) { count in
-                                            Button(action: { text = "Category \(count)" }) {
-                                                Text("Category \(count)")
-                                                    .padding(.top, count == 0 ? 4 : 0)
-                                                    .frame(height: 28)
-                                                    .foregroundColor(.accentColor)
+                                            VStack {
+                                                Button(action: { text = "Category \(count)" }) {
+                                                    VStack {
+                                                        Spacer()
+                                                        HStack {
+                                                            Text("Category \(count)")
+                                                                .foregroundColor(.accentColor)
+                                                            Spacer()
+                                                        }
+                                                        Spacer()
+                                                    }
+    //                                                .border(Color.red)
+                                                }
+                                                .frame(minHeight: 44)
+                                                
+                                                
+                                                Divider()
                                             }
+//                                            .padding(.top, count == 0 ? 4 : 0)
                                             
-                                            Divider()
                                             
                                         }
                                         .padding(.leading, 24)
