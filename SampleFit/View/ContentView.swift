@@ -11,18 +11,19 @@ struct ContentView: View {
     @StateObject var userData = UserData()
 
     var body: some View {
-        NavigationView {
-            AuthenticationView()
-                .environmentObject(userData)
-        }
+        HomeView()
+            .environmentObject(userData)
+            .accentColor(.systemBlue)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
+    static var userData = UserData()
+    
     static var previews: some View {
-        NavigationView {
+        MultiplePreview(embedInNavigationView: false) {
             ContentView()
-                .environmentObject(UserData())
         }
+        .environmentObject(userData)
     }
 }

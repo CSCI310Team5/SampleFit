@@ -93,23 +93,9 @@ struct SignInView_Previews: PreviewProvider {
     static var userData = UserData()
 
     static var previews: some View {
-        Group {
-            NavigationView {
-                SignInView(signInInformation: userData.signInInformation)
-            }
-            .previewDisplayName("Light mode")
-            
-            NavigationView {
-                SignInView(signInInformation: userData.signInInformation)
-            }
-            .environment(\.colorScheme, .dark)
-            .previewDisplayName("Dark mode")
-            
-            NavigationView {
-                SignInView(signInInformation: userData.signInInformation)
-            }
-            .previewDevice("iPhone 8")
-            .previewDisplayName("iPhone 8")
+        MultiplePreview(embedInNavigationView: true) {
+            SignInView(signInInformation: userData.signInInformation)
+
         }
         .environmentObject(userData)
     }
