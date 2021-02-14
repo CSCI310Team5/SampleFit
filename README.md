@@ -6,8 +6,8 @@ The app is written in Swift 5.3. This apps uses SwiftUI as the main UI Frameowor
 
 ## System Requirement
 
-### MacOS: This project should be built and run on macOS Big Sur 11.0+, Xcode 12.0+.
-### Windows: The app itself cannot be run on Windows. However, some data model can be compiled if it includes only the Foundation framework and that the Windows machine has Swift 5 compiler installed.
+MacOS: This project should be built and run on macOS Big Sur 11.0+, Xcode 12.0+.
+Windows: The app itself cannot be run on Windows. However, some data model can be compiled if it includes only the Foundation framework and that the Windows machine has Swift 5 compiler installed.
 
 
 # Tasks
