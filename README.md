@@ -23,8 +23,8 @@ We need to setup a backend with database to:
 
 ## Authentication
 
-In `UserData.swift`, several functions are marked with a `// TODO: ` comment. We need to implement networking code (preferrably using `URLSession` to talk to the backend to do actual authentication.)\n
-Recommended Documentation: 
+In `UserData.swift`, several functions are marked with a `// TODO: ` comment. We need to implement networking code (preferrably using `URLSession` to talk to the backend to do actual authentication.)  
+Recommended Documentation:  
 [Apple Developer Documentation: URLSession](https://developer.apple.com/documentation/foundation/url_loading_system)
 
 
@@ -33,7 +33,7 @@ Recommended Documentation:
 All other parts, except authentication, are still a prototype, i.e. fake. We need to implement each part to make it real.
 
 ### Writing data models:
-This app uses Swift as the language for data models. Feel free to check out the Swift files located in  `SampleFit/Model`. \n
+This app uses Swift as the language for data models. Feel free to check out the Swift files located in  `SampleFit/Model`.  
 To learn more about Swift, check out [The Swift Programming Language Guide](https://docs.swift.org/swift-book/GuidedTour/GuidedTour.html). A Swift Tour section can quickly ramp you up on core language features, and the Language Guide section describes language syntax in details.
 Converting between JSON data and our own data models is an essential task. To learn more about how to do this, check out [Apple Developer Documentation: Encoding and Decoding Custom Types](https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types)
 
