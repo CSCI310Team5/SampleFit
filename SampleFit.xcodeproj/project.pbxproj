@@ -122,8 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				F6F9E00A25D4DCC200B578B3 /* UserData.swift */,
-				F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */,
 				F61BA67325D6205D00249ED1 /* SignInStatus.swift */,
+				F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */,
 				F6597BA825D7CEE00069EB4B /* NavigationState.swift */,
 			);
 			path = Model;

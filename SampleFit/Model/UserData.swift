@@ -72,7 +72,7 @@ class UserData: ObservableObject {
         }
         
         
-        func validateUsername(_ newUsername: String) {
+        private func validateUsername(_ newUsername: String) {
             
             // TODO: Check with backend to validate username
             if newUsername.count > 4 {
@@ -84,7 +84,7 @@ class UserData: ObservableObject {
             evaluateIfUserIsAllowedToSignUp()
         }
         
-        func validatePassword(_ newPassword: String) {
+        private func validatePassword(_ newPassword: String) {
             if !newPassword.isEmpty {
                 passwordInputStatus = .valid
             } else {
@@ -104,7 +104,7 @@ class UserData: ObservableObject {
             evaluateIfUserIsAllowedToSignUp()
         }
             
-        func validateRepeatPassword(_ newRepeatPassword: String) {
+        private func validateRepeatPassword(_ newRepeatPassword: String) {
             if password == newRepeatPassword {
                 repeatPasswordInputStatus = .valid
             } else {
@@ -147,12 +147,12 @@ class UserData: ObservableObject {
         @Published var passwordInputStatus: DataEntryStatus = .notEntered
         @Published var allowsSignIn = false
         
-        func validateUsername(_ newUsername: String) {
+        private func validateUsername(_ newUsername: String) {
             usernameInputStatus = !newUsername.isEmpty ? .valid : .invalid
             evaluateIfUserIsAllowedToSignIn()
         }
         
-        func validatePassword(_ newPassword: String) {
+        private func validatePassword(_ newPassword: String) {
             passwordInputStatus = !newPassword.isEmpty ? .valid : .invalid
             evaluateIfUserIsAllowedToSignIn()
         }
