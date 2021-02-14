@@ -41,9 +41,9 @@ Converting between JSON data and our own data models is an essential task. To le
 To learn more about Swift, check out [The Swift Programming Language Guide](https://docs.swift.org/swift-book/GuidedTour/GuidedTour.html). A Swift Tour section can quickly ramp you up on core language features, and the Language Guide section describes language syntax in details.
 
 ### Writing user interfaces:
-This app uses SwiftUI as the UI framework. If you are familar with React, SwiftUI can be a easier to pick up. To learn more about SwiftUI, check out [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui/)
+This app uses SwiftUI as the UI framework. If you are familar with React, SwiftUI can be easier to pick up. To learn more about SwiftUI, check out [SwiftUI Tutorials](https://developer.apple.com/tutorials/swiftui/)
 and [iOS App Dev with SwiftUI](https://developer.apple.com/tutorials/app-dev-training)
 
-You can also use UIKit and Storyboard to create user interface for an iOS app since UIKit and SwiftUI can be intergrated in the same app. However, implementing complex interfaces can be more challenging with UIKit. Integration work will also need to be done in the end. To develop user interface in UIKit, check out tutorials on UIKit, Storyboard, and AutoLayout.
+You can also use UIKit and Storyboard to create user interface for an iOS app. However, implementing complex interfaces can be more challenging with UIKit. Integrating UIKit interfaces into the app will require some work. To develop user interface in UIKit, check out tutorials on UIKit, Storyboard, and AutoLayout.
 
 
