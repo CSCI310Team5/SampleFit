@@ -38,6 +38,7 @@ class UserData: ObservableObject {
             objectWillChange.send()
         }
     }
+    var networkQueryController = NetworkQueryController()
     
     // MARK: - Navigation
     var shouldPresentAuthenticationView: Bool {
@@ -45,7 +46,7 @@ class UserData: ObservableObject {
         set {}
     }
     
-    // MARK: - Sign in/out methods
+    // MARK: - Sign in/out
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -75,19 +76,27 @@ class UserData: ObservableObject {
     /// Runs when the user chooses to sign up using default method.
     func signUpUsingDefaultMethod() {
         print("creating account using default method...")
-        // TODO: Create account over the network
         
-        // FIXME: Assuming success for now
-        storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signUpInformation.username)
+        networkQueryController.createAccount(using: signUpInformation) { [unowned self] (success) in 
+            if success {
+                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signUpInformation.username)
+            } else {
+                print("Create account failed")
+            }
+        }
     }
     
     /// Runs when the user chooses to sign in using default method.
     func signInUsingDefaultMethod() {
         print("signing in using default method...")
-        // TODO: Sign in over the network
         
-        // FIXME: Assuming success for now
-        storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
+        networkQueryController.signIn(using: signInInformation) { [unowned self] (success) in
+            if success {
+                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
+            } else {
+                print("Sign in failed")
+            }
+        }
     }
     
     /// Runs when the user chooses to sign out.

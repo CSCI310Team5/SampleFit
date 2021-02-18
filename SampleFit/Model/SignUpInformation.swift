@@ -19,13 +19,13 @@ class SignUpInformation: ObservableObject {
         get { return _username }
         set {
             objectWillChange.send()
-            usernamePassthroughSubject.send(newValue)
+            _usernamePassthroughSubject.send(newValue)
             
         }
     }
-    private let usernamePassthroughSubject = PassthroughSubject<String, Never>()
-    private var usernameWillSetCancellable: AnyCancellable?
-    private var usernameShouldValidateCancellable: AnyCancellable?
+    private let _usernamePassthroughSubject = PassthroughSubject<String, Never>()
+    private var _usernameWillSetCancellable: AnyCancellable?
+    private var _usernameShouldValidateCancellable: AnyCancellable?
     
     var password: String = "" {
         willSet {
@@ -45,8 +45,8 @@ class SignUpInformation: ObservableObject {
             
     init() {
         // when user is still typing in, limit username length and update the username input status to validating
-        self.usernameWillSetCancellable =
-            usernamePassthroughSubject
+        self._usernameWillSetCancellable =
+            _usernamePassthroughSubject
             .filter { $0.count < 16 }
             .removeDuplicates()
             .sink { [unowned self] newValue in
@@ -56,8 +56,8 @@ class SignUpInformation: ObservableObject {
             }
         
         // only validate username 1 second after user stopped typing
-        self.usernameShouldValidateCancellable =
-            usernamePassthroughSubject
+        self._usernameShouldValidateCancellable =
+            _usernamePassthroughSubject
             .filter { $0.count < 16 }
             .removeDuplicates()
             .debounce(for: .seconds(1.0), scheduler: DispatchQueue.global())
