@@ -13,7 +13,7 @@ import Combine
 
 struct SignInView: View {
     @EnvironmentObject var userData: UserData
-    @ObservedObject var signInInformation: UserData.SignInInformation
+    @ObservedObject var signInInformation: SignInInformation
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
     

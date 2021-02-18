@@ -11,7 +11,7 @@ import Combine
 
 struct SignUpView: View {
     @EnvironmentObject var userData: UserData
-    @ObservedObject var signUpInformation: UserData.SignUpInformation
+    @ObservedObject var signUpInformation: SignUpInformation
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
     
