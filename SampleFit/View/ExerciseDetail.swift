@@ -78,13 +78,23 @@ struct ExerciseDetail: View {
                     Button(action: { withAnimation {isWorkingout.toggle()} }) {
                         Group {
                             if isWorkingout {
-                                Text("End Workout")
+                                HStack {
+                                    Image(systemName: "pause.circle.fill")
+                                        .font(.title3)
+                                    Text("End Workout")
+                                }
+                                
                             } else {
-                                Text("Start Workout")
+                                HStack {
+                                    Image(systemName: "play.circle.fill")
+                                        .font(.title3)
+                                    Text("Start Workout")
+                                }
                             }
                         }
                         .font(.headline)
                         .foregroundColor(Color.systemBackground)
+                        .padding(.horizontal, 100)
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .frame(height: 44)
                         .background(

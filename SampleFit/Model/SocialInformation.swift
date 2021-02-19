@@ -15,6 +15,16 @@ class SocialInformation: ObservableObject {
     @PublishedCollection var exerciseFeeds: [Exercise] = Exercise.sampleExercisesSmall
     private var exerciseFeedsWillChangeCancellable: AnyCancellable?
     
+    init() {
+        exerciseFeedsWillChangeCancellable = $exerciseFeeds.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { _ in
+            self.objectWillChange.send()
+        }
+    }
+}
+
+// MARK: - View Model
+
+extension SocialInformation {
     /// Exercise feed structured by category.
     var exerciseInCategory: [Exercise.Category: [Exercise]] {
         get {
@@ -29,12 +39,6 @@ class SocialInformation: ObservableObject {
             return [exerciseFeeds.first!]
         } else {
             return liveExercises
-        }
-    }
-    
-    init() {
-        exerciseFeedsWillChangeCancellable = $exerciseFeeds.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { _ in
-            self.objectWillChange.send()
         }
     }
 }

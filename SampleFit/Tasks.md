@@ -6,15 +6,12 @@
 2. Implement a List for Quick Browse By Category
 3. Either Search using search bar or by using quick browse by category, we should return search results (using some kind of a search filter)
 
+## Authentication
+1. Tapping on sign in / create account should change status to validating, and should display this status to the user (maybe activity indicator on the button and disable it?)
 
 ## Browse
 
-1. Reorganize browse data and data flow
-2. Tapping on a category item should navigate to a detail page
-3. Detail page should:
-    a. allow video playback
-    b. allow user to start exercise with this video
-    c. allow user to "save / like"
+1. Save and start exercise should be really calling functions
     
     
 ## Search Tab
