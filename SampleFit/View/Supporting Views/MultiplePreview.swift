@@ -32,8 +32,8 @@ struct MultiplePreview<Content>: View where Content: View {
                 NavigationView {
                     content
                 }
-                .previewDevice("iPhone 8")
-                .previewDisplayName("iPhone 8")
+                .previewDevice("iPhone SE (2nd generation)")
+                .previewDisplayName("iPhone SE")
             }
         } else {
             Group {
@@ -45,8 +45,8 @@ struct MultiplePreview<Content>: View where Content: View {
                     .previewDisplayName("Dark mode")
                 
                 content
-                    .previewDevice("iPhone 8")
-                    .previewDisplayName("iPhone 8")
+                    .previewDevice("iPhone SE (2nd generation)")
+                    .previewDisplayName("iPhone SE")
             }
         }
     }

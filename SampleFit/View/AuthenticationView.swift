@@ -16,10 +16,10 @@ struct AuthenticationView: View {
         VStack {
             // either sign in view or sign up view
             Group {
-                if userData.signInStatus == .never {
+                if userData.signInStatus == .never || userData.signInStatus == .validatingFirstTime {
                     CreateAccountView(createAccountInformation: userData.createAccountInformation)
                 }
-                if userData.signInStatus == .signedOut {
+                if userData.signInStatus == .signedOut || userData.signInStatus == .validating {
                     SignInView(signInInformation: userData.signInInformation)
                 }
             }

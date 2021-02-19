@@ -66,6 +66,7 @@ class UserData: ObservableObject {
     /// Runs when the user chooses to sign up using default method.
     func createAccountUsingDefaultMethod() {
         print("creating account using default method...")
+        signInStatus = .validatingFirstTime
         
         networkQueryController.createAccount(using: createAccountInformation) { [unowned self] (success) in 
             if success {
@@ -79,6 +80,7 @@ class UserData: ObservableObject {
     /// Runs when the user chooses to sign in using default method.
     func signInUsingDefaultMethod() {
         print("signing in using default method...")
+        signInStatus = .validating
         
         networkQueryController.signIn(using: signInInformation) { [unowned self] (success) in
             if success {

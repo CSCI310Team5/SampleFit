@@ -10,7 +10,8 @@ import SwiftUI
 struct PlaceholderImage: View {
     var body: some View {
         Rectangle()
-            .fill(Color.allColors.randomElement()!.opacity(Double.random(in: 0.5...1)))
+            .fill(Color.allColors.randomElement()!)
+            .opacity(Double.random(in: 0.2...0.5))
 
     }
 }

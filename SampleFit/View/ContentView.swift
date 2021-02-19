@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var userData = UserData.signedInUserData
+    @StateObject var userData = UserData()
 
     var body: some View {
         // showing either the authentication or the home view

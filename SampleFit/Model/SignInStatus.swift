@@ -10,6 +10,7 @@ import Foundation
 /// Indicates the sign in status.
 enum SignInStatus {
     case never
+    case validatingFirstTime
     case validating
     case signedIn
     case signedOut

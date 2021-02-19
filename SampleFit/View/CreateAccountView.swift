@@ -70,17 +70,25 @@ struct CreateAccountView: View {
                 
                 // create account button
                 Button(action: userData.createAccountUsingDefaultMethod) {
-                    Text("Create Account")
-                        .font(.headline)
-                        .foregroundColor(Color(UIColor.systemBackground))
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(
-                            RoundedRectangle(cornerRadius: 7.5)
-                                .fill(createAccountInformation.allowsSignUp ? createAccountInformation.passwordInputStatus.signUpColor : Color.secondary)
-                        )
+                    Group {
+                        if userData.signInStatus != .validatingFirstTime {
+                            Text("Create Account")
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .padding(.vertical)
+                        }
+                    }
+                    .font(.headline)
+                    .foregroundColor(Color(UIColor.systemBackground))
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(
+                        RoundedRectangle(cornerRadius: 7.5)
+                            .fill(createAccountInformation.allowsSignUp ? createAccountInformation.passwordInputStatus.signUpColor : Color.secondary)
+                    )
                 }
-                .disabled(!createAccountInformation.allowsSignUp)
+                .disabled(!createAccountInformation.allowsSignUp || userData.signInStatus == .validatingFirstTime)
                 .padding(.top, 24)
             }
             .padding(.top, 60)
@@ -99,6 +107,7 @@ struct CreateAccountView: View {
             .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
             .frame(height: 44)
             .id(currentColorScheme.hashValue)
+            .disabled(!createAccountInformation.allowsSignUp || userData.signInStatus == .validating)
 
             Spacer()
         }

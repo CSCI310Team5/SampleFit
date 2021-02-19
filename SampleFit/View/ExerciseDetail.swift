@@ -43,7 +43,7 @@ struct ExerciseDetail: View {
                                 .padding(.bottom, 8)
                             
                             if exercise.playbackType == .recordedVideo {
-                                Text(exercise.description)
+                                Text(exercise.durationDescription)
                             } else {
                                 HStack(spacing: 6) {
                                     LiveIndicator()
@@ -94,9 +94,9 @@ struct ExerciseDetail: View {
                         }
                         .font(.headline)
                         .foregroundColor(Color.systemBackground)
-                        .padding(.horizontal, 100)
+                        .frame(minWidth: 100, maxWidth: 150)
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .frame(height: 44)
+                        .frame(height: 50)
                         .background(
                             RoundedRectangle(cornerRadius: 7.5)
                                 .fill(Color.accentColor)
@@ -107,6 +107,9 @@ struct ExerciseDetail: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
+                
+                Divider()
+                    .padding(.horizontal, 20)
                 
                 // description
                 Text(exercise.description)
@@ -123,7 +126,7 @@ struct ExerciseDetail: View {
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
-    @ObservedObject static var exercise: Exercise = Exercise.sampleExercisesFull[12]
+    @ObservedObject static var exercise: Exercise = Exercise.sampleExercisesFull[10]
 
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {

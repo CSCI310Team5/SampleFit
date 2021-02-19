@@ -48,7 +48,15 @@ struct SignInView: View {
                 
                 // sign in button
                 Button(action: userData.signInUsingDefaultMethod) {
-                    Text("Sign In")
+                    Group {
+                        if userData.signInStatus != .validating {
+                            Text("Sign In")
+                        } else {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                                .padding(.vertical)
+                        }
+                    }
                         .font(.headline)
                         .foregroundColor(Color(UIColor.systemBackground))
                         .frame(minWidth: 0, maxWidth: .infinity)
@@ -58,7 +66,7 @@ struct SignInView: View {
                                 .fill(signInInformation.allowsSignIn ? signInInformation.passwordInputStatus.signInColor : Color.secondary)
                         )
                 }
-                .disabled(!signInInformation.allowsSignIn)
+                .disabled(!signInInformation.allowsSignIn || userData.signInStatus == .validating)
                 .padding(.top, 24)
             }
             .padding(.top, 60)
@@ -77,6 +85,7 @@ struct SignInView: View {
             .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
             .frame(height: 44)
             .id(currentColorScheme.hashValue)
+            .disabled(userData.signInStatus == .validating)
 
             Spacer()
         }

@@ -36,14 +36,20 @@ struct FeaturedExercisesView: View {
         NavigationLink(destination: ExerciseDetail(exercise: exercises[0])) {
             Group {
                 if exercises[0].image != nil {
-                    exercises[0].image!
+                    ZStack {
+                        exercises[0].image!
+                        
+                        // tint
+                        Rectangle()
+                            .fill(Color.white.opacity(0.3))
+                    }
                 } else {
                     PlaceholderImage()
+                        
                 }
             }
-            
             .frame(height: 200, alignment: .bottom)
-            .frame(maxWidth: .infinity)
+            .frame(width: UIScreen.main.bounds.width)
 
             .listRowInsets(EdgeInsets())
             .overlay(
@@ -70,14 +76,12 @@ struct FeaturedExercisesView: View {
                     }
                     .foregroundColor(.white)
                     .padding()
-                    
-                    
-                    
                 }
                 .frame(width: UIScreen.main.bounds.width)
             ,alignment: .bottomLeading)
         }
-        .edgesIgnoringSafeArea(.all)
+        .buttonStyle(PlainButtonStyle())
+//        .edgesIgnoringSafeArea(.all)
     }
 }
 
