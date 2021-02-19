@@ -23,7 +23,7 @@ We need to setup a backend with database to:
 
 ## Authentication
 
-In `UserData.swift`, several functions are marked with a `// TODO: ` comment. We need to implement networking code in these functions (preferrably using `URLSession` to talk to the backend to do actual authentication.)  
+In `NetworkQueryController.swift`, several functions are marked with a `// FIXME: ` comment. We need to implement networking code in these functions (preferrably using `URLSession` to talk to the backend to do actual authentication.)  
 Recommended Documentation:  
 [Apple Developer Documentation: URLSession](https://developer.apple.com/documentation/foundation/url_loading_system)
 
