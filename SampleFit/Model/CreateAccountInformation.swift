@@ -1,5 +1,5 @@
 //
-//  SignUpInformation.swift
+//  CreateAccountInformation.swift
 //  SampleFit
 //
 //  Created by Zihan Qi on 2/17/21.
@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 /// Stores information during sign up.
-class SignUpInformation: ObservableObject {
+class CreateAccountInformation: ObservableObject {
     
     /// Notifies SwiftUI to re-render UI because of a data change.
     var objectWillChange = ObservableObjectPublisher()

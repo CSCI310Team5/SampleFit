@@ -1,5 +1,5 @@
 //
-//  SignUpView.swift
+//  CreateAccountView.swift
 //  SampleFit
 //
 //  Created by Zihan Qi on 2/11/21.
@@ -9,9 +9,9 @@ import SwiftUI
 import AuthenticationServices
 import Combine
 
-struct SignUpView: View {
+struct CreateAccountView: View {
     @EnvironmentObject var userData: UserData
-    @ObservedObject var signUpInformation: SignUpInformation
+    @ObservedObject var createAccountInformation: CreateAccountInformation
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
     
@@ -24,8 +24,8 @@ struct SignUpView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "person.circle")
                         .font(.title)
-                        .foregroundColor(signUpInformation.usernameInputStatus.signUpColor)
-                    TextField("User name", text: $signUpInformation.username)
+                        .foregroundColor(createAccountInformation.usernameInputStatus.signUpColor)
+                    TextField("User name", text: $createAccountInformation.username)
                         .textContentType(.username)
                         .font(.title3)
                         .autocapitalization(.none)
@@ -34,14 +34,14 @@ struct SignUpView: View {
                 }
                 .overlay(
                     Group {
-                        if signUpInformation.usernameInputStatus == .validating {
+                        if createAccountInformation.usernameInputStatus == .validating {
                             ProgressView()
                                 .progressViewStyle(CircularProgressViewStyle())
                         }
-                        if signUpInformation.usernameInputStatus == .invalid {
+                        if createAccountInformation.usernameInputStatus == .invalid {
                             Text("Not Available")
                                 .font(Font.callout.bold())
-                                .foregroundColor(signUpInformation.usernameInputStatus.signUpColor)
+                                .foregroundColor(createAccountInformation.usernameInputStatus.signUpColor)
                         }
                     }
                     .padding(.trailing, 16)
@@ -51,8 +51,8 @@ struct SignUpView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "lock.circle")
                         .font(Font.title)
-                        .foregroundColor(signUpInformation.passwordInputStatus.signUpColor)
-                    SecureField("Password", text: $signUpInformation.password)
+                        .foregroundColor(createAccountInformation.passwordInputStatus.signUpColor)
+                    SecureField("Password", text: $createAccountInformation.password)
                         .textContentType(.newPassword)
                         .font(.title3)
                         .frame(minHeight: 44)
@@ -61,15 +61,15 @@ struct SignUpView: View {
                 HStack(spacing: 12) {
                     Image(systemName: "lock.circle")
                         .font(Font.title)
-                        .foregroundColor(signUpInformation.repeatPasswordInputStatus.signUpColor)
-                    SecureField("Repeat password", text: $signUpInformation.repeatPassword)
+                        .foregroundColor(createAccountInformation.repeatPasswordInputStatus.signUpColor)
+                    SecureField("Repeat password", text: $createAccountInformation.repeatPassword)
                         .textContentType(.newPassword)
                         .font(.title3)
                         .frame(minHeight: 44)
                 }
                 
                 // create account button
-                Button(action: userData.signUpUsingDefaultMethod) {
+                Button(action: userData.createAccountUsingDefaultMethod) {
                     Text("Create Account")
                         .font(.headline)
                         .foregroundColor(Color(UIColor.systemBackground))
@@ -77,10 +77,10 @@ struct SignUpView: View {
                         .frame(height: 44)
                         .background(
                             RoundedRectangle(cornerRadius: 7.5)
-                                .fill(signUpInformation.allowsSignUp ? signUpInformation.passwordInputStatus.signUpColor : Color.secondary)
+                                .fill(createAccountInformation.allowsSignUp ? createAccountInformation.passwordInputStatus.signUpColor : Color.secondary)
                         )
                 }
-                .disabled(!signUpInformation.allowsSignUp)
+                .disabled(!createAccountInformation.allowsSignUp)
                 .padding(.top, 24)
             }
             .padding(.top, 60)
@@ -115,7 +115,7 @@ struct SignUpView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            SignUpView(signUpInformation: userData.signUpInformation)
+            CreateAccountView(createAccountInformation: userData.createAccountInformation)
 
         }
         .environmentObject(userData)

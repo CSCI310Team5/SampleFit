@@ -19,6 +19,8 @@ extension Color {
     static var systemBlue: Color {
         return Color(UIColor.systemBlue)
     }
+    static let allColors: [Color] = [.yellow, .blue, .green, .gray, .orange, .pink, .purple, .red]
+
 }
 
 

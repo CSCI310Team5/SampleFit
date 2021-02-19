@@ -13,26 +13,17 @@ import AuthenticationServices
 /// Stores relavant information about the user.
 class UserData: ObservableObject {
     
-    /// Stores user credential.
-    class Credential {
-        var identifier: String = ""
-        var fullName: PersonNameComponents?
-        
-        init() {}
-        init(identifier: String, fullName: PersonNameComponents?) {
-            self.identifier = identifier
-            self.fullName = fullName
-        }
-    }
-    
     // MARK: - Instance properties
     
     /// Notifies SwiftUI to re-render UI because of a data change.
     var objectWillChange = ObservableObjectPublisher()
     
-    var signUpInformation = SignUpInformation()
+    var createAccountInformation = CreateAccountInformation()
     var signInInformation = SignInInformation()
     var credential = Credential()
+    var socialInformation = SocialInformation()
+    
+    
     var signInStatus = SignInStatus.never {
         willSet {
             objectWillChange.send()
@@ -46,7 +37,7 @@ class UserData: ObservableObject {
         set {}
     }
     
-    // MARK: - Sign in/out
+    // MARK: - Asynchronous tasks
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -63,7 +54,6 @@ class UserData: ObservableObject {
                 break
             }
             
-            
         case let .failure(error):
             
             // TODO: Do something about the error
@@ -74,12 +64,12 @@ class UserData: ObservableObject {
     }
     
     /// Runs when the user chooses to sign up using default method.
-    func signUpUsingDefaultMethod() {
+    func createAccountUsingDefaultMethod() {
         print("creating account using default method...")
         
-        networkQueryController.createAccount(using: signUpInformation) { [unowned self] (success) in 
+        networkQueryController.createAccount(using: createAccountInformation) { [unowned self] (success) in 
             if success {
-                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signUpInformation.username)
+                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: createAccountInformation.username)
             } else {
                 print("Create account failed")
             }
@@ -107,8 +97,12 @@ class UserData: ObservableObject {
     }
     
     private func storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: String, fullName: PersonNameComponents? = nil) {
+        // store the credentials
         storeCredential(identifier: identifier, fullName: fullName)
+        // change sign in status
         manageSignInStatusAfterSignIn(true)
+        // fetch social information
+        fetchSocialInformation(usingCredential: credential)
     }
     
     private func storeCredential(identifier: String, fullName: PersonNameComponents? = nil) {
@@ -127,5 +121,26 @@ class UserData: ObservableObject {
                 signInStatus = .signedOut
             }
         }
+    }
+    
+    private func fetchSocialInformation(usingCredential credential: Credential) {
+        // fetch social information
+        networkQueryController.exerciseFeedsForUser(withCredential: credential) { (result) in
+            switch result {
+            case let .success(exercises):
+                DispatchQueue.main.async {
+                    self.socialInformation.exerciseFeeds = exercises
+                }
+            case let .failure(error):
+                print("error fetching exercise feeds: \(error)")
+                
+            }
+        }
+    }
+    
+    static var signedInUserData: UserData {
+        let userData = UserData()
+        userData.storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: "signedInUser")
+        return userData
     }
 }

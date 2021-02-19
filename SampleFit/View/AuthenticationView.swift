@@ -17,7 +17,7 @@ struct AuthenticationView: View {
             // either sign in view or sign up view
             Group {
                 if userData.signInStatus == .never {
-                    SignUpView(signUpInformation: userData.signUpInformation)
+                    CreateAccountView(createAccountInformation: userData.createAccountInformation)
                 }
                 if userData.signInStatus == .signedOut {
                     SignInView(signInInformation: userData.signInInformation)
