@@ -8,4 +8,5 @@
 import Foundation
 
 class NavigationState: ObservableObject {
+    
 }

@@ -12,7 +12,7 @@ class SocialInformation: ObservableObject {
     var objectWillChange = ObservableObjectPublisher()
     
     /// Flat array of exercises that should provide to the user as the browse exercise feeds.
-    @PublishedCollection var exerciseFeeds: [Exercise] = Exercise.sampleExercisesSmall
+    @PublishedCollection var exerciseFeeds: [Exercise] = Exercise.exampleExercisesSmall
     private var exerciseFeedsWillChangeCancellable: AnyCancellable?
     
     init() {
@@ -28,7 +28,7 @@ extension SocialInformation {
     /// Exercise feed structured by category.
     var exerciseInCategory: [Exercise.Category: [Exercise]] {
         get {
-            Dictionary(grouping: exerciseFeeds, by: { $0.category })
+            Dictionary(grouping: exerciseFeeds.sorted(by: <), by: { $0.category })
         }
     }
     

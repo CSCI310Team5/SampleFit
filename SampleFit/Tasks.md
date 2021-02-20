@@ -1,27 +1,23 @@
 #  Tasks
 
-## Search Tab
+## ExerciseListDisplayItem
+1. Add a text overlay with blurred / translucent white background for LIVE views
 
-1. Implement Search Bar in Navigation Bar like in App Store and Music App
-2. Implement a List for Quick Browse By Category
-3. Either Search using search bar or by using quick browse by category, we should return search results (using some kind of a search filter)
+## NetworkQueryController
+1. Change all @escaping callbacks to Combine. Use .delay() to simulate network delay.
 
 ## Authentication
-1. Tapping on sign in / create account should change status to validating, and should display this status to the user (maybe activity indicator on the button and disable it?)
-
-## Browse
-
-1. Save and start exercise should be really calling functions
-    
-    
-## Search Tab
-
-1. Reorganize search tab data and data flow
-
-    
-## Start exericise / Calories Tracking
-1. Starting exercise should update data
-2. Data udpate should cause tracking view to show up
+1. Extract validation code into Network Query Controller
 
 
+## SearchResult -> UserSearchResult
+1. UserListDisplayItem should display quick "follow / unfollow" button, which should call function over network
 
+
+## UserDetail
+1. Implement UserDetail
+
+
+## ExerciseDetail
+1. Start / Stop exercise should be really calling functions
+2. Save / Unsave exercise should call function over network

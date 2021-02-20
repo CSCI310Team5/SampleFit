@@ -126,7 +126,7 @@ struct ExerciseDetail: View {
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
-    @ObservedObject static var exercise: Exercise = Exercise.sampleExercisesFull[10]
+    @ObservedObject static var exercise: Exercise = Exercise.exampleExercisesFull[10]
 
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {

@@ -20,16 +20,16 @@ class UserData: ObservableObject {
     
     var createAccountInformation = CreateAccountInformation()
     var signInInformation = SignInInformation()
-    var credential = Credential()
+    var personalInformation = PersonalInformation()
     var socialInformation = SocialInformation()
-    
+    var searchCategoryTokenController = SearchCategoryTokenEventController()
     
     var signInStatus = SignInStatus.never {
         willSet {
             objectWillChange.send()
         }
     }
-    var networkQueryController = NetworkQueryController()
+    private var networkQueryController = NetworkQueryController()
     
     // MARK: - Navigation
     var shouldPresentAuthenticationView: Bool {
@@ -104,11 +104,11 @@ class UserData: ObservableObject {
         // change sign in status
         manageSignInStatusAfterSignIn(true)
         // fetch social information
-        fetchSocialInformation(usingCredential: credential)
+        fetchSocialInformation(usingCredential: personalInformation)
     }
     
     private func storeCredential(identifier: String, fullName: PersonNameComponents? = nil) {
-        credential = Credential(identifier: identifier, fullName: fullName)
+        personalInformation = PersonalInformation(identifier: identifier, fullName: fullName)
     }
     
     /// Manages sign in status after the user chooses to sign in.
@@ -125,7 +125,7 @@ class UserData: ObservableObject {
         }
     }
     
-    private func fetchSocialInformation(usingCredential credential: Credential) {
+    private func fetchSocialInformation(usingCredential credential: PersonalInformation) {
         // fetch social information
         networkQueryController.exerciseFeedsForUser(withCredential: credential) { (result) in
             switch result {
@@ -143,6 +143,12 @@ class UserData: ObservableObject {
     static var signedInUserData: UserData {
         let userData = UserData()
         userData.storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: "signedInUser")
+        return userData
+    }
+    
+    static var signedOutUserData: UserData {
+        let userData = UserData()
+        userData.signInStatus = .signedOut
         return userData
     }
 }

@@ -25,7 +25,7 @@ struct ExerciseCategoryRow: View {
                 HStack(spacing: 16) {
                     ForEach(items) { item in
                         NavigationLink(destination: ExerciseDetail(exercise: item)) {
-                            ExerciseCategoryItem(item: item)
+                            ExerciseListDisplayItem(exercise: item)
                                 // padding on the last item so that it doesn't look shifted
                                 .padding(.trailing, item == items.last! ? UIScreen.main.bounds.width * 0.075 : 0)
                                 .foregroundColor(.primary)
@@ -39,55 +39,13 @@ struct ExerciseCategoryRow: View {
     }
 }
 
-struct ExerciseCategoryItem: View {
-    @ObservedObject var item: Exercise
-    var body: some View {
-        HStack(alignment: .center) {
-            Group {
-                if item.image != nil {
-                    item.image!
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    PlaceholderImage()
-                }
-            }
-            .frame(width: 200, height: 120)
-            .clipShape(RoundedRectangle(cornerRadius: 5))
-            .clipped()
-                        
-            VStack(alignment: .leading) {
-                if item.playbackType == .recordedVideo {
-                    Text(item.durationDescription)
-                        .font(.caption)
-                } else {
-                    // live indicator
-                    HStack(spacing: 6) {
-                        LiveIndicator()
-                        Text(item.durationDescription)
-                            .font(.caption)
-                            .bold()
-                    }
-                }
-                
-                Text(item.name)
-            }
-            
-            Spacer()
-
-        }
-        .frame(maxWidth: UIScreen.main.bounds.width * 0.85)
-    }
-}
-
-
 struct ExerciseCategoryRow_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
             VStack {
-                ExerciseCategoryRow(categoryName: "Category 1", items: Exercise.sampleExercisesAllPushup)
-                ExerciseCategoryRow(categoryName: "Category 2", items: Exercise.sampleExercisesAllPushup)
+                ExerciseCategoryRow(categoryName: "Category 1", items: Exercise.exampleExercisesAllPushup)
+                ExerciseCategoryRow(categoryName: "Category 2", items: Exercise.exampleExercisesAllPushup)
             }
             
         }

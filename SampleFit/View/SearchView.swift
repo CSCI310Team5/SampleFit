@@ -6,123 +6,59 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SearchView: View {
-    @State private var text: String = ""
-    @State private var isSearching = false
-    @State private var scope: Scope = .video
-    
-    enum Scope: String, CaseIterable, CustomStringConvertible {
-        case video = "Video"
-        case user = "User"
-        var description: String {
-            return self.rawValue
-        }
-    }
+    @EnvironmentObject var userData: UserData
+    @ObservedObject private var searchState = SearchState()
+    @State private var exerciseSearchResults: [Exercise] = []
+    @State private var userSearchResults: [PersonalInformation] = []
+    var searchCancellable: AnyCancellable?
     
     var body: some View {
-        NavigationView {
-            VStack {
-                SearchBar(text: $text, placeholder: "Videos, Users", scopes: Scope.allCases) {
-                    // onBegin:
-                    withAnimation { isSearching = true }
-                } onCancel: {
-                    isSearching = false
-                } onSearchClicked: {
-                    
-                } onScopeChange: { newScope in
-                    scope = newScope
-                }
-                .padding(.horizontal, 6)
-                
-                if isSearching {
-                    if text == "" {
-                        // search recommendation
-                        switch scope {
-                        case .video:
-                            // video search recommendations
-                            ScrollView(showsIndicators: false) {
-                                LazyVStack(alignment: .leading, spacing: /*@START_MENU_TOKEN@*/nil/*@END_MENU_TOKEN@*/, pinnedViews: .sectionHeaders) {
-                                    Section(header:
-                                        HStack {
-                                            Text("Suggested Searches")
-                                                .font(.headline)
-                                                .padding(.vertical, 4)
-                                                .padding(.leading, 15)
-                                            Spacer()
-                                        }
-                                        .frame(maxWidth: .infinity)
-                                        .background(
-                                            ZStack {
-                                                Color.systemBackground
-                                                Color.systemFill
-                                            }
-                                        )
-                                    ) {
-                                        // section content
-                                        ForEach(0...10, id: \.self) { count in
-                                            VStack {
-                                                Button(action: { text = "Category \(count)" }) {
-                                                    VStack {
-                                                        Spacer()
-                                                        HStack {
-                                                            Text("Category \(count)")
-                                                                .foregroundColor(.accentColor)
-                                                            Spacer()
-                                                        }
-                                                        Spacer()
-                                                    }
-    //                                                .border(Color.red)
-                                                }
-                                                .frame(minHeight: 44)
-                                                
-                                                
-                                                Divider()
-                                            }
-//                                            .padding(.top, count == 0 ? 4 : 0)
-                                            
-                                            
-                                        }
-                                        .padding(.leading, 24)
+        NavigationViewWithSearchBar(text: $searchState.searchText, placeholder: "Videos, Users", scopes: SearchScope.allCases, tokenEventController: userData.searchCategoryTokenController) {
+            
+            SearchContent(searchState: searchState)
+                .navigationTitle("Search")
+            
+        } onBegin: {
+            searchState.isSearching = true
+        } onCancel: {
+            searchState.isSearching = false
+        } onSearchClicked: {
+            searchState.beginSearch()
+        } onScopeChange: { newScope in
+            searchState.scope = newScope
+            if newScope == .user {
+                userData.searchCategoryTokenController.removeAllTokens()
+            }
+            searchState.beginSearch()
+        } onTokenItemsChange: { newTokenItems in
+            searchState.searchCategory = newTokenItems.map { $0 as! Exercise.Category }.first ?? nil
+            searchState.beginSearch()
+        }
 
-                                    }
-                                    
-                                    
-                                    
-                                }
-                            }
-                            .transition(.opacity)
-                        case .user:
-                            // user search recommendations
-                            EmptyView()
-                            
-                        }
-                        
-                    } else {
-                        // search result
-                        Text("Search result")
-                        
-                    }
-                    
-                    // keep search bar at the top
-                    Spacer()
+    }
+    
+}
+
+struct SearchContent: View {
+    @ObservedObject var searchState: SearchState
+    
+    var body: some View {
+        VStack {
+            if searchState.isSearching {
+                if searchState.showsSuggestedSearch  {
+                    SearchRecommendation(searchState: searchState)
                     
                 } else {
-                    // not searching - default view
-                    Spacer()
-                    
-                    VStack {
-                        Text("Default")
-                    }
-                    
-                    Spacer()
+                    SearchResult(searchState: searchState)
                     
                 }
                 
+            } else {
+                // MARK: Not searching - default view
             }
-            .navigationTitle("Search")
-            .navigationBarHidden(isSearching)
-            
             
         }
     }
@@ -130,9 +66,13 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var userData = UserData()
+    @State private static var text = ""
+    static var scope: SearchScope = .video
     static var previews: some View {
-        MultiplePreview(embedInNavigationView: false) {
-            SearchView()
+        Group {
+            MultiplePreview(embedInNavigationView: false) {
+                SearchView()
+            }
         }
         .environmentObject(userData)
     }

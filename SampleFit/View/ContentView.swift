@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var userData = UserData()
+    @StateObject var userData = UserData.signedInUserData
 
     var body: some View {
         // showing either the authentication or the home view
@@ -18,13 +18,12 @@ struct ContentView: View {
                     .environmentObject(userData)
                     .accentColor(.systemBlue)
             }
-            
+
         } else {
             HomeView()
                 .environmentObject(userData)
                 .transition(.opacity)
         }
-            
     }
 }
 

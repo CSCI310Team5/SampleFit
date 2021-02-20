@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 /// Handles asynchronous networking tasks.
 struct NetworkQueryController {
@@ -28,13 +29,44 @@ struct NetworkQueryController {
         }
     }
     
-    func exerciseFeedsForUser(withCredential credential: Credential, completionHandler: @escaping (_ result: Result<[Exercise], Error>) -> ()) {
+    /// Queries the network and returns the exercise feeds or an error in the completion handler.
+    func exerciseFeedsForUser(withCredential credential: PersonalInformation, completionHandler: @escaping (_ result: Result<[Exercise], Error>) -> ()) {
         // FIXME: Search for exercise feeds for user over network
         // assuming success now
         // faking networking delay of 2 seconds
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            completionHandler(.success(Exercise.sampleExercisesFull))
+            completionHandler(.success(Exercise.exampleExercisesFull))
         }
+    }
+    
+    /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
+    func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Error> {
+        // FIXME: Search for exercise results for user over network
+        // assuming success now
+        // faking networking delay of 2 seconds
+        return Future { promise in
+            promise(.success(Exercise.exampleExercisesFull.filter {
+                if let category = category {
+                    return $0.category == category && $0.shouldAppearOnSearchText(searchText)
+                } else {
+                    return $0.shouldAppearOnSearchText(searchText)
+                }
+            }))
+        }
+        .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+        .eraseToAnyPublisher()
+    }
+    
+    /// Quries the network for user results and returns a publisher that emits either relevant user credentials on success or an error on failure.
+    func searchUserResults(searchText: String) -> AnyPublisher<[PersonalInformation], Error> {
+        // FIXME: Search for user results for user over network
+        // assuming success now
+        // faking networking delay of 2 seconds
+        return Future { promise in
+            promise(.success(PersonalInformation.examplePersonalInformation.filter { $0.shouldAppearOnSearchText(searchText) }))
+        }
+        .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+        .eraseToAnyPublisher()
     }
     
     func loadImage(fromURL url: URL, completionHandler: @escaping (_ result: Result<Image, Error>) -> ()) {
