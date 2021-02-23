@@ -25,18 +25,7 @@ struct ExerciseListDisplayItem: View {
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .clipped()
             .overlay(
-                Text("LIVE")
-                    .foregroundColor(.white)
-                    .font(.subheadline)
-                    .bold()
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
-                    .background(
-                        BlurView()
-                            .clipShape(RoundedRectangle(cornerRadius: 5))
-                    )
-                    .padding(6)
-            , alignment: .bottomLeading)
+                LiveBlurOverlay(), alignment: .bottomLeading)
                         
             VStack(alignment: .leading) {
                 HStack(spacing: 4) {
