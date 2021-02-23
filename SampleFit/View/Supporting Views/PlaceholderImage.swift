@@ -10,14 +10,15 @@ import SwiftUI
 struct PlaceholderImage: View {
     var body: some View {
         Rectangle()
-            .fill(Color.allColors.randomElement()!)
-            .opacity(Double.random(in: 0.2...0.5))
-
+            .fill(Color.systemFill)
     }
 }
 
 struct PlaceholderImage_Previews: PreviewProvider {
     static var previews: some View {
-        PlaceholderImage()
+        MultiplePreview(embedInNavigationView: true) {
+            PlaceholderImage()
+                .frame(width: 240, height: 180)
+        }
     }
 }

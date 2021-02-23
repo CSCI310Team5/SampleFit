@@ -10,17 +10,16 @@ import SwiftUI
 import Combine
 
 class Exercise: Identifiable, ObservableObject {
-    var objectWillChange = ObservableObjectPublisher()
-    
-    var id: Int
-    var name: String
-    var description: String
-    var category: Category
-    var playbackType: PlaybackType
-    var owningUserIdentifier: String
-    var duration: Measurement<UnitDuration>?
-    var image: Image?
+    @Published var id: Int
+    @Published var name: String
+    @Published var description: String
+    @Published var category: Category
+    @Published var playbackType: PlaybackType
+    @Published var owningUserIdentifier: String
+    @Published var duration: Measurement<UnitDuration>?
+    @Published var image: Image?
     fileprivate var previewImageIdentifier: String
+    private var imageLoadingCancellable: AnyCancellable?
     
     enum PlaybackType: Int {
         case live = 1
@@ -62,21 +61,9 @@ class Exercise: Identifiable, ObservableObject {
         self.owningUserIdentifier = owningUserIdentifier
         self.duration = duration
         self.previewImageIdentifier = previewImageIdentifier
-        ImageLoader.shared.image(withIdentifier: previewImageIdentifier) { (result) in
-            switch result {
-            case let .success(image):
-                DispatchQueue.main.async {
-                    self.image = image
-                    self.objectWillChange.send()
-                }
-                
-            case let .failure(error):
-                print(error)
-                DispatchQueue.main.async {
-                    self.image = nil
-                }
-            }
-        }
+        self.imageLoadingCancellable = ImageLoader.shared.image(withIdentifier: previewImageIdentifier)
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.image, on: self)
     }
     
     /// Creates a sample exercise.

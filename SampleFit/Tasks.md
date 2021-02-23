@@ -1,7 +1,7 @@
 #  Tasks
 
 ## NetworkQueryController
-1. Change all @escaping callbacks to Combine. Use .delay() to simulate network delay.
+1. Change most of publisher that publishes on main thread to background thread.
 
 ## Authentication
 1. Extract validation code into Network Query Controller

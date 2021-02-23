@@ -68,19 +68,23 @@ class SearchState: ObservableObject {
         switch scope {
         case .video:
             self.searchCancellable = NetworkQueryController.shared.searchExerciseResults(searchText: searchText, category: searchCategory)
+                .receive(on: DispatchQueue.main)
                 .replaceError(with: [])
                 .map { $0.sorted(by: <) }
                 .assign(to: \.exerciseSearchResults, on: self)
             self.searchStatusCancellable = NetworkQueryController.shared.searchExerciseResults(searchText: searchText, category: searchCategory)
+                .receive(on: DispatchQueue.main)
                 .replaceError(with: [])
                 .map { return $0.isEmpty ? SearchStatus.noResults : SearchStatus.hasResults }
                 .assign(to: \.searchStatus, on: self)
         case .user:
             self.searchCancellable = NetworkQueryController.shared.searchUserResults(searchText: searchText)
+                .receive(on: DispatchQueue.main)
                 .replaceError(with: [])
                 .map { $0.sorted(by: <) }
                 .assign(to: \.userSearchResults, on: self)
             self.searchStatusCancellable = NetworkQueryController.shared.searchUserResults(searchText: searchText)
+                .receive(on: DispatchQueue.main)
                 .replaceError(with: [])
                 .map { return $0.isEmpty ? SearchStatus.noResults : SearchStatus.hasResults }
                 .assign(to: \.searchStatus, on: self)

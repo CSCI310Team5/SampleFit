@@ -25,7 +25,12 @@ struct ExerciseListDisplayItem: View {
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .clipped()
             .overlay(
-                LiveBlurOverlay(), alignment: .bottomLeading)
+                Group {
+                    if exercise.playbackType == .live {
+                        LiveBlurOverlay()
+                    }
+                }
+            , alignment: .bottomLeading)
                         
             VStack(alignment: .leading) {
                 HStack(spacing: 4) {

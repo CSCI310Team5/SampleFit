@@ -38,6 +38,9 @@ class UserData: ObservableObject {
     }
     
     // MARK: - Asynchronous tasks
+    var createAccountCancellable: AnyCancellable?
+    var signInCancellable: AnyCancellable?
+    var fetchExerciseFeedCancellable: AnyCancellable?
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -68,13 +71,15 @@ class UserData: ObservableObject {
         print("creating account using default method...")
         signInStatus = .validatingFirstTime
         
-        networkQueryController.createAccount(using: createAccountInformation) { [unowned self] (success) in 
-            if success {
-                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: createAccountInformation.username)
-            } else {
-                print("Create account failed")
+        createAccountCancellable = networkQueryController.createAccount(using: createAccountInformation)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] success in
+                if success {
+                    storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: createAccountInformation.username)
+                } else {
+                    print("Create account failed")
+                }
             }
-        }
     }
     
     /// Runs when the user chooses to sign in using default method.
@@ -82,13 +87,15 @@ class UserData: ObservableObject {
         print("signing in using default method...")
         signInStatus = .validating
         
-        networkQueryController.signIn(using: signInInformation) { [unowned self] (success) in
-            if success {
-                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
-            } else {
-                print("Sign in failed")
+        signInCancellable = networkQueryController.signIn(using: signInInformation)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] success in
+                if success {
+                    storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
+                } else {
+                    print("Sign in failed")
+                }
             }
-        }
     }
     
     /// Runs when the user chooses to sign out.
@@ -127,17 +134,9 @@ class UserData: ObservableObject {
     
     private func fetchSocialInformation(usingCredential credential: PersonalInformation) {
         // fetch social information
-        networkQueryController.exerciseFeedsForUser(withCredential: credential) { (result) in
-            switch result {
-            case let .success(exercises):
-                DispatchQueue.main.async {
-                    self.socialInformation.exerciseFeeds = exercises
-                }
-            case let .failure(error):
-                print("error fetching exercise feeds: \(error)")
-                
-            }
-        }
+        fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withCredential: credential)
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.socialInformation.exerciseFeeds, on: self)
     }
     
     static var signedInUserData: UserData {

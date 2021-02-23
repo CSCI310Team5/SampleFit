@@ -7,16 +7,17 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
-struct ImageLoader {
-    func image(withIdentifier identifier: String, completionHandler: @escaping (Result<Image, Error>) -> ()) {
+class ImageLoader {
+    /// Returns an image with the specified identifier (either local or network URL), or returns a nil if image not found.
+    func image(withIdentifier identifier: String) -> AnyPublisher<Image?, Never> {
         if _isImageIdentifierLocallyLodable(identifier) {
-            completionHandler(.success(Image(identifier)))
+            return Just(Image(identifier))
+                .eraseToAnyPublisher()
         } else {
-            // FIXME: Should loading over network
-            NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://apple.com")!) { (result) in
-                completionHandler(result)
-            }
+            // FIXME: Use actual identifer to load image from network
+            return NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://apple.com")!)
         }
     }
     

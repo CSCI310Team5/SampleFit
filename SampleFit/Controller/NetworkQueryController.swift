@@ -11,32 +11,43 @@ import Combine
 
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
-    func createAccount(using: CreateAccountInformation, completionHandler: @escaping (_ success: Bool) -> ()) {
+    /// Returns a publisher that publishes true values if success and false values if an eror occured.
+    func createAccount(using: CreateAccountInformation) -> AnyPublisher<Bool, Never> {
         // FIXME: Create account over network
         // assuming success now
         // faking networking delay of 2 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            completionHandler(true)
+        return Future<Bool, Error> { promise in
+            promise(.success(true))
         }
+        .replaceError(with: false)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
     }
     
-    func signIn(using: SignInInformation, completionHandler: @escaping (_ success: Bool) -> ()) {
+    /// Returns a publisher that publishes true values if success and false values if an eror occured.
+    func signIn(using: SignInInformation) -> AnyPublisher<Bool, Never> {
         // FIXME: Sign in over network
         // assuming success now
         // faking networking delay of 2 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            completionHandler(true)
+        return Future<Bool, Error> { promise in
+            promise(.success(true))
         }
+        .replaceError(with: false)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
     }
     
-    /// Queries the network and returns the exercise feeds or an error in the completion handler.
-    func exerciseFeedsForUser(withCredential credential: PersonalInformation, completionHandler: @escaping (_ result: Result<[Exercise], Error>) -> ()) {
+    /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
+    func exerciseFeedsForUser(withCredential credential: PersonalInformation) -> AnyPublisher<[Exercise], Never> {
         // FIXME: Search for exercise feeds for user over network
         // assuming success now
         // faking networking delay of 2 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            completionHandler(.success(Exercise.exampleExercisesFull))
+        return Future<[Exercise], Error> { promise in
+            promise(.success(Exercise.exampleExercisesFull))
         }
+        .replaceError(with: Exercise.exampleExercisesSmall)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
     }
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
@@ -53,7 +64,7 @@ class NetworkQueryController {
                 }
             }))
         }
-        .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
         .eraseToAnyPublisher()
     }
     
@@ -65,17 +76,21 @@ class NetworkQueryController {
         return Future { promise in
             promise(.success(PersonalInformation.examplePersonalInformation.filter { $0.shouldAppearOnSearchText(searchText) }))
         }
-        .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
         .eraseToAnyPublisher()
     }
     
-    func loadImage(fromURL url: URL, completionHandler: @escaping (_ result: Result<Image, Error>) -> ()) {
+    /// Returns a publisher that publishes image values if success and nil values if an eror occured.
+    func loadImage(fromURL url: URL) -> AnyPublisher<Image?, Never> {
         // FIXME: Load image over network
         // assuming success now
         // faking networking delay of 2 seconds
-        DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
-            completionHandler(Result.success(Image(systemName: "network")))
+        return Future<Image?, Error> { promise in
+            promise(.success(Image(systemName: "network")))
         }
+        .replaceError(with: nil)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
     }
     
     static let shared = NetworkQueryController()
