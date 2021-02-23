@@ -10,33 +10,33 @@ import Combine
 
 struct SearchView: View {
     @EnvironmentObject var userData: UserData
-    @ObservedObject private var searchState = SearchState()
+    @StateObject private var searchState = SearchState()
     @State private var exerciseSearchResults: [Exercise] = []
     @State private var userSearchResults: [PersonalInformation] = []
     var searchCancellable: AnyCancellable?
     
     var body: some View {
         NavigationViewWithSearchBar(text: $searchState.searchText, placeholder: "Videos, Users", scopes: SearchScope.allCases, tokenEventController: userData.searchCategoryTokenController) {
-            
             SearchContent(searchState: searchState)
                 .navigationTitle("Search")
-            
         } onBegin: {
-            searchState.isSearching = true
+            searchState.isSearchBarActive = true
         } onCancel: {
-            searchState.isSearching = false
+            searchState.isSearchBarActive = false
+            searchState.searchText = ""
         } onSearchClicked: {
-            searchState.beginSearch()
-        } onScopeChange: { newScope in
+            searchState.beginSearchIfNeededAndSetSearchStatus()
+        } onScopeChange: { (newScope) in
             searchState.scope = newScope
             if newScope == .user {
                 userData.searchCategoryTokenController.removeAllTokens()
             }
-            searchState.beginSearch()
-        } onTokenItemsChange: { newTokenItems in
+            searchState.beginSearchIfNeededAndSetSearchStatus()
+        } onTokenItemsChange: { (newTokenItems) in
             searchState.searchCategory = newTokenItems.map { $0 as! Exercise.Category }.first ?? nil
-            searchState.beginSearch()
+            searchState.beginSearchIfNeededAndSetSearchStatus()
         }
+        .edgesIgnoringSafeArea(.all)
 
     }
     
@@ -47,11 +47,17 @@ struct SearchContent: View {
     
     var body: some View {
         VStack {
-            if searchState.isSearching {
-                if searchState.showsSuggestedSearch  {
+            if searchState.isSearchBarActive {
+                switch searchState.searchStatus {
+                case .notStarted:
                     SearchRecommendation(searchState: searchState)
-                    
-                } else {
+                case .userIsTyping:
+                    EmptyView()
+                case .loading:
+                    LoadingSearch()
+                case .noResults:
+                    NoSearchResult(searchText: searchState.searchText)
+                case .hasResults:
                     SearchResult(searchState: searchState)
                     
                 }

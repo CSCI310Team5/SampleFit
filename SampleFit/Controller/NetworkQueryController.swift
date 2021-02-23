@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 /// Handles asynchronous networking tasks.
-struct NetworkQueryController {
+class NetworkQueryController {
     func createAccount(using: CreateAccountInformation, completionHandler: @escaping (_ success: Bool) -> ()) {
         // FIXME: Create account over network
         // assuming success now

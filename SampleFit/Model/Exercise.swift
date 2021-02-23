@@ -98,6 +98,8 @@ class Exercise: Identifiable, ObservableObject {
     // MARK: - Instance methods
     
     func shouldAppearOnSearchText(_ text: String) -> Bool {
+        // if the search text is empty, the user may want to see all exercises available
+        guard !text.isEmpty else { return true }
         return self.name.lowercased().contains(text.lowercased())
     }
     

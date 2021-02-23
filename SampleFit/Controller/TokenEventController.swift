@@ -21,7 +21,7 @@ protocol TokenEventController {
     func removeAllTokens()
 }
 
-struct SearchCategoryTokenEventController: TokenEventController {
+class SearchCategoryTokenEventController: TokenEventController {
     var tokenWillChangePublisher = PassthroughSubject<TokenChangeEvent, Never>()
 
     func addToken(for category: Exercise.Category) {

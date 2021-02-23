@@ -35,7 +35,7 @@ struct NavigationViewWithSearchBar<Content, TokenController>: UIViewControllerRe
         self.tokenItemsChangeAction = onTokenItemsChange
     }
     
-    class Coordinator: NSObject, UISearchBarDelegate {
+    class Coordinator: NSObject, UISearchBarDelegate, UITextFieldDelegate {
         @Binding var text: String
         let contentHostingController: UIHostingController<Content>
         let searchController: UISearchController
@@ -48,7 +48,7 @@ struct NavigationViewWithSearchBar<Content, TokenController>: UIViewControllerRe
         let tokenItemChangeAction: ([Any?]) -> ()
         var tokenWillChangeCancellable: AnyCancellable?
         
-        init(text: Binding<String>, placeholder: String, scopes: [SearchScope], tokenEventController: TokenController?, onBegin: @escaping () -> () = {}, onCancel: @escaping () -> () = {}, onSearchClicked: @escaping () -> () = {}, onScopeChange: @escaping (_ newScope: SearchScope) -> (), onTokenItemChange: @escaping ([Any?]) -> (), content: Content) {
+        init(text: Binding<String>, placeholder: String, scopes: [SearchScope], tokenEventController: TokenController?, onBegin: @escaping () -> (), onCancel: @escaping () -> (), onSearchClicked: @escaping () -> (), onScopeChange: @escaping (_ newScope: SearchScope) -> (), onTokenItemChange: @escaping ([Any?]) -> (), content: Content) {
             self._text = text
             self.scopes = scopes
             self.tokenEventController = tokenEventController
@@ -77,35 +77,47 @@ struct NavigationViewWithSearchBar<Content, TokenController>: UIViewControllerRe
         // MARK: - Responding to user events
         func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
             text = searchText
-            self.tokenItemChangeAction(self.searchController.searchBar.searchTextField.tokens.map { $0.representedObject })
         }
         func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
             scopeChangeAction(scopes[selectedScope])
         }
-        func addToken(_ token: UISearchToken) {
+        func textFieldShouldClear(_ textField: UITextField) -> Bool {
+            text = ""
+            tokenItemChangeAction([])
+            return true
+        }
+        
+        
+        fileprivate func addToken(_ token: UISearchToken) {
             var tokens = self.searchController.searchBar.searchTextField.tokens
             tokens.append(token)
             self.searchController.searchBar.searchTextField.tokens = tokens
             self.tokenItemChangeAction(tokens.map { $0.representedObject })
         }
-        func removeAllTokens() {
+        fileprivate func removeAllTokens() {
             self.searchController.searchBar.searchTextField.tokens.removeAll()
             self.tokenItemChangeAction(self.searchController.searchBar.searchTextField.tokens.map { $0.representedObject })
         }
         
         // MARK: - Editing Life cycle
         func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-            beginAction()
+            // boost performance by freeing the main thread
+            DispatchQueue.main.async {
+                self.beginAction()
+            }
         }
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-            cancellationAction()
+            // boost performance by freeing the main thread
+            DispatchQueue.main.async {
+                self.cancellationAction()
+            }
         }
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             searchClickedAction()
         }
         
         // MARK: - View update
-        func update(text: String, content: Content) {
+        fileprivate func update(text: String, content: Content) {
             searchController.searchBar.text = text
             contentHostingController.rootView = content
             contentHostingController.view.setNeedsDisplay()
@@ -122,6 +134,7 @@ struct NavigationViewWithSearchBar<Content, TokenController>: UIViewControllerRe
         
         // Setting delegates
         context.coordinator.searchController.searchBar.delegate = context.coordinator
+        context.coordinator.searchController.searchBar.searchTextField.delegate = context.coordinator
         
         // setting up async callbacks
         context.coordinator.tokenWillChangeCancellable = tokenEventController?.tokenWillChangePublisher
