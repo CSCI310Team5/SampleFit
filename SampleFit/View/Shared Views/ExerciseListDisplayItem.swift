@@ -11,6 +11,7 @@ struct ExerciseListDisplayItem: View {
     @ObservedObject var exercise: Exercise
     var body: some View {
         HStack(alignment: .center) {
+            // image
             Group {
                 if exercise.image != nil {
                     exercise.image!
@@ -23,6 +24,19 @@ struct ExerciseListDisplayItem: View {
             .frame(width: 200, height: 120)
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .clipped()
+            .overlay(
+                Text("LIVE")
+                    .foregroundColor(.white)
+                    .font(.subheadline)
+                    .bold()
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(
+                        BlurView()
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                    )
+                    .padding(6)
+            , alignment: .bottomLeading)
                         
             VStack(alignment: .leading) {
                 HStack(spacing: 4) {
@@ -54,7 +68,8 @@ struct ExerciseListDisplayItem: View {
 struct ExerciseDisplayItem_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            ExerciseListDisplayItem(exercise: Exercise.exampleExercisesAllPushup[0])
+//            ExerciseListDisplayItem(exercise: Exercise.exampleExercisesAllPushup[1])
+            ExerciseListDisplayItem(exercise: Exercise.exampleExercisesAllPushup[2])
         }
     }
 }

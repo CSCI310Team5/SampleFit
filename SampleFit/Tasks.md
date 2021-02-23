@@ -1,8 +1,5 @@
 #  Tasks
 
-## ExerciseListDisplayItem
-1. Add a text overlay with blurred / translucent white background for LIVE views
-
 ## NetworkQueryController
 1. Change all @escaping callbacks to Combine. Use .delay() to simulate network delay.
 
