@@ -47,23 +47,20 @@ struct SearchContent: View {
     
     var body: some View {
         VStack {
-            if searchState.isSearchBarActive {
-                switch searchState.searchStatus {
-                case .notStarted:
+            switch searchState.searchStatus {
+            case .notStarted:
+                if searchState.isSearchBarActive {
                     SearchRecommendation(searchState: searchState)
-                case .userIsTyping:
-                    EmptyView()
-                case .loading:
-                    LoadingSearch()
-                case .noResults:
-                    NoSearchResult(searchText: searchState.searchText)
-                case .hasResults:
-                    SearchResult(searchState: searchState)
-                    
                 }
+            case .userIsTyping:
+                EmptyView()
+            case .loading:
+                LoadingSearch()
+            case .noResults:
+                NoSearchResult(searchText: searchState.searchText)
+            case .hasResults:
+                SearchResult(searchState: searchState)
                 
-            } else {
-                // MARK: Not searching - default view
             }
             
         }

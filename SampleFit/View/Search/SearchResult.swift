@@ -35,14 +35,21 @@ struct ExerciseSearchResult: View {
 
 struct UserSearchResult: View {
     var users: [PersonalInformation]
+    
     var body: some View {
         ScrollView {
             LazyVStack {
                 ForEach(users) { user in
-                    NavigationLink(destination: UserDetail(user: user)) {
-                        UserListDisplayItem(user: user)
-                            .padding(.top, user == users[0] ? 4 : 0)
+                    ZStack(alignment: .trailing) {
+                        NavigationLink(destination: UserDetail(user: user)) {
+                            UserListDisplayItem(user: user)
+                                .padding(.top, user == users[0] ? 4 : 0)
+                        }
+                        
+                        FollowButton()
+                            .padding(.trailing, 20)
                     }
+                    
                 }
             }
             

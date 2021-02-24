@@ -1,7 +1,8 @@
 #  Tasks
 
+
 ## Search
-1. Create a shared token controller instance and use that in SearchView and SearchState. This decouples UerData from Search.
+1. Small bug - enter a search term on "Video", Return key for search, wait for 2 seconds, and then switch to User. They search loading view persists / no search appears without no result view.
 
 ## Authentication
 1. Extract validation code into Network Query Controller

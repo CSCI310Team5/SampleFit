@@ -9,12 +9,14 @@ import SwiftUI
 
 struct UserListDisplayItem: View {
     var user: PersonalInformation
+    
     var body: some View {
         VStack {
             HStack(spacing: 16) {
                 if user.image != nil {
                     // FIXME: Incomplete
                 } else {
+                    // user image
                     Image(systemName: "person.fill")
                         .resizable()
                         .scaledToFill()
@@ -25,23 +27,26 @@ struct UserListDisplayItem: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .strokeBorder(Color.secondary, lineWidth: 0.5)
                         )
-                    
                 }
                 
-                
+                // name label
                 Text(user.identifier)
+                    .fixedSize(horizontal: true, vertical: false)
                 
                 Spacer()
                 
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.secondary)
+                // Placeholder to button to avoid complex text padding layout
+                FollowButton()
+                    .disabled(true)
+                    .opacity(0.01)
+                
             }
             .padding(.vertical, 8)
-            .padding(.horizontal, 20)
-
+            
             Divider()
-                .padding(.leading, 85)
         }
+        .padding(.horizontal, 20)
+
         .foregroundColor(.primary)
     }
 }

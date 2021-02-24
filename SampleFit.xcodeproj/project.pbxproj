@@ -42,6 +42,7 @@
 		F6E3095F25E4E1C600F4B7A6 /* NoSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3095E25E4E1C600F4B7A6 /* NoSearchResult.swift */; };
 		F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3096625E4F50300F4B7A6 /* BlurView.swift */; };
 		F6E3096C25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */; };
+		F6E3097125E635E500F4B7A6 /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3097025E635E500F4B7A6 /* FollowButton.swift */; };
 		F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */; };
 		F6F9DFCF25D4CC4700B578B3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */; };
 		F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFD025D4CC4700B578B3 /* ContentView.swift */; };
@@ -109,6 +110,7 @@
 		F6E3095E25E4E1C600F4B7A6 /* NoSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoSearchResult.swift; sourceTree = "<group>"; };
 		F6E3096625E4F50300F4B7A6 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveBlurOverlay.swift; sourceTree = "<group>"; };
+		F6E3097025E635E500F4B7A6 /* FollowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
 		F6F9DFC925D4CC4700B578B3 /* SampleFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -321,6 +323,7 @@
 				F669331F25DFB75C000D9442 /* LiveIndicator.swift */,
 				F669333425E09932000D9442 /* NavigationViewWithSearchBar.swift */,
 				F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */,
+				F6E3097025E635E500F4B7A6 /* FollowButton.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				F6C7A3CD25D613F70023D250 /* CreateAccountView.swift in Sources */,
 				F6F9E00B25D4DCC200B578B3 /* UserData.swift in Sources */,
 				F61BA67425D6205D00249ED1 /* SignInStatus.swift in Sources */,
+				F6E3097125E635E500F4B7A6 /* FollowButton.swift in Sources */,
 				F669335625E0DB7E000D9442 /* SearchResult.swift in Sources */,
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
 				F669332525E087F8000D9442 /* TokenEventController.swift in Sources */,
