@@ -31,4 +31,6 @@ class SearchCategoryTokenEventController: TokenEventController {
     func removeAllTokens() {
         tokenWillChangePublisher.send(.removeAllTokens)
     }
+    
+    static let shared = SearchCategoryTokenEventController()
 }

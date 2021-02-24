@@ -22,6 +22,7 @@ struct SearchRecommendation: View {
 
 struct ExerciseSearchRecommendation: View {
     @EnvironmentObject var userData: UserData
+    var searchCategoryTokenController = SearchCategoryTokenEventController.shared
     
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -47,7 +48,7 @@ struct ExerciseSearchRecommendation: View {
                         VStack {
                             
                             // recommended search button
-                            Button(action: { userData.searchCategoryTokenController.addToken(for: category) }) {
+                            Button(action: { searchCategoryTokenController.addToken(for: category) }) {
                                 VStack {
                                     Spacer()
                                     HStack {

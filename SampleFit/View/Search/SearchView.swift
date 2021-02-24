@@ -9,14 +9,14 @@ import SwiftUI
 import Combine
 
 struct SearchView: View {
-    @EnvironmentObject var userData: UserData
     @StateObject private var searchState = SearchState()
     @State private var exerciseSearchResults: [Exercise] = []
     @State private var userSearchResults: [PersonalInformation] = []
+    var searchCategoryTokenController = SearchCategoryTokenEventController.shared
     var searchCancellable: AnyCancellable?
     
     var body: some View {
-        NavigationViewWithSearchBar(text: $searchState.searchText, placeholder: "Videos, Users", scopes: SearchScope.allCases, tokenEventController: userData.searchCategoryTokenController) {
+        NavigationViewWithSearchBar(text: $searchState.searchText, placeholder: "Videos, Users", scopes: SearchScope.allCases, tokenEventController: searchCategoryTokenController) {
             SearchContent(searchState: searchState)
                 .navigationTitle("Search")
         } onBegin: {
@@ -29,7 +29,7 @@ struct SearchView: View {
         } onScopeChange: { (newScope) in
             searchState.scope = newScope
             if newScope == .user {
-                userData.searchCategoryTokenController.removeAllTokens()
+                searchCategoryTokenController.removeAllTokens()
             }
             searchState.beginSearchIfNeededAndSetSearchStatus()
         } onTokenItemsChange: { (newTokenItems) in

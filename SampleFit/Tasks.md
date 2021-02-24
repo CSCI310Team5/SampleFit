@@ -1,7 +1,7 @@
 #  Tasks
 
-## NetworkQueryController
-1. Change most of publisher that publishes on main thread to background thread.
+## Search
+1. Create a shared token controller instance and use that in SearchView and SearchState. This decouples UerData from Search.
 
 ## Authentication
 1. Extract validation code into Network Query Controller
