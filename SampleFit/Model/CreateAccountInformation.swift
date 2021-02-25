@@ -18,18 +18,13 @@ class CreateAccountInformation: ObservableObject {
     var username: String {
         get { return _username }
         set {
-            objectWillChange.send()
-            _usernamePassthroughSubject.send(newValue)
-            
+            _validateUsername(newValue)
+            _usernameWillChangePublisher.send(newValue)
         }
     }
-    private let _usernamePassthroughSubject = PassthroughSubject<String, Never>()
-    private var _usernameWillSetCancellable: AnyCancellable?
-    private var _usernameShouldValidateCancellable: AnyCancellable?
-    
     var password: String = "" {
         willSet {
-            validatePassword(newValue)
+            _validatePassword(newValue)
         }
     }
     var repeatPassword: String = "" {
@@ -42,44 +37,48 @@ class CreateAccountInformation: ObservableObject {
     var passwordInputStatus: DataEntryStatus = .notEntered
     var repeatPasswordInputStatus: DataEntryStatus = .notEntered
     var allowsSignUp = false
+    
+    private let _usernameWillChangePublisher = PassthroughSubject<String, Never>()
+    private var _usernameShouldUpdateCancellable: AnyCancellable?
+    private var _usernameShouldValidateCancellable: AnyCancellable?
+    private var _usernameValidationCancellable: AnyCancellable?
             
     init() {
         // when user is still typing in, limit username length and update the username input status to validating
-        self._usernameWillSetCancellable =
-            _usernamePassthroughSubject
+        self._usernameShouldUpdateCancellable = _usernameWillChangePublisher
             .filter { $0.count < 16 }
             .removeDuplicates()
             .sink { [unowned self] newValue in
+                // when the user types in, change input status to validating
                 usernameInputStatus = .validating
                 _username = newValue
-                evaluateIfUserIsAllowedToSignUp()
+                objectWillChange.send()
             }
         
         // only validate username 1 second after user stopped typing
-        self._usernameShouldValidateCancellable =
-            _usernamePassthroughSubject
+        self._usernameShouldValidateCancellable = _usernameWillChangePublisher
             .filter { $0.count < 16 }
             .removeDuplicates()
             .debounce(for: .seconds(1.0), scheduler: DispatchQueue.global())
             .sink { newValue in
-                self.validateUsername(newValue)
+                self._validateUsername(newValue)
             }
     }
     
     
-    private func validateUsername(_ newUsername: String) {
+    private func _validateUsername(_ newUsername: String) {
+        _usernameValidationCancellable?.cancel()
         
-        // TODO: Check with backend to validate username
-        if newUsername.count > 4 {
-            usernameInputStatus = .valid
-        } else {
-            usernameInputStatus = .invalid
-        }
-        
-        evaluateIfUserIsAllowedToSignUp()
+        _usernameValidationCancellable = NetworkQueryController.shared.validateUsername(newUsername)
+            .receive(on: DispatchQueue.main)
+            .map { $0 ? DataEntryStatus.valid : DataEntryStatus.invalid }
+            .sink {
+                self.usernameInputStatus = $0
+                self.evaluateIfUserIsAllowedToSignUp()
+            }
     }
     
-    private func validatePassword(_ newPassword: String) {
+    private func _validatePassword(_ newPassword: String) {
         if !newPassword.isEmpty {
             passwordInputStatus = .valid
         } else {

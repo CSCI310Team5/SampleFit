@@ -11,6 +11,18 @@ import Combine
 
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
+    
+    /// Returns a publisher that publishes true value if success and false values if an error occured.
+    func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
+        return Future<Bool, Error> { promise in
+            promise(.success(true))
+        }
+        .replaceError(with: false)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
+    }
+    
+    
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
     func createAccount(using: CreateAccountInformation) -> AnyPublisher<Bool, Never> {
         // FIXME: Create account over network
