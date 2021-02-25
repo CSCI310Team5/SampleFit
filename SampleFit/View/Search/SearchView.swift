@@ -10,8 +10,6 @@ import Combine
 
 struct SearchView: View {
     @StateObject private var searchState = SearchState()
-    @State private var exerciseSearchResults: [Exercise] = []
-    @State private var userSearchResults: [PersonalInformation] = []
     var searchCategoryTokenController = SearchCategoryTokenEventController.shared
     var searchCancellable: AnyCancellable?
     

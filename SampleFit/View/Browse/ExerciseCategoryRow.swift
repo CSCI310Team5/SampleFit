@@ -13,17 +13,30 @@ struct ExerciseCategoryRow: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            // category name label
-            Text(categoryName)
-                .font(.title2)
-                .fontWeight(.semibold)
+            HStack(alignment: .lastTextBaseline) {
+                // category name label
+                Text(categoryName)
+                    .font(.title2)
+                    .fontWeight(.bold)
+                
+                Spacer()
+                
+                // show all button
+                NavigationLink(destination: ExerciseSearchResult(exercises: items).navigationTitle(categoryName)) {
+                    Text("Show All")
+                        .foregroundColor(.accentColor)
+                }
+                .padding(.trailing, 6)
+            }
+            
                 .padding(.top, 8)
-                .padding(.leading, 15)
+                .padding(.horizontal, 15)
             
             // horizontal scroll view
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-                    ForEach(items) { item in
+                    // show up to 6 items only
+                    ForEach(Array(items.prefix(6))) { item in
                         NavigationLink(destination: ExerciseDetail(exercise: item)) {
                             ExerciseListDisplayItem(exercise: item)
                                 // padding on the last item so that it doesn't look shifted

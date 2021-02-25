@@ -19,7 +19,7 @@ struct HomeView: View {
     
     var body: some View {
         TabView(selection: $selection) {
-            BrowseView()
+            BrowseView(socialInformation: userData.socialInformation)
                 .tabItem {
                     Label("Browse", systemImage: "list.and.film")
                 }
