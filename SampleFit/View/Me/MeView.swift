@@ -34,7 +34,7 @@ struct MeView: View {
                     Label {
                         Text("Uploads")
                     } icon: {
-                        Image(systemName: "network")
+                        Image(systemName: "arrow.up.circle")
                             .font(Font.body.bold())
                     }
                 }
