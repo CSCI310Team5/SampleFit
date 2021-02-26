@@ -24,12 +24,7 @@ struct WorkoutDisplayItem: View {
                 
                 Spacer()
                 
-                HStack {
-                    Text(workout.dateDescription)
-//                    Image(systemName: "chevron.right")
-//                        .font(Font.subheadline.bold())
-//                        .opacity(0.5)
-                }
+                Text(workout.dateDescription)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             }
