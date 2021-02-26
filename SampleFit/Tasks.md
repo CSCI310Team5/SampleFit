@@ -1,7 +1,8 @@
 #  Tasks
 
-## UserSearchResultList
-1. Wire up the follow button functionality to call methods
+## MeView
+1. Add a profile button on top right corner.
+
 
 ## UserDetail
 1. Implement UserDetail

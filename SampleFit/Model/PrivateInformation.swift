@@ -15,6 +15,7 @@ class PrivateInformation: ObservableObject {
     @PublishedCollection var exerciseFeeds: [Exercise] = Exercise.exampleExercisesSmall
     @Published var favoriteExercises: [Exercise] = []
     @Published var followedUsers: [PublicProfile] = []
+    @Published var workoutHistory: [Workout] = []
     
     private var _exerciseFeedsWillChangeCancellable: AnyCancellable?
     
@@ -72,6 +73,7 @@ class PrivateInformation: ObservableObject {
         let information = PrivateInformation()
 //        information.followedUsers = PublicProfile.exampleProfiles.sorted()
 //        information.favoriteExercises = Exercise.exampleExercisesSmall
+        information.workoutHistory = Workout.exampleWorkouts
         return information
     }()
 }

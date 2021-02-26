@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MeView: View {
+    @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
     var body: some View {
         List {
@@ -29,8 +30,29 @@ struct MeView: View {
                     }
                 }
                 
+                NavigationLink(destination: NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.")        .navigationBarTitle("Uploads", displayMode: .inline)) {
+                    Label {
+                        Text("Uploads")
+                    } icon: {
+                        Image(systemName: "network")
+                            .font(Font.body.bold())
+                    }
+                }
                 
-                
+            }
+            
+            // Workout History
+            Section(header: Text("History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
+                ForEach(privateInformation.workoutHistory) { workout in
+                    WorkoutDisplayItem(workout: workout)
+                }
+            }
+            
+            Section {
+                Button(action: { userData.signOut() }) {
+                    Text("Sign Out")
+                        .foregroundColor(.red)
+                }
             }
             
             

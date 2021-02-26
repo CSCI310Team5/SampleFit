@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
+/// Represents an exercise (a video or a livestream) that other users can view.
 class Exercise: Identifiable, ObservableObject {
     @Published var id: Int
     @Published var name: String

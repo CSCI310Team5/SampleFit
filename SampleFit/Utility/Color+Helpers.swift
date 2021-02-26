@@ -22,6 +22,9 @@ extension Color {
     static var tertiarySystemFill: Color {
         return Color(UIColor.tertiarySystemFill)
     }
+    static var workoutLabelColor: Color {
+        return Color(red: 241.0 / 255, green: 94.0 / 255, blue: 36.0 / 255)
+    }
     static let allColors: [Color] = [.yellow, .blue, .green, .gray, .orange, .pink, .purple, .red]
 
 }
