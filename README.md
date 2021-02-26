@@ -15,7 +15,7 @@ Windows: The app itself cannot be run on Windows. However, some data model can b
 
 ## Backend
 
-We need to setup a backend with database to:
+We need to setup a backend with database to:  
     1. store and access videos  
     2. Regsiter new user  
     3. Log in existing user  
@@ -29,8 +29,6 @@ Recommended Documentation:
 
 
 ## What's Next
-
-All other parts, except authentication, are still a prototype, i.e. fake. We need to implement each part to make it real.
 
 ### Writing data models:
 This app uses Swift as the language for data models. Feel free to check out the Swift files located in  `SampleFit/Model`.  
