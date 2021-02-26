@@ -42,25 +42,30 @@ class PrivateInformation: ObservableObject {
     func removeFollowedUser(at indicies: IndexSet) {
         followedUsers.remove(atOffsets: indicies)
     }
-    func addFollowedUser(_ user: PublicProfile) {
+    func toggleExerciseInFavorites(_ exercise: Exercise) {
+        if self.hasFavorited(exercise) {
+            favoriteExercises.removeAll { $0 == exercise }
+        } else {
+            _addExerciseToFavorites(exercise)
+        }
+    }
+    func toggleUserInFollowed(_ user: PublicProfile) {
+        if self.hasFollowed(user) {
+            followedUsers.removeAll { $0 == user }
+        } else {
+            _addFollowedUser(user)
+        }
+    }
+    
+    private func _addFollowedUser(_ user: PublicProfile) {
         followedUsers.append(user)
         followedUsers.sort()
     }
-    func addExerciseToFavorites(_ exercise: Exercise) {
+    private func _addExerciseToFavorites(_ exercise: Exercise) {
         guard !favoriteExercises.contains(exercise) else { return }
         favoriteExercises.append(exercise)
     }
-    func toggleExerciseInFavorites(_ exercise: Exercise) {
-        if self.hasFavorited(exercise) {
-            removeExerciseFromFavorites(exercise)
-        } else {
-            addExerciseToFavorites(exercise)
-        }
-    }
-    /// Remove exercise from favorites.
-    private func removeExerciseFromFavorites(_ exercise: Exercise) {
-        favoriteExercises.removeAll { $0 == exercise }
-    }
+    
     
     // MARK: - Convenience type properties
     static var examplePrivateInformation: PrivateInformation = {

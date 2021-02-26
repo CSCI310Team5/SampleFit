@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct FollowButton: View {
-    @State private var isFollowed = false
+    var following: Bool
+    var action: () -> ()
 
     var body: some View {
-        Button(action: { isFollowed.toggle() }) {
+        Button(action: action) {
             Group {
-                if isFollowed {
+                if following {
                     Label("Followed", systemImage: "checkmark")
                         .foregroundColor(.green)
                         .padding(.vertical, 8)
@@ -41,7 +42,7 @@ struct FollowButton: View {
 struct FollowButton_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            FollowButton()
+            FollowButton(following: false, action: {})
         }
     }
 }

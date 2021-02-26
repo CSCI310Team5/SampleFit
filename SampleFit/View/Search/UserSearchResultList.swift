@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UserSearchResultList: View {
     var users: [PublicProfile]
+    @ObservedObject var privateInformation: PrivateInformation
     
     var body: some View {
         ScrollView {
@@ -23,7 +24,7 @@ struct UserSearchResultList: View {
                             }
                         }
                         
-                        FollowButton()
+                        FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user) })
                     }
                     .padding(.horizontal, 20)
                     
@@ -38,7 +39,7 @@ struct UserSearchResultList: View {
 struct UserList_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UserSearchResultList(users: PublicProfile.exampleProfiles)
+            UserSearchResultList(users: PublicProfile.exampleProfiles, privateInformation: PrivateInformation.examplePrivateInformation)
         }
     }
 }

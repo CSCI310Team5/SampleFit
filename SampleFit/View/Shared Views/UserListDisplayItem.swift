@@ -36,7 +36,7 @@ struct UserListDisplayItem: View {
                 Spacer()
                 
                 // Placeholder to button to avoid complex text padding layout
-                FollowButton()
+                FollowButton(following: false, action: {})
                     .disabled(true)
                     .opacity(0.01)
                 

@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct SearchResult: View {
+    @EnvironmentObject var userData: UserData
     @ObservedObject var searchState: SearchState
     var body: some View {
         switch searchState.scope {
         case .video:
             ExerciseSearchResultList(exercises: searchState.exerciseSearchResults)
         case .user:
-            UserSearchResultList(users: searchState.userSearchResults)
+            UserSearchResultList(users: searchState.userSearchResults, privateInformation: userData.privateInformation)
         }
     }
 }
