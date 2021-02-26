@@ -1,5 +1,8 @@
 #  Tasks
 
+## UserSearchResultList
+1. Wire up the follow button functionality to call methods
+
 ## UserDetail
 1. Implement UserDetail
 

@@ -65,8 +65,8 @@ class PrivateInformation: ObservableObject {
     // MARK: - Convenience type properties
     static var examplePrivateInformation: PrivateInformation = {
         let information = PrivateInformation()
-        information.followedUsers = PublicProfile.exampleProfiles.sorted()
-        information.favoriteExercises = Exercise.exampleExercisesSmall
+//        information.followedUsers = PublicProfile.exampleProfiles.sorted()
+//        information.favoriteExercises = Exercise.exampleExercisesSmall
         return information
     }()
 }

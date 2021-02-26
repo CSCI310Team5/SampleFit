@@ -15,7 +15,7 @@ struct ExerciseDetail: View {
     
     var body: some View {
         // FIXME: Fake player now
-        ScrollView(showsIndicators: false) {
+        ScrollView {
             VStack {
                 VideoPlayer(player: nil) {
                     Group {
@@ -116,8 +116,26 @@ struct ExerciseDetail: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
 
+                }
+            .listRowInsets(EdgeInsets())
+            
+            // link to user detail
+            NavigationLink(destination: UserDetail(user: exercise.owningUser)) {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text(exercise.owningUser.identifier)
+                            .font(.body)
+                        Text("Creator")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.secondary)
+                }
                 
             }
+            .padding(20)
             
         }
         .navigationTitle(exercise.name)

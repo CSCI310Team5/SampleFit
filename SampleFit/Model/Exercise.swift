@@ -15,7 +15,7 @@ class Exercise: Identifiable, ObservableObject {
     @Published var description: String
     @Published var category: Category
     @Published var playbackType: PlaybackType
-    @Published var owningUserIdentifier: String
+    @Published var owningUser: PublicProfile
     @Published var duration: Measurement<UnitDuration>?
     @Published var image: Image?
     fileprivate var previewImageIdentifier: String
@@ -52,13 +52,13 @@ class Exercise: Identifiable, ObservableObject {
     
     // MARK: - Initializers
     
-    init(id: Int, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUserIdentifier: String, duration: Measurement<UnitDuration>?, previewImageIdentifier: String) {
+    init(id: Int, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String) {
         self.id = id
         self.name = name
         self.description = description
         self.category = category
         self.playbackType = playbackType
-        self.owningUserIdentifier = owningUserIdentifier
+        self.owningUser = owningUser
         self.duration = duration
         self.previewImageIdentifier = previewImageIdentifier
         self.imageLoadingCancellable = ImageLoader.shared.image(withIdentifier: previewImageIdentifier)
@@ -68,16 +68,15 @@ class Exercise: Identifiable, ObservableObject {
     
     /// Creates a sample exercise.
     convenience init(sampleExerciseInCategory category: Category, playbackType: PlaybackType, previewImageID: Int) {
-        let names = ["Abudala Awabel", "Tim Cook", "Mark Redekopp", "Andrew Goodney", "Johnny Appleseed", "Jane Doe", "Carol Folt", "Barack Obama", "Mike Pence", "Donald Trump"]
+        let owningUser = PublicProfile.exampleProfiles.randomElement()!
         let loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vehicula lectus vitae quam maximus semper. Duis eget magna id neque sagittis pretium. Morbi sit amet diam et eros cursus mattis a vitae dolor. Etiam in ex at sapien consectetur euismod. Curabitur in fringilla lectus. Duis dictum orci libero, ac semper risus facilisis sit amet. Praesent a tellus nulla."
         
-        let name = names.randomElement()!
         self.init(id: Int.random(in: Int.min...Int.max),
-                  name: "\(category.description) with \(name)",
+                  name: "\(category.description) with \(owningUser.identifier)",
                   description: loremIpsum,
                   category: category,
                   playbackType: playbackType,
-                  owningUserIdentifier: name,
+                  owningUser: owningUser,
                   duration: playbackType == .recordedVideo ? Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes) : nil,
                   previewImageIdentifier: "\(category.rawValue)-\(previewImageID)")
     }
