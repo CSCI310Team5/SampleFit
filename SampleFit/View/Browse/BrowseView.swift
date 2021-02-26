@@ -8,31 +8,35 @@
 import SwiftUI
 
 struct BrowseView: View {
-    @ObservedObject var socialInformation: SocialInformation
+    @ObservedObject var privateInformation: PrivateInformation
     
     var body: some View {
         NavigationView {
             
             ScrollView {
                 VStack {
-                    FeaturedExercisesView(exercises: socialInformation.featuredExercises)
+                    FeaturedExercisesView(privateInformation: privateInformation)
                                 
                     // iterating category instead of the actual items to prevent ForEach from making a copy of the items array which could fail in rerendering
                     ForEach(Exercise.Category.allCases, id: \.self) { category in
-                        ExerciseCategoryRow(categoryName: category.description, items: socialInformation.exerciseInCategory[category]!)
+                        ExerciseCategoryRow(categoryName: category.description, items: privateInformation.exerciseInCategory[category]!)
                     }
                 }
             }
             .navigationTitle("Browse")
             
         }
+        .environmentObject(privateInformation)
     }
 }
 
 struct FeaturedExercisesView: View {
-    var exercises: [Exercise]
+    @ObservedObject var privateInformation: PrivateInformation
+    var exercises: [Exercise] {
+        privateInformation.featuredExercises
+    }
     var body: some View {
-        NavigationLink(destination: ExerciseDetail(exercise: exercises[0])) {
+        NavigationLink(destination: ExerciseDetail(privateInformation: privateInformation, exercise: exercises[0])) {
             Group {
                 if exercises[0].image != nil {
                     ZStack {
@@ -89,9 +93,10 @@ struct DiscoverView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
         MultiplePreview(embedInNavigationView: false) {
-            BrowseView(socialInformation: userData.socialInformation)
+            BrowseView(privateInformation: userData.privateInformation)
         }
         .environmentObject(userData)
+        .environmentObject(userData.privateInformation)
     }
 }
 

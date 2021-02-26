@@ -151,6 +151,8 @@ extension Exercise {
     }
 }
 
+// MARK: - Protocol conformance
+
 extension Exercise: Equatable {
     static func == (lhs: Exercise, rhs: Exercise) -> Bool {
         return lhs.id == rhs.id

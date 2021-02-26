@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserDetail: View {
-    var user: PersonalInformation
+    var user: PublicProfile
     var body: some View {
         VStack {
             Text("User Detail View")
@@ -20,7 +20,7 @@ struct UserDetail: View {
 struct UserDetail_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UserDetail(user: PersonalInformation.examplePersonalInformation[0])
+            UserDetail(user: PublicProfile.exampleProfiles[0])
         }
     }
 }

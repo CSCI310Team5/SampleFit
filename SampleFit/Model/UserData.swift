@@ -20,8 +20,8 @@ class UserData: ObservableObject {
     
     var createAccountInformation = CreateAccountInformation()
     var signInInformation = SignInInformation()
-    var personalInformation = PersonalInformation()
-    var socialInformation = SocialInformation()
+    var publicProfile = PublicProfile()
+    var privateInformation = PrivateInformation()
     var searchCategoryTokenController = SearchCategoryTokenEventController()
     
     var signInStatus = SignInStatus.never {
@@ -111,11 +111,11 @@ class UserData: ObservableObject {
         // change sign in status
         manageSignInStatusAfterSignIn(true)
         // fetch social information
-        fetchSocialInformation(usingCredential: personalInformation)
+        fetchSocialInformation(usingCredential: publicProfile)
     }
     
     private func storeCredential(identifier: String, fullName: PersonNameComponents? = nil) {
-        personalInformation = PersonalInformation(identifier: identifier, fullName: fullName)
+        publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
     }
     
     /// Manages sign in status after the user chooses to sign in.
@@ -132,16 +132,17 @@ class UserData: ObservableObject {
         }
     }
     
-    private func fetchSocialInformation(usingCredential credential: PersonalInformation) {
+    private func fetchSocialInformation(usingCredential credential: PublicProfile) {
         // fetch social information
         fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withCredential: credential)
             .receive(on: DispatchQueue.main)
-            .assign(to: \.socialInformation.exerciseFeeds, on: self)
+            .assign(to: \.privateInformation.exerciseFeeds, on: self)
     }
     
     static var signedInUserData: UserData {
         let userData = UserData()
         userData.storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: "signedInUser")
+        userData.privateInformation = PrivateInformation.examplePrivateInformation
         return userData
     }
     

@@ -50,7 +50,7 @@ class NetworkQueryController {
     }
     
     /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
-    func exerciseFeedsForUser(withCredential credential: PersonalInformation) -> AnyPublisher<[Exercise], Never> {
+    func exerciseFeedsForUser(withCredential credential: PublicProfile) -> AnyPublisher<[Exercise], Never> {
         // FIXME: Search for exercise feeds for user over network
         // assuming success now
         // faking networking delay of 2 seconds
@@ -81,12 +81,12 @@ class NetworkQueryController {
     }
     
     /// Quries the network for user results and returns a publisher that emits either relevant user credentials on success or an error on failure.
-    func searchUserResults(searchText: String) -> AnyPublisher<[PersonalInformation], Error> {
+    func searchUserResults(searchText: String) -> AnyPublisher<[PublicProfile], Error> {
         // FIXME: Search for user results for user over network
         // assuming success now
         // faking networking delay of 2 seconds
         return Future { promise in
-            promise(.success(PersonalInformation.examplePersonalInformation.filter { $0.shouldAppearOnSearchText(searchText) }))
+            promise(.success(PublicProfile.exampleProfiles.filter { $0.shouldAppearOnSearchText(searchText) }))
         }
         .delay(for: .seconds(2), scheduler: DispatchQueue.global())
         .eraseToAnyPublisher()

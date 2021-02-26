@@ -12,52 +12,12 @@ struct SearchResult: View {
     var body: some View {
         switch searchState.scope {
         case .video:
-            ExerciseSearchResult(exercises: searchState.exerciseSearchResults)
+            ExerciseSearchResultList(exercises: searchState.exerciseSearchResults)
         case .user:
-            UserSearchResult(users: searchState.userSearchResults)
+            UserSearchResultList(users: searchState.userSearchResults)
         }
     }
 }
-
-struct ExerciseSearchResult: View {
-    var exercises: [Exercise]
-    var body: some View {
-        List {
-            ForEach(exercises) { exercise in
-                NavigationLink(destination: ExerciseDetail(exercise: exercise)) {
-                    ExerciseListDisplayItem(exercise: exercise)
-                }
-            }
-        }
-        .listStyle(PlainListStyle())
-    }
-}
-
-struct UserSearchResult: View {
-    var users: [PersonalInformation]
-    
-    var body: some View {
-        ScrollView {
-            LazyVStack {
-                ForEach(users) { user in
-                    ZStack(alignment: .trailing) {
-                        NavigationLink(destination: UserDetail(user: user)) {
-                            UserListDisplayItem(user: user)
-                                .padding(.top, user == users[0] ? 4 : 0)
-                        }
-                        
-                        FollowButton()
-                            .padding(.trailing, 20)
-                    }
-                    
-                }
-            }
-            
-        }
-    }
-}
-
-
 
 struct SearchResult_Previews: PreviewProvider {
     @ObservedObject static var userData = UserData()
@@ -65,7 +25,7 @@ struct SearchResult_Previews: PreviewProvider {
     @State private static var userSearchState = SearchState.exampleStateWithResultsFilled(inScope: .user)
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            SearchResult(searchState: userSearchState)
+//            SearchResult(searchState: userSearchState)
             SearchResult(searchState: videoSearchState)
         }
         .environmentObject(userData)

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var userData: UserData
-    @State private var selection: Tab = .browse
+    @State private var selection: Tab = .me
     
     enum Tab: String {
         case browse = "Browse"
@@ -19,20 +19,19 @@ struct HomeView: View {
     
     var body: some View {
         TabView(selection: $selection) {
-            BrowseView(socialInformation: userData.socialInformation)
+            BrowseView(privateInformation: userData.privateInformation)
                 .tabItem {
-                    Label("Browse", systemImage: "list.and.film")
+                    Label("Browse", systemImage: "square.grid.2x2.fill")
                 }
                 .tag(Tab.browse)
             
             NavigationView {
                 VStack {
-                    Text("Me")
-                    Button("Sign out", action: userData.signOut)
+                    MeView(privateInformation: userData.privateInformation)
                 }
             }
                 .tabItem {
-                    Label("Me", systemImage: "person")
+                    Label("Me", systemImage: "person.fill")
                 }
                 .tag(Tab.me)
             
@@ -42,6 +41,7 @@ struct HomeView: View {
                 }
                 .tag(Tab.search)
         }
+        .environmentObject(userData)
     }
 }
 

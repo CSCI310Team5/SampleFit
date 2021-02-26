@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ExerciseCategoryRow: View {
+    @EnvironmentObject var privateInformation: PrivateInformation
     var categoryName: String
     var items: [Exercise]
     
@@ -22,7 +23,7 @@ struct ExerciseCategoryRow: View {
                 Spacer()
                 
                 // show all button
-                NavigationLink(destination: ExerciseSearchResult(exercises: items).navigationTitle(categoryName)) {
+                NavigationLink(destination: ExerciseSearchResultList(exercises: items).navigationTitle(categoryName)) {
                     Text("Show All")
                         .foregroundColor(.accentColor)
                 }
@@ -37,7 +38,7 @@ struct ExerciseCategoryRow: View {
                 HStack(spacing: 16) {
                     // show up to 6 items only
                     ForEach(Array(items.prefix(6))) { item in
-                        NavigationLink(destination: ExerciseDetail(exercise: item)) {
+                        NavigationLink(destination: ExerciseDetail(privateInformation: privateInformation, exercise: item)) {
                             ExerciseListDisplayItem(exercise: item)
                                 // padding on the last item so that it doesn't look shifted
                                 .padding(.trailing, item == items.last! ? UIScreen.main.bounds.width * 0.075 : 0)
@@ -63,5 +64,6 @@ struct ExerciseCategoryRow_Previews: PreviewProvider {
             
         }
         .environmentObject(userData)
+        .environmentObject(userData.privateInformation)
     }
 }

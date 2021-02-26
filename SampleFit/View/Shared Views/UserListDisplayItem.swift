@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserListDisplayItem: View {
-    var user: PersonalInformation
+    var user: PublicProfile
     
     var body: some View {
         VStack {
@@ -42,11 +42,7 @@ struct UserListDisplayItem: View {
                 
             }
             .padding(.vertical, 8)
-            
-            Divider()
         }
-        .padding(.horizontal, 20)
-
         .foregroundColor(.primary)
     }
 }
@@ -54,7 +50,7 @@ struct UserListDisplayItem: View {
 struct UserListDisplayItem_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UserListDisplayItem(user: PersonalInformation.examplePersonalInformation[0])
+            UserListDisplayItem(user: PublicProfile.exampleProfiles[0])
         }
     }
 }

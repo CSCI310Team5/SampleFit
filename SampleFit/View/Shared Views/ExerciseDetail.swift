@@ -9,8 +9,8 @@ import SwiftUI
 import AVKit
 
 struct ExerciseDetail: View {
-    @ObservedObject var exercise: Exercise
-    @State private var favorited = false
+    @ObservedObject var privateInformation: PrivateInformation
+    var exercise: Exercise
     @State private var isWorkingout = false
     
     var body: some View {
@@ -54,10 +54,10 @@ struct ExerciseDetail: View {
                         }
                         
                         Spacer()
-                        
+                                            
                         // favorite button
-                        Button(action: { withAnimation { favorited.toggle() } }) {
-                            if favorited {
+                        Button(action: { privateInformation.toggleExerciseInFavorites(exercise) }) {
+                            if privateInformation.hasFavorited(exercise) {
                                 Image(systemName: "star.fill")
                                     .resizable()
                                     .frame(width: 24, height: 24)
@@ -130,7 +130,7 @@ struct ExerciseDetail_Previews: PreviewProvider {
 
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            ExerciseDetail(exercise: exercise)
+            ExerciseDetail(privateInformation: PrivateInformation.examplePrivateInformation, exercise: exercise)
         }
     }
 }

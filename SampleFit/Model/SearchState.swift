@@ -24,6 +24,7 @@ enum SearchStatus {
     case hasResults
 }
 
+/// Use `SearchState` to allow search related views to coordinate search data and status.
 class SearchState: ObservableObject {
     typealias SearchCategory = Exercise.Category
     
@@ -46,7 +47,7 @@ class SearchState: ObservableObject {
     }
     @Published var searchStatus: SearchStatus = .notStarted
     @Published var exerciseSearchResults: [Exercise] = []
-    @Published var userSearchResults: [PersonalInformation] = []
+    @Published var userSearchResults: [PublicProfile] = []
     var searchCancellable: AnyCancellable?
     var searchStatusCancellable: AnyCancellable?
     
@@ -101,7 +102,7 @@ class SearchState: ObservableObject {
        let searchState = SearchState()
         searchState.scope = scope
         searchState.exerciseSearchResults = Exercise.exampleExercisesAllPushup
-        searchState.userSearchResults = PersonalInformation.examplePersonalInformation
+        searchState.userSearchResults = PublicProfile.exampleProfiles
         return searchState
     }
 }

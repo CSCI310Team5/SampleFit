@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExerciseListDisplayItem: View {
     @ObservedObject var exercise: Exercise
+    var hideDetails = false
     var body: some View {
         HStack(alignment: .center) {
             // image
@@ -33,20 +34,22 @@ struct ExerciseListDisplayItem: View {
             , alignment: .bottomLeading)
                         
             VStack(alignment: .leading) {
-                HStack(spacing: 4) {
-                    if exercise.playbackType == .recordedVideo {
-                        Text(exercise.durationDescription)
-                    } else {
-                        // live
-                        Text(exercise.durationDescription)
-                            .bold()
-                            .foregroundColor(.red)
+                if !hideDetails {
+                    HStack(spacing: 4) {
+                        if exercise.playbackType == .recordedVideo {
+                            Text(exercise.durationDescription)
+                        } else {
+                            // live
+                            Text(exercise.durationDescription)
+                                .bold()
+                                .foregroundColor(.red)
+                        }
+                        Text("·")
+                            .font(.title3)
+                        Text(exercise.category.description)
                     }
-                    Text("·")
-                        .font(.title3)
-                    Text(exercise.category.description)
+                    .font(.caption)
                 }
-                .font(.caption)
                 
                 Text(exercise.name)
             }
