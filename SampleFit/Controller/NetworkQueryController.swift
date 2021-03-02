@@ -50,7 +50,7 @@ class NetworkQueryController {
     }
     
     /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
-    func exerciseFeedsForUser(withCredential credential: PublicProfile) -> AnyPublisher<[Exercise], Never> {
+    func exerciseFeedsForUser(withProfile profile: PublicProfile) -> AnyPublisher<[Exercise], Never> {
         // FIXME: Search for exercise feeds for user over network
         // assuming success now
         // faking networking delay of 2 seconds

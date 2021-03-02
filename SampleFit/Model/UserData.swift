@@ -48,10 +48,10 @@ class UserData: ObservableObject {
             
             switch authorization.credential {
             case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: appleIDCredential.user, fullName: appleIDCredential.fullName)
+                _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: appleIDCredential.user, fullName: appleIDCredential.fullName)
 
             case let passwordCredential as ASPasswordCredential:
-                storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: passwordCredential.user)
+                _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: passwordCredential.user)
                 
             default:
                 break
@@ -75,7 +75,7 @@ class UserData: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
                 if success {
-                    storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: createAccountInformation.username)
+                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: createAccountInformation.username)
                 } else {
                     print("Create account failed")
                 }
@@ -91,7 +91,7 @@ class UserData: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
                 if success {
-                    storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
+                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
                 } else {
                     print("Sign in failed")
                 }
@@ -105,16 +105,16 @@ class UserData: ObservableObject {
         signInStatus = .signedOut
     }
     
-    private func storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: String, fullName: PersonNameComponents? = nil) {
+    private func _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: String, fullName: PersonNameComponents? = nil) {
         // store the credentials
-        storeCredential(identifier: identifier, fullName: fullName)
+        _storeProfile(identifier: identifier, fullName: fullName)
         // change sign in status
         manageSignInStatusAfterSignIn(true)
         // fetch social information
-        fetchSocialInformation(usingCredential: publicProfile)
+        _fetchExerciseFeeds(usingProfile: publicProfile)
     }
     
-    private func storeCredential(identifier: String, fullName: PersonNameComponents? = nil) {
+    private func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
         publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
     }
     
@@ -132,16 +132,16 @@ class UserData: ObservableObject {
         }
     }
     
-    private func fetchSocialInformation(usingCredential credential: PublicProfile) {
+    private func _fetchExerciseFeeds(usingProfile profile: PublicProfile) {
         // fetch social information
-        fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withCredential: credential)
+        fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withProfile: profile)
             .receive(on: DispatchQueue.main)
             .assign(to: \.privateInformation.exerciseFeeds, on: self)
     }
     
     static var signedInUserData: UserData {
         let userData = UserData()
-        userData.storeCredentialAndManageSignInStatusAfterSignInSuccess(identifier: "signedInUser")
+        userData._storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: "signedInUser")
         userData.privateInformation = PrivateInformation.examplePrivateInformation
         return userData
     }

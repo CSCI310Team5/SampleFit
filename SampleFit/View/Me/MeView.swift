@@ -30,7 +30,7 @@ struct MeView: View {
                     }
                 }
                 
-                NavigationLink(destination: NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.")        .navigationBarTitle("Uploads", displayMode: .inline)) {
+                NavigationLink(destination: NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.").navigationBarTitle("Uploads", displayMode: .inline)) {
                     Label {
                         Text("Uploads")
                     } icon: {
@@ -58,6 +58,11 @@ struct MeView: View {
             
         }
         .listStyle(InsetGroupedListStyle())
+        .toolbar {
+            Image(systemName: "person.circle")
+                .font(.title)
+        }
+        
         .navigationTitle("Me")
     }
 }
