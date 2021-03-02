@@ -15,7 +15,7 @@ Windows: The app itself cannot be run on Windows. However, some data model can b
 
 ## Backend
 
-We need to setup a backend with database to:  
+We need to setup a backend with database to: 
     1. store and access videos  
     2. Regsiter new user  
     3. Log in existing user  

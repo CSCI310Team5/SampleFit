@@ -35,7 +35,7 @@ struct Workout: Identifiable {
 extension Workout {
     var weekdaySymbol: String {
 //        Self.dateFormatter.shortWeekdaySymbols
-        return Self.dateFormatter.shortWeekdaySymbols[Calendar.autoupdatingCurrent.component(.weekday, from: date)]
+        return Self.dateFormatter.shortWeekdaySymbols[Calendar.autoupdatingCurrent.component(.weekday, from: date) - 1]
     }
     var dateDescription: String {
         return Self.dateFormatter.string(from: date)
