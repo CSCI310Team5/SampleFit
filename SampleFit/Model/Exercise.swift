@@ -19,8 +19,13 @@ class Exercise: Identifiable, ObservableObject {
     @Published var owningUser: PublicProfile
     @Published var duration: Measurement<UnitDuration>?
     @Published var image: Image?
+    @Published var peopleLimit: Int
+    // MARK: we also need something that points to the link to the prerecorded/zoom link
+    @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
     private var imageLoadingCancellable: AnyCancellable?
+    
+    
     
     enum PlaybackType: Int {
         case live = 1
@@ -53,7 +58,7 @@ class Exercise: Identifiable, ObservableObject {
     
     // MARK: - Initializers
     
-    init(id: Int, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String) {
+    init(id: Int, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "") {
         self.id = id
         self.name = name
         self.description = description
@@ -61,6 +66,8 @@ class Exercise: Identifiable, ObservableObject {
         self.playbackType = playbackType
         self.owningUser = owningUser
         self.duration = duration
+        self.peopleLimit = peoplelimt
+        self.contentLink = contentlink
         self.previewImageIdentifier = previewImageIdentifier
         self.imageLoadingCancellable = ImageLoader.shared.image(withIdentifier: previewImageIdentifier)
             .receive(on: DispatchQueue.main)
