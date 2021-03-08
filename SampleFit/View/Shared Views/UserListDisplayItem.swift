@@ -13,21 +13,17 @@ struct UserListDisplayItem: View {
     var body: some View {
         VStack {
             HStack(spacing: 16) {
-                if user.image != nil {
-                    // FIXME: Incomplete
-                } else {
-                    // user image
-                    Image(systemName: "person.fill")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 44, height: 44)
-                        .frame(width: 60, height: 60)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .strokeBorder(Color.secondary, lineWidth: 0.5)
-                        )
-                }
+                // user image
+                user.image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Color.secondary, lineWidth: 0.5)
+                    )
                 
                 // name label
                 Text(user.identifier)

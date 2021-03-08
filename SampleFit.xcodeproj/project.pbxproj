@@ -37,6 +37,13 @@
 		F669338A25E10070000D9442 /* SearchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F669338925E10070000D9442 /* SearchState.swift */; };
 		F669339525E100D8000D9442 /* UserListDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F669339425E100D8000D9442 /* UserListDisplayItem.swift */; };
 		F669339A25E10334000D9442 /* UserDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F669339925E10334000D9442 /* UserDetail.swift */; };
+		F66E6BF825F5C87F00F36D9D /* ProfileHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66E6BF725F5C87F00F36D9D /* ProfileHost.swift */; };
+		F66E6C1E25F5E7AC00F36D9D /* UploadedExercisesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */; };
+		F66E6C2925F5EB6400F36D9D /* DisclosureIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66E6C2825F5EB6400F36D9D /* DisclosureIndicator.swift */; };
+		F691AFBE25F6006F00283CE5 /* MiniProfileSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFBD25F6006F00283CE5 /* MiniProfileSummary.swift */; };
+		F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFC225F6095200283CE5 /* NotSetView.swift */; };
+		F691AFC825F6097E00283CE5 /* DetailedProfileSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */; };
+		F691AFCD25F609C400283CE5 /* ProfileEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFCC25F609C400283CE5 /* ProfileEditor.swift */; };
 		F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3BA25D5F9630023D250 /* TestView.swift */; };
 		F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */; };
 		F6C7A3CD25D613F70023D250 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */; };
@@ -111,6 +118,13 @@
 		F669338925E10070000D9442 /* SearchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchState.swift; sourceTree = "<group>"; };
 		F669339425E100D8000D9442 /* UserListDisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListDisplayItem.swift; sourceTree = "<group>"; };
 		F669339925E10334000D9442 /* UserDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetail.swift; sourceTree = "<group>"; };
+		F66E6BF725F5C87F00F36D9D /* ProfileHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHost.swift; sourceTree = "<group>"; };
+		F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadedExercisesList.swift; sourceTree = "<group>"; };
+		F66E6C2825F5EB6400F36D9D /* DisclosureIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureIndicator.swift; sourceTree = "<group>"; };
+		F691AFBD25F6006F00283CE5 /* MiniProfileSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniProfileSummary.swift; sourceTree = "<group>"; };
+		F691AFC225F6095200283CE5 /* NotSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSetView.swift; sourceTree = "<group>"; };
+		F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedProfileSummary.swift; sourceTree = "<group>"; };
+		F691AFCC25F609C400283CE5 /* ProfileEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditor.swift; sourceTree = "<group>"; };
 		F6C7A3BA25D5F9630023D250 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataEntryStatus.swift; sourceTree = "<group>"; };
 		F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
@@ -180,7 +194,12 @@
 			isa = PBXGroup;
 			children = (
 				F631D04F25E878430002E3D1 /* MeView.swift */,
+				F66E6BF725F5C87F00F36D9D /* ProfileHost.swift */,
+				F691AFCC25F609C400283CE5 /* ProfileEditor.swift */,
+				F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */,
+				F691AFBD25F6006F00283CE5 /* MiniProfileSummary.swift */,
 				F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */,
+				F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */,
 				F61719FC25E88CF600C09CE9 /* FollowingUserList.swift */,
 				F6171A1F25E8B4A300C09CE9 /* WorkoutDisplayItem.swift */,
 			);
@@ -350,6 +369,8 @@
 				F669333425E09932000D9442 /* NavigationViewWithSearchBar.swift */,
 				F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */,
 				F6E3097025E635E500F4B7A6 /* FollowButton.swift */,
+				F66E6C2825F5EB6400F36D9D /* DisclosureIndicator.swift */,
+				F691AFC225F6095200283CE5 /* NotSetView.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -501,19 +522,25 @@
 				F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */,
 				F61BA69725D639AF00249ED1 /* MultiplePreview.swift in Sources */,
 				F66932F425DF749B000D9442 /* PropertyWrapper+Helpers.swift in Sources */,
+				F66E6C1E25F5E7AC00F36D9D /* UploadedExercisesList.swift in Sources */,
 				F631D05025E878430002E3D1 /* MeView.swift in Sources */,
 				F6F9DFCF25D4CC4700B578B3 /* SceneDelegate.swift in Sources */,
 				F6DC3FFB25E87EB200A1CD00 /* ExerciseSearchResultList.swift in Sources */,
 				F61BA6B825D75D5E00249ED1 /* SearchView.swift in Sources */,
 				F669339525E100D8000D9442 /* UserListDisplayItem.swift in Sources */,
 				F669332025DFB75C000D9442 /* LiveIndicator.swift in Sources */,
+				F66E6C2925F5EB6400F36D9D /* DisclosureIndicator.swift in Sources */,
 				F6DC400525E87F6200A1CD00 /* FavoriteExercisesList.swift in Sources */,
+				F691AFCD25F609C400283CE5 /* ProfileEditor.swift in Sources */,
 				F61BA6C325D7795C00249ED1 /* Color+Helpers.swift in Sources */,
+				F66E6BF825F5C87F00F36D9D /* ProfileHost.swift in Sources */,
 				F6F9E00025D4CCB200B578B3 /* AuthenticationView.swift in Sources */,
 				F6C7A3CD25D613F70023D250 /* CreateAccountView.swift in Sources */,
 				F6F9E00B25D4DCC200B578B3 /* UserData.swift in Sources */,
 				F61BA67425D6205D00249ED1 /* SignInStatus.swift in Sources */,
 				F6E3097125E635E500F4B7A6 /* FollowButton.swift in Sources */,
+				F691AFC825F6097E00283CE5 /* DetailedProfileSummary.swift in Sources */,
+				F691AFBE25F6006F00283CE5 /* MiniProfileSummary.swift in Sources */,
 				F669335625E0DB7E000D9442 /* SearchResult.swift in Sources */,
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
 				F669332525E087F8000D9442 /* TokenEventController.swift in Sources */,
@@ -531,6 +558,7 @@
 				F669336425E0E110000D9442 /* ExerciseListDisplayItem.swift in Sources */,
 				F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */,
 				F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */,
+				F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

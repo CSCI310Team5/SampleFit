@@ -10,8 +10,21 @@ import SwiftUI
 struct MeView: View {
     @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
+    @State private var isProfileSheetPresented = false
     var body: some View {
         List {
+            // profile mini summary
+            MiniProfileSummary(publicProfile: userData.publicProfile)
+            
+            Section {
+                NavigationLink(destination: ProfileHost(publicProfile: userData.publicProfile)) {
+                    Label {
+                        Text("Profile Details")
+                    } icon: {
+                        Image(systemName: "person.fill")
+                    }
+                }
+            }
             
             Section {
                 NavigationLink(destination: FavoriteExercisesList(privateInformation: privateInformation)) {
@@ -19,14 +32,6 @@ struct MeView: View {
                         Text("Favorites")
                     } icon: {
                         Image(systemName: "star.fill")
-                    }
-                }
-                
-                NavigationLink(destination: FollowingUserList(privateInformation: privateInformation)) {
-                    Label {
-                        Text("Following")
-                    } icon: {
-                        Image(systemName: "person.fill")
                     }
                 }
                 
@@ -39,14 +44,24 @@ struct MeView: View {
                     }
                 }
                 
+                NavigationLink(destination: FollowingUserList(privateInformation: privateInformation)) {
+                    Label {
+                        Text("Following")
+                    } icon: {
+                        Image(systemName: "person.2.fill")
+                    }
+                }
             }
             
             // Workout History
-            Section(header: Text("History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
-                ForEach(privateInformation.workoutHistory) { workout in
-                    WorkoutDisplayItem(workout: workout)
+            if !privateInformation.workoutHistory.isEmpty {
+                Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
+                    ForEach(privateInformation.workoutHistory) { workout in
+                        WorkoutDisplayItem(workout: workout)
+                    }
                 }
             }
+            
             
             Section {
                 Button(action: { userData.signOut() }) {
@@ -58,21 +73,17 @@ struct MeView: View {
             
         }
         .listStyle(InsetGroupedListStyle())
-        .toolbar {
-            Image(systemName: "person.circle")
-                .font(.title)
-        }
-        
         .navigationTitle("Me")
     }
 }
 
 struct MeView_Previews: PreviewProvider {
+    static var userData = UserData.signedInUserData
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            MeView(privateInformation: PrivateInformation.examplePrivateInformation)
+            MeView(privateInformation: userData.privateInformation)
         }
-        .environmentObject(PrivateInformation.examplePrivateInformation)
+        .environmentObject(userData)
         
     }
 }

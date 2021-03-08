@@ -20,7 +20,7 @@ class UserData: ObservableObject {
     
     var createAccountInformation = CreateAccountInformation()
     var signInInformation = SignInInformation()
-    var publicProfile = PublicProfile()
+    var publicProfile = PublicProfile.exampleProfile
     var privateInformation = PrivateInformation()
     var searchCategoryTokenController = SearchCategoryTokenEventController()
     

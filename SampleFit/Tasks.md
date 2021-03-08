@@ -1,11 +1,17 @@
 #  Tasks
 
-## MeView
-1. Add a profile button on top right corner.
-
+## ProfileEditor
+1. Implement Mass Picker and Height Picker. Provide appropriate range and data flow.
+2. onConfirm / on cancel should save / discard draft profile
 
 ## UserDetail
 1. Implement UserDetail
+
+
+## Authentication
+1. Replace username with email as the unique identifier.
+
+
 
 
 ## ExerciseDetail

@@ -46,7 +46,7 @@ struct HomeView: View {
 }
 
 struct HomeView_Previews: PreviewProvider {
-    static var userData = UserData()
+    static var userData = UserData.signedInUserData
     static var previews: some View {
         MultiplePreview(embedInNavigationView: false) {
             HomeView()
