@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MiniProfileSummary: View {
-    var publicProfile: PublicProfile
+    @ObservedObject var publicProfile: PublicProfile
     var body: some View {
         Section {
             HStack {

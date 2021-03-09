@@ -44,6 +44,10 @@
 		F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFC225F6095200283CE5 /* NotSetView.swift */; };
 		F691AFC825F6097E00283CE5 /* DetailedProfileSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */; };
 		F691AFCD25F609C400283CE5 /* ProfileEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFCC25F609C400283CE5 /* ProfileEditor.swift */; };
+		F691AFE225F6FFB000283CE5 /* NicknameEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFE125F6FFB000283CE5 /* NicknameEditor.swift */; };
+		F691AFEA25F6FFE600283CE5 /* BirthdayEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */; };
+		F691AFEF25F7007000283CE5 /* HeightEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFEE25F7007000283CE5 /* HeightEditor.swift */; };
+		F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFF325F7008F00283CE5 /* MassEditor.swift */; };
 		F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3BA25D5F9630023D250 /* TestView.swift */; };
 		F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */; };
 		F6C7A3CD25D613F70023D250 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */; };
@@ -125,6 +129,10 @@
 		F691AFC225F6095200283CE5 /* NotSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotSetView.swift; sourceTree = "<group>"; };
 		F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedProfileSummary.swift; sourceTree = "<group>"; };
 		F691AFCC25F609C400283CE5 /* ProfileEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditor.swift; sourceTree = "<group>"; };
+		F691AFE125F6FFB000283CE5 /* NicknameEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameEditor.swift; sourceTree = "<group>"; };
+		F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayEditor.swift; sourceTree = "<group>"; };
+		F691AFEE25F7007000283CE5 /* HeightEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightEditor.swift; sourceTree = "<group>"; };
+		F691AFF325F7008F00283CE5 /* MassEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MassEditor.swift; sourceTree = "<group>"; };
 		F6C7A3BA25D5F9630023D250 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataEntryStatus.swift; sourceTree = "<group>"; };
 		F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
@@ -194,10 +202,7 @@
 			isa = PBXGroup;
 			children = (
 				F631D04F25E878430002E3D1 /* MeView.swift */,
-				F66E6BF725F5C87F00F36D9D /* ProfileHost.swift */,
-				F691AFCC25F609C400283CE5 /* ProfileEditor.swift */,
-				F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */,
-				F691AFBD25F6006F00283CE5 /* MiniProfileSummary.swift */,
+				F691AFE025F6FF9600283CE5 /* Profile */,
 				F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */,
 				F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */,
 				F61719FC25E88CF600C09CE9 /* FollowingUserList.swift */,
@@ -214,6 +219,21 @@
 				F669332425E087F8000D9442 /* TokenEventController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		F691AFE025F6FF9600283CE5 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				F66E6BF725F5C87F00F36D9D /* ProfileHost.swift */,
+				F691AFCC25F609C400283CE5 /* ProfileEditor.swift */,
+				F691AFE125F6FFB000283CE5 /* NicknameEditor.swift */,
+				F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */,
+				F691AFEE25F7007000283CE5 /* HeightEditor.swift */,
+				F691AFF325F7008F00283CE5 /* MassEditor.swift */,
+				F691AFC725F6097E00283CE5 /* DetailedProfileSummary.swift */,
+				F691AFBD25F6006F00283CE5 /* MiniProfileSummary.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		F6C7A3C525D60FC10023D250 /* Model */ = {
@@ -505,6 +525,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F691AFE225F6FFB000283CE5 /* NicknameEditor.swift in Sources */,
 				F669335125E0DAB4000D9442 /* SearchRecommendation.swift in Sources */,
 				F66932A925DE1315000D9442 /* SignInInformation.swift in Sources */,
 				F6C7A3D225D616BC0023D250 /* SignInView.swift in Sources */,
@@ -533,6 +554,7 @@
 				F6DC400525E87F6200A1CD00 /* FavoriteExercisesList.swift in Sources */,
 				F691AFCD25F609C400283CE5 /* ProfileEditor.swift in Sources */,
 				F61BA6C325D7795C00249ED1 /* Color+Helpers.swift in Sources */,
+				F691AFEA25F6FFE600283CE5 /* BirthdayEditor.swift in Sources */,
 				F66E6BF825F5C87F00F36D9D /* ProfileHost.swift in Sources */,
 				F6F9E00025D4CCB200B578B3 /* AuthenticationView.swift in Sources */,
 				F6C7A3CD25D613F70023D250 /* CreateAccountView.swift in Sources */,
@@ -545,6 +567,7 @@
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
 				F669332525E087F8000D9442 /* TokenEventController.swift in Sources */,
 				F669333525E09932000D9442 /* NavigationViewWithSearchBar.swift in Sources */,
+				F691AFEF25F7007000283CE5 /* HeightEditor.swift in Sources */,
 				F669331B25DFB3E5000D9442 /* ExerciseDetail.swift in Sources */,
 				F669338A25E10070000D9442 /* SearchState.swift in Sources */,
 				F66932C625DE1A09000D9442 /* ImageLoader.swift in Sources */,
@@ -552,6 +575,7 @@
 				F6E3095425E4DBE400F4B7A6 /* LoadingSearch.swift in Sources */,
 				F61BA6A225D6407D00249ED1 /* BrowseView.swift in Sources */,
 				F6DC400025E87EC200A1CD00 /* UserSearchResultList.swift in Sources */,
+				F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */,
 				F6171A2525E8B4BE00C09CE9 /* Workout.swift in Sources */,
 				F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */,
 				F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */,

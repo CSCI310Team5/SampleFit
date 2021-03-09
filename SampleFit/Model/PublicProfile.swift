@@ -17,17 +17,38 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _birthday: Date?
     private var _height: Measurement<UnitLength>?
     private var _mass: Measurement<UnitMass>?
-        
-    private var _birthdayFormatter: DateFormatter
-    private var _heightformatter: LengthFormatter
-    private var _massformatter: MassFormatter
+
+    private var _usesMetricSystem: Bool
     
-    var birthdayDateRange: ClosedRange<Date> = {
-        let calendar = Calendar.autoupdatingCurrent
-        let startComponents = DateComponents(year: 1900)
-        let endComponents = calendar.dateComponents(in: calendar.timeZone, from: Date())
-        return calendar.date(from: startComponents)! ... calendar.date(from: endComponents)!
+    var birthdayDateRange: ClosedRange<Date>
+    var heightRange: [Measurement<UnitLength>]
+    var massRange: [Measurement<UnitMass>]
+    
+    static private let _dropFractionsNumberFormatter: NumberFormatter = {
+        let dropFractionsNumberFormatter = NumberFormatter()
+        dropFractionsNumberFormatter.maximumFractionDigits = 0
+        return dropFractionsNumberFormatter
     }()
+    static var birthdayFormatter: DateFormatter = {
+        let birthdayFormatter = DateFormatter()
+        birthdayFormatter.timeStyle = .none
+        birthdayFormatter.dateStyle = .medium
+        return birthdayFormatter
+    }()
+    static var heightFormatter: LengthFormatter = {
+        let heightFormatter = LengthFormatter()
+        heightFormatter.isForPersonHeightUse = true
+        heightFormatter.unitStyle = .short
+        heightFormatter.numberFormatter = _dropFractionsNumberFormatter
+        return heightFormatter
+    }()
+    static var massFormatter: MassFormatter = {
+        let massFormatter = MassFormatter()
+        massFormatter.isForPersonMassUse = true
+        massFormatter.numberFormatter = _dropFractionsNumberFormatter
+        return massFormatter
+    }()
+    
     
     init(identifier: String, fullName: PersonNameComponents?) {
         self.identifier = identifier
@@ -37,18 +58,27 @@ class PublicProfile: Identifiable, ObservableObject {
             _nickname = nameFormatter.string(from: fullName)
         }
         
-        self._birthdayFormatter = DateFormatter()
-        _birthdayFormatter.timeStyle = .none
-        _birthdayFormatter.dateStyle = .medium
-        self._heightformatter = LengthFormatter()
-        _heightformatter.isForPersonHeightUse = true
-        _heightformatter.unitStyle = .short
-        self._massformatter = MassFormatter()
-        _massformatter.isForPersonMassUse = true
-        let dropFractionsNumberFormatter = NumberFormatter()
-        dropFractionsNumberFormatter.maximumFractionDigits = 0
-        _heightformatter.numberFormatter = dropFractionsNumberFormatter
-        _massformatter.numberFormatter = dropFractionsNumberFormatter
+        // initialzing ranges
+        let calendar = Calendar.autoupdatingCurrent
+        let startComponents = DateComponents(year: 1900)
+        let endComponents = calendar.dateComponents(in: calendar.timeZone, from: Date())
+        self.birthdayDateRange = calendar.date(from: startComponents)! ... calendar.date(from: endComponents)!
+
+        _usesMetricSystem = Locale.autoupdatingCurrent.usesMetricSystem
+        if _usesMetricSystem {
+            // height ranges from 50cm to 200cm
+            heightRange = Array(stride(from: 50, through: 200, by: 1)).map { Measurement(value: $0, unit: UnitLength.centimeters) }
+            // mass ranges from 20kg to 300kg
+            massRange = Array(stride(from: 20, to: 300, by: 1)).map { Measurement(value: $0, unit: UnitMass.kilograms) }
+        } else {
+            // height ranges from 10in to 80in
+            heightRange = Array(stride(from: 10, through: 80, by: 1)).map { Measurement(value: $0, unit: UnitLength.inches) }
+            // mass ranges from 50lb to 650lb
+            massRange = Array(stride(from: 50, to: 650, by: 1)).map { Measurement(value: $0, unit: UnitMass.pounds) }
+        }
+        
+        
+        
     }
     
     // MARK: - Instance methods
@@ -61,6 +91,14 @@ class PublicProfile: Identifiable, ObservableObject {
         copyProfile._height = _height
         copyProfile._mass = _mass
         return copyProfile
+    }
+    
+    func update(using newProfile: PublicProfile) {
+        self._nickname = newProfile.nickname
+        self.image = newProfile.image
+        self._birthday = newProfile._birthday
+        self._height = newProfile._height
+        self._mass = newProfile._mass
     }
     
     func shouldAppearOnSearchText(_ text: String) -> Bool {
@@ -106,6 +144,12 @@ extension PublicProfile {
     var isBirthdaySet: Bool {
         return _birthday != nil
     }
+    var isHeightSet: Bool {
+        return _height != nil
+    }
+    var isMassSet: Bool {
+        return _mass != nil
+    }
     var birthdayBinding: Date {
         get { return _birthday ?? Date() }
         set {
@@ -115,17 +159,30 @@ extension PublicProfile {
     }
     var birthdayDescription: String? {
         guard let birthday = _birthday else { return nil }
-        return _birthdayFormatter.string(from: birthday)
+        return Self.birthdayFormatter.string(from: birthday)
+    }
+    var heightBinding: Measurement<UnitLength> {
+        get { return _height ?? heightRange[heightRange.count / 2] }
+        set {
+            objectWillChange.send()
+            _height = newValue
+        }
+    }
+    var massBinding: Measurement<UnitMass> {
+        get { return _mass ?? massRange[massRange.count / 2]}
+        set {
+            objectWillChange.send()
+            _mass = newValue
+        }
     }
     var heightDescription: String? {
         guard let height = _height else { return nil }
-        return _heightformatter.string(fromMeters: height.converted(to: .meters).value)
+        return Self.heightFormatter.string(fromMeters: height.converted(to: .meters).value)
     }
     var massDescription: String? {
         guard let mass = _mass else { return nil }
-        return _massformatter.string(fromKilograms: mass.converted(to: .kilograms).value)
+        return Self.massFormatter.string(fromKilograms: mass.converted(to: .kilograms).value)
     }
-    
 }
 
 // MARK: - Protocol conformance
@@ -137,5 +194,21 @@ extension PublicProfile: Equatable, Comparable {
     
     static func < (lhs: PublicProfile, rhs: PublicProfile) -> Bool {
         return lhs.identifier < rhs.identifier
+    }
+}
+
+// MARK: - Convenience extension
+
+extension Measurement where UnitType == UnitLength {
+    /// Returns the person height description string using PublicProfile's heightFormatter.
+    var personHeightDescription: String {
+        PublicProfile.heightFormatter.string(fromMeters: self.converted(to: .meters).value)
+    }
+}
+
+extension Measurement where UnitType == UnitMass {
+    /// Returns the person mass description string using PublicProfile's massFormatter.
+    var personMassDescription: String {
+        PublicProfile.massFormatter.string(fromKilograms: self.converted(to: .kilograms).value)
     }
 }

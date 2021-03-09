@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct DetailedProfileSummary: View {
-    var publicProfile: PublicProfile
+    @ObservedObject var publicProfile: PublicProfile
     var body: some View {
         VStack {
             MiniProfileSummary(publicProfile: publicProfile)
                 .padding(.bottom, 20)
             
+            // extra VStack to avoid too many arugments in the parent VStack
             VStack(spacing: 0) {
-                Divider()
+                VStack(spacing: 0) {
+                    Divider()
+                    
+                    // username
+                    HStack {
+                        Text("Username")
+                        Spacer()
+                        Text(publicProfile.identifier)
+                    }
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal)
+                    .frame(minHeight: 44)
+                    
+                    Divider()
+                }
+                
 
                 // nickname
                 HStack {
@@ -41,9 +57,6 @@ struct DetailedProfileSummary: View {
                     } else {
                         NotSetView()
                     }
-                    
-                    //                    DatePicker("", selection: $publicProfile.birthdayBinding, in: publicProfile.birthdayDateRange, displayedComponents: .date)
-                    //                        .datePickerStyle(CompactDatePickerStyle())
                 }
                 .padding(.horizontal)
                 .frame(minHeight: 44)
@@ -64,7 +77,7 @@ struct DetailedProfileSummary: View {
                 .frame(minHeight: 44)
                 
                 Divider()
-                            
+                
                 // weight
                 HStack {
                     Text("Weight")
@@ -79,10 +92,12 @@ struct DetailedProfileSummary: View {
                 .frame(minHeight: 44)
                             
                 Divider()
+                
             }
             
             Spacer()
         }
+        .padding(.top, 50)
     }
 }
 

@@ -9,24 +9,23 @@ import SwiftUI
 
 struct ProfileHost: View {
     @ObservedObject var publicProfile: PublicProfile
-    @Environment(\.editMode) private var editMode
+    @State private var isEditing = false
     
     init(publicProfile: PublicProfile) {
         self.publicProfile = publicProfile
     }
     
     var body: some View {
-        ScrollView {
-            if editMode?.wrappedValue == .inactive {
-                DetailedProfileSummary(publicProfile: publicProfile)
-            } else {
-                ProfileEditor(publicProfile: publicProfile)
-            }
+        ScrollView {    // scrolling experience is a bit better
+            DetailedProfileSummary(publicProfile: publicProfile)
         }
-        .padding(.top, 50)
-
+        .sheet(isPresented: $isEditing) {
+            ProfileEditor(publicProfile: publicProfile, isPresented: $isEditing)
+        }
         .toolbar {
-            EditButton()
+            Button(action: { self.isEditing.toggle() }) {
+                Text("Edit")
+            }
         }
         .navigationBarTitle("Profile Details", displayMode: .inline)
     }
