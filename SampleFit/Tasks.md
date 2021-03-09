@@ -1,17 +1,13 @@
 #  Tasks
 
 ## ProfileEditor
-1. Implement Mass Picker and Height Picker. Provide appropriate range and data flow.
-2. onConfirm / on cancel should save / discard draft profile
+1. Implement Image editor
 
 ## UserDetail
 1. Implement UserDetail
 
-
 ## Authentication
 1. Replace username with email as the unique identifier.
-
-
 
 
 ## ExerciseDetail
