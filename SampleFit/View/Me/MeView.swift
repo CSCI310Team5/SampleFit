@@ -14,7 +14,7 @@ struct MeView: View {
     var body: some View {
         List {
             // profile mini summary
-            MiniProfileSummary(publicProfile: userData.publicProfile)
+//            MiniProfileSummary(publicProfile: userData.publicProfile)
             
             Section {
                 NavigationLink(destination: ProfileHost(publicProfile: userData.publicProfile)) {

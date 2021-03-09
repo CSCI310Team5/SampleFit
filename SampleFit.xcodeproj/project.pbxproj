@@ -60,6 +60,9 @@
 		F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3096625E4F50300F4B7A6 /* BlurView.swift */; };
 		F6E3096C25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */; };
 		F6E3097125E635E500F4B7A6 /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3097025E635E500F4B7A6 /* FollowButton.swift */; };
+		F6E8AEF225F74E3C00EF4BE4 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */; };
+		F6E8AEF725F75A9000EF4BE4 /* ImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AEF625F75A9000EF4BE4 /* ImageEditor.swift */; };
+		F6E8AEFC25F75E3100EF4BE4 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */; };
 		F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */; };
 		F6F9DFCF25D4CC4700B578B3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */; };
 		F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFD025D4CC4700B578B3 /* ContentView.swift */; };
@@ -145,6 +148,9 @@
 		F6E3096625E4F50300F4B7A6 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveBlurOverlay.swift; sourceTree = "<group>"; };
 		F6E3097025E635E500F4B7A6 /* FollowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
+		F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		F6E8AEF625F75A9000EF4BE4 /* ImageEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditor.swift; sourceTree = "<group>"; };
+		F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
 		F6F9DFC925D4CC4700B578B3 /* SampleFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -226,6 +232,7 @@
 			children = (
 				F66E6BF725F5C87F00F36D9D /* ProfileHost.swift */,
 				F691AFCC25F609C400283CE5 /* ProfileEditor.swift */,
+				F6E8AEF625F75A9000EF4BE4 /* ImageEditor.swift */,
 				F691AFE125F6FFB000283CE5 /* NicknameEditor.swift */,
 				F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */,
 				F691AFEE25F7007000283CE5 /* HeightEditor.swift */,
@@ -391,6 +398,8 @@
 				F6E3097025E635E500F4B7A6 /* FollowButton.swift */,
 				F66E6C2825F5EB6400F36D9D /* DisclosureIndicator.swift */,
 				F691AFC225F6095200283CE5 /* NotSetView.swift */,
+				F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */,
+				F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -528,6 +537,7 @@
 				F691AFE225F6FFB000283CE5 /* NicknameEditor.swift in Sources */,
 				F669335125E0DAB4000D9442 /* SearchRecommendation.swift in Sources */,
 				F66932A925DE1315000D9442 /* SignInInformation.swift in Sources */,
+				F6E8AEF225F74E3C00EF4BE4 /* ImagePicker.swift in Sources */,
 				F6C7A3D225D616BC0023D250 /* SignInView.swift in Sources */,
 				F66932D725DF6B9C000D9442 /* PublicProfile.swift in Sources */,
 				F669331625DFAF29000D9442 /* PlaceholderImage.swift in Sources */,
@@ -578,10 +588,12 @@
 				F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */,
 				F6171A2525E8B4BE00C09CE9 /* Workout.swift in Sources */,
 				F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */,
+				F6E8AEF725F75A9000EF4BE4 /* ImageEditor.swift in Sources */,
 				F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */,
 				F669336425E0E110000D9442 /* ExerciseListDisplayItem.swift in Sources */,
 				F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */,
 				F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */,
+				F6E8AEFC25F75E3100EF4BE4 /* CircleImage.swift in Sources */,
 				F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

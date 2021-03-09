@@ -15,12 +15,7 @@ struct MiniProfileSummary: View {
                 Spacer()
                 VStack(spacing: 16) {
                     
-                    publicProfile.image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.gray, lineWidth: 0.25))
+                    CircleImage(image: publicProfile.image)
                     
                     // top portion
                     VStack {

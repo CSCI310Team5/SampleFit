@@ -36,12 +36,7 @@ struct ProfileEditor: View {
         ZStack(alignment: .top) {
             VStack(spacing: 70) {
                 
-                draftProfile.image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 80, height: 80)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 0.25))
+                ImageEditor(draftProfile: draftProfile)
                 
                 VStack(spacing: 0) {
                     Divider()

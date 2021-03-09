@@ -37,7 +37,7 @@ struct DetailedProfileSummary: View {
                 HStack {
                     Text("Nickname")
                     Spacer()
-                    if publicProfile.isNicknameSet {
+                    if publicProfile.isNicknameSet && !publicProfile.nickname.isEmpty {
                         Text(publicProfile.nickname)
                     } else {
                         NotSetView()
