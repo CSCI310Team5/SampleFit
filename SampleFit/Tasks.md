@@ -45,9 +45,6 @@ All code that talks to the backend should go into NetworkQueryController. All cu
     a. Ask the backend to remove password checking on any sign up / sign in. This is currently NOT handled on the frontend.  
     b. In the sign Up / Sign In / Sign Out functionalities, serialize AuthenticiationState to a JSON object that the backend wants.  
     c. Send the JSON object over the network using URLSession APIs.  
-    d. If sign up / sign in failed, the UI should display an error.  
-        i. The quickest way to do this is to add a Bool value (indicating authenticionSuccess/fail) to userData which defaults to true. Only when sign in/ sign up failed, it turns to false, allowing the UI to display an error message. 
-    e. Sign In / Sign Up with Apple does not work on Simulator and may require a slightly different implementation. If time requires, comment out the SignInWithApple buttons for now.  
 3. In NetworkQueryController, add functions which retrieves all necessary information in PublicProfile.
 4. In NetworkQueryController, add functions which retrieves all necessary information in PrivateInformation.
 
