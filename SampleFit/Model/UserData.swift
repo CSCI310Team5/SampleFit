@@ -18,8 +18,8 @@ class UserData: ObservableObject {
     /// Notifies SwiftUI to re-render UI because of a data change.
     var objectWillChange = ObservableObjectPublisher()
     
-    var createAccountInformation = CreateAccountInformation()
-    var signInInformation = SignInInformation()
+    var createAccountAuthenticationState = AuthenticationState(for: .createAccount)
+    var signInAuthenticationState = AuthenticationState(for: .signIn)
     var publicProfile = PublicProfile.exampleProfile
     var privateInformation = PrivateInformation()
     var searchCategoryTokenController = SearchCategoryTokenEventController()
@@ -71,11 +71,11 @@ class UserData: ObservableObject {
         print("creating account using default method...")
         signInStatus = .validatingFirstTime
         
-        createAccountCancellable = networkQueryController.createAccount(using: createAccountInformation)
+        createAccountCancellable = networkQueryController.createAccount(using: createAccountAuthenticationState)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
                 if success {
-                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: createAccountInformation.username)
+                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: createAccountAuthenticationState.username)
                 } else {
                     print("Create account failed")
                 }
@@ -87,11 +87,11 @@ class UserData: ObservableObject {
         print("signing in using default method...")
         signInStatus = .validating
         
-        signInCancellable = networkQueryController.signIn(using: signInInformation)
+        signInCancellable = networkQueryController.signIn(using: signInAuthenticationState)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
                 if success {
-                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInInformation.username)
+                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInAuthenticationState.username)
                 } else {
                     print("Sign in failed")
                 }

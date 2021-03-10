@@ -11,8 +11,8 @@ struct ChangePasswordView: View {
     @EnvironmentObject var userData: UserData
     @Binding var isPresented: Bool
     @State private var isDoneButtonEnabled = false
-    // reusing CreateAccountInformation verification logic
-    @ObservedObject private var draftInformation = CreateAccountInformation.resetPasswordInformation
+    // reusing AuthenticationState verification logic
+    @ObservedObject private var draftInformation = AuthenticationState.resetPasswordInformation
     
     var body: some View {
         VStack(spacing: 50) {
@@ -26,7 +26,7 @@ struct ChangePasswordView: View {
                 }) {
                     Text("Confirm").bold()
                 }
-                .disabled(!draftInformation.allowsSignUp)
+                .disabled(!draftInformation.allowsAuthentication)
             }
             .padding(.horizontal)
             .padding(.vertical, 20)
@@ -36,17 +36,13 @@ struct ChangePasswordView: View {
             
             VStack(spacing: 12) {
                 // password
-                CreateAccountPasswordTextField($draftInformation.password, inputStatus: draftInformation.passwordInputStatus)
-                CreateAccountRepeatPasswordTextField($draftInformation.repeatPassword, inputStatus: draftInformation.repeatPasswordInputStatus)
+                PasswordTextField(.password, text: $draftInformation.password, inputStatus: draftInformation.passwordInputStatus, colorType: \.signInColor)
+                PasswordTextField(.verify, text: $draftInformation.repeatPassword, inputStatus: draftInformation.repeatPasswordInputStatus, colorType: \.signInColor)
             }
             .padding(.horizontal, 28)
             .padding(.top, 50)
 
             Spacer()
-        }
-        .onDisappear {
-            draftInformation.password = ""
-            draftInformation.repeatPassword = ""
         }
     }
 }

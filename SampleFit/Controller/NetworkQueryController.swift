@@ -22,7 +22,7 @@ class NetworkQueryController {
         // faking validation logic now
         // faking networking delay of 2 seconds
         return Future<Bool, Error> { promise in
-            if username.count < 3 {
+            if username.count <= 3 {
                 promise(.failure(MessagedError(message: "Too short")))
             } else {
                 promise(.success(true))
@@ -35,7 +35,7 @@ class NetworkQueryController {
     
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
-    func createAccount(using: CreateAccountInformation) -> AnyPublisher<Bool, Never> {
+    func createAccount(using: AuthenticationState) -> AnyPublisher<Bool, Never> {
         // FIXME: Create account over network
         // assuming success now
         // faking networking delay of 2 seconds
@@ -48,7 +48,7 @@ class NetworkQueryController {
     }
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
-    func signIn(using: SignInInformation) -> AnyPublisher<Bool, Never> {
+    func signIn(using: AuthenticationState) -> AnyPublisher<Bool, Never> {
         // FIXME: Sign in over network
         // assuming success now
         // faking networking delay of 2 seconds

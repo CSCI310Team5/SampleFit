@@ -1,5 +1,5 @@
 //
-//  CreateAccountUsernameTextField.swift
+//  PasswordTextField.swift
 //  SampleFit
 //
 //  Created by Zihan Qi on 3/9/21.
@@ -7,27 +7,38 @@
 
 import SwiftUI
 
-struct UsernameTextField: View {
-    @Binding var username: String
+struct PasswordTextField: View {
+    enum Usage {
+        case password
+        case verify
+    }
+    var title: String
+    var errorMessage: String
+    @Binding var text: String
     var inputStatus: InputVerificationStatus
     var colorType: KeyPath<InputVerificationStatus, Color>
     
-    init(_ username: Binding<String>, inputStatus: InputVerificationStatus, colorType: KeyPath<InputVerificationStatus, Color>) {
-        self._username = username
+    init(_ style: Usage, text: Binding<String>, inputStatus: InputVerificationStatus, colorType: KeyPath<InputVerificationStatus, Color>) {
+        if style == .password {
+            self.title = "Password"
+            self.errorMessage = "Too short"
+        } else {
+            title = "Repeat Password"
+            self.errorMessage = "Does not match"
+        }
+        self._text = text
         self.inputStatus = inputStatus
         self.colorType = colorType
     }
     
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: "person.circle")
-                .font(.title)
+            Image(systemName: "lock.circle")
+                .font(Font.title)
                 .foregroundColor(inputStatus[keyPath: colorType])
-            TextField("User name", text: $username)
-                .textContentType(.username)
+            SecureField(title, text: $text)
+                .textContentType(.newPassword)
                 .font(.title3)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
                 .frame(minHeight: 44)
         }
         .overlay(
@@ -37,7 +48,7 @@ struct UsernameTextField: View {
                         .progressViewStyle(CircularProgressViewStyle())
                 }
                 if inputStatus == .invalid {
-                    Text("Not Available")
+                    Text(errorMessage)
                         .font(Font.callout.bold())
                         .foregroundColor(inputStatus[keyPath: colorType])
                 }
@@ -47,10 +58,10 @@ struct UsernameTextField: View {
     }
 }
 
-struct NewUsernameTextField_Previews: PreviewProvider {
+struct NewPasswordTextField_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: false) {
-            UsernameTextField(.constant(""), inputStatus: .notEntered, colorType: \.signInColor)
+            PasswordTextField(.password, text: .constant(""), inputStatus: InputVerificationStatus.invalid, colorType: \.signUpColor)
         }
     }
 }

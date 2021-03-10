@@ -13,7 +13,7 @@ import Combine
 
 struct SignInView: View {
     @EnvironmentObject var userData: UserData
-    @ObservedObject var signInInformation: SignInInformation
+    @ObservedObject var signInAuthenticationState: AuthenticationState
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
     
@@ -23,10 +23,10 @@ struct SignInView: View {
             // Custom sign in
             VStack(spacing: 16) {
                 // username field
-                SignInUsernameTextField(signInInformation: signInInformation)
-
+                UsernameTextField($signInAuthenticationState.username, inputStatus: signInAuthenticationState.usernameInputStatus, colorType: \.signInColor)
+                
                 // password field
-                SignInPasswordTextField(signInInformation: signInInformation)
+                PasswordTextField(.password, text: $signInAuthenticationState.password, inputStatus: signInAuthenticationState.passwordInputStatus, colorType: \.signInColor)
                 
                 // sign in button
                 Button(action: userData.signInUsingDefaultMethod) {
@@ -45,10 +45,10 @@ struct SignInView: View {
                         .frame(height: 44)
                         .background(
                             RoundedRectangle(cornerRadius: 7.5)
-                                .fill(signInInformation.allowsSignIn ? signInInformation.passwordInputStatus.signInColor : Color.secondary)
+                                .fill(signInAuthenticationState.allowsAuthentication ? signInAuthenticationState.passwordInputStatus.signInColor : Color.secondary)
                         )
                 }
-                .disabled(!signInInformation.allowsSignIn || userData.signInStatus == .validating)
+                .disabled(!signInAuthenticationState.allowsAuthentication || userData.signInStatus == .validating)
                 .padding(.top, 24)
             }
             .padding(.top, 60)
@@ -85,7 +85,7 @@ struct SignInView_Previews: PreviewProvider {
 
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            SignInView(signInInformation: userData.signInInformation)
+            SignInView(signInAuthenticationState: userData.signInAuthenticationState)
 
         }
         .environmentObject(userData)

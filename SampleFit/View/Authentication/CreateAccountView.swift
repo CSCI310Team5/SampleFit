@@ -11,7 +11,7 @@ import Combine
 
 struct CreateAccountView: View {
     @EnvironmentObject var userData: UserData
-    @ObservedObject var createAccountInformation: CreateAccountInformation
+    @ObservedObject var createAccountState: AuthenticationState
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
     
@@ -21,11 +21,13 @@ struct CreateAccountView: View {
             // Custom sign in
             VStack(spacing: 8) {
                 // username field
-                UsernameTextField($createAccountInformation.username, inputStatus: createAccountInformation.usernameInputStatus, colorType: \.signUpColor)
+                UsernameTextField($createAccountState.username, inputStatus: createAccountState.usernameInputStatus, colorType: \.signUpColor)
+               
                 // password field
-                CreateAccountPasswordTextField($createAccountInformation.password, inputStatus: createAccountInformation.passwordInputStatus)
+                PasswordTextField(.password, text: $createAccountState.password, inputStatus: createAccountState.passwordInputStatus, colorType: \.signUpColor)
+                
                 // repeat password field
-                CreateAccountRepeatPasswordTextField($createAccountInformation.repeatPassword, inputStatus: createAccountInformation.repeatPasswordInputStatus)
+                PasswordTextField(.verify, text: $createAccountState.repeatPassword, inputStatus: createAccountState.repeatPasswordInputStatus, colorType: \.signUpColor)
                 
                 // create account button
                 Button(action: userData.createAccountUsingDefaultMethod) {
@@ -44,10 +46,10 @@ struct CreateAccountView: View {
                     .frame(height: 44)
                     .background(
                         RoundedRectangle(cornerRadius: 7.5)
-                            .fill(createAccountInformation.allowsSignUp ? createAccountInformation.passwordInputStatus.signUpColor : Color.secondary)
+                            .fill(createAccountState.allowsAuthentication ? createAccountState.passwordInputStatus.signUpColor : Color.secondary)
                     )
                 }
-                .disabled(!createAccountInformation.allowsSignUp || userData.signInStatus == .validatingFirstTime)
+                .disabled(!createAccountState.allowsAuthentication || userData.signInStatus == .validatingFirstTime)
                 .padding(.top, 24)
             }
             .padding(.top, 60)
@@ -66,7 +68,7 @@ struct CreateAccountView: View {
             .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
             .frame(height: 44)
             .id(currentColorScheme.hashValue)
-            .disabled(!createAccountInformation.allowsSignUp || userData.signInStatus == .validating)
+            .disabled(!createAccountState.allowsAuthentication || userData.signInStatus == .validating)
 
             Spacer()
         }
@@ -83,7 +85,7 @@ struct SignUpView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            CreateAccountView(createAccountInformation: userData.createAccountInformation)
+            CreateAccountView(createAccountState: userData.createAccountAuthenticationState)
 
         }
         .environmentObject(userData)

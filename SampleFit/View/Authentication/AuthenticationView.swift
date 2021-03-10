@@ -17,10 +17,10 @@ struct AuthenticationView: View {
             // either sign in view or sign up view
             Group {
                 if userData.signInStatus == .never || userData.signInStatus == .validatingFirstTime {
-                    CreateAccountView(createAccountInformation: userData.createAccountInformation)
+                    CreateAccountView(createAccountState: userData.createAccountAuthenticationState)
                 }
                 if userData.signInStatus == .signedOut || userData.signInStatus == .validating {
-                    SignInView(signInInformation: userData.signInInformation)
+                    SignInView(signInAuthenticationState: userData.signInAuthenticationState)
                 }
             }
             
