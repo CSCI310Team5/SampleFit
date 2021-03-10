@@ -48,8 +48,9 @@
 		F691AFEA25F6FFE600283CE5 /* BirthdayEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */; };
 		F691AFEF25F7007000283CE5 /* HeightEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFEE25F7007000283CE5 /* HeightEditor.swift */; };
 		F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFF325F7008F00283CE5 /* MassEditor.swift */; };
+		F6B1224F25F86FF600EC8AEE /* FractionalWidthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B1224E25F86FF600EC8AEE /* FractionalWidthView.swift */; };
 		F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3BA25D5F9630023D250 /* TestView.swift */; };
-		F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */; };
+		F6C7A3C825D60FE30023D250 /* InputStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3C725D60FE30023D250 /* InputStatus.swift */; };
 		F6C7A3CD25D613F70023D250 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */; };
 		F6C7A3D225D616BC0023D250 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3D125D616BC0023D250 /* SignInView.swift */; };
 		F6DC3FFB25E87EB200A1CD00 /* ExerciseSearchResultList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */; };
@@ -63,6 +64,14 @@
 		F6E8AEF225F74E3C00EF4BE4 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */; };
 		F6E8AEF725F75A9000EF4BE4 /* ImageEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AEF625F75A9000EF4BE4 /* ImageEditor.swift */; };
 		F6E8AEFC25F75E3100EF4BE4 /* CircleImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */; };
+		F6E8AF0125F82CA800EF4BE4 /* SecurityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF0025F82CA800EF4BE4 /* SecurityView.swift */; };
+		F6E8AF0625F82D6C00EF4BE4 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF0525F82D6C00EF4BE4 /* ChangePasswordView.swift */; };
+		F6E8AF0E25F82F7300EF4BE4 /* UsernameTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF0D25F82F7300EF4BE4 /* UsernameTextField.swift */; };
+		F6E8AF1325F839AF00EF4BE4 /* CreateAccountPasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF1225F839AF00EF4BE4 /* CreateAccountPasswordTextField.swift */; };
+		F6E8AF2125F83A5500EF4BE4 /* CreateAccountRepeatPasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF2025F83A5500EF4BE4 /* CreateAccountRepeatPasswordTextField.swift */; };
+		F6E8AF2625F83B6200EF4BE4 /* SignInUsernameTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF2525F83B6200EF4BE4 /* SignInUsernameTextField.swift */; };
+		F6E8AF2B25F83B6A00EF4BE4 /* SignInPasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF2A25F83B6A00EF4BE4 /* SignInPasswordTextField.swift */; };
+		F6E8AF3025F8415B00EF4BE4 /* InputVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E8AF2F25F8415B00EF4BE4 /* InputVerifier.swift */; };
 		F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */; };
 		F6F9DFCF25D4CC4700B578B3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */; };
 		F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6F9DFD025D4CC4700B578B3 /* ContentView.swift */; };
@@ -136,8 +145,9 @@
 		F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayEditor.swift; sourceTree = "<group>"; };
 		F691AFEE25F7007000283CE5 /* HeightEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightEditor.swift; sourceTree = "<group>"; };
 		F691AFF325F7008F00283CE5 /* MassEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MassEditor.swift; sourceTree = "<group>"; };
+		F6B1224E25F86FF600EC8AEE /* FractionalWidthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionalWidthView.swift; sourceTree = "<group>"; };
 		F6C7A3BA25D5F9630023D250 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
-		F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataEntryStatus.swift; sourceTree = "<group>"; };
+		F6C7A3C725D60FE30023D250 /* InputStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputStatus.swift; sourceTree = "<group>"; };
 		F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
 		F6C7A3D125D616BC0023D250 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSearchResultList.swift; sourceTree = "<group>"; };
@@ -151,6 +161,14 @@
 		F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		F6E8AEF625F75A9000EF4BE4 /* ImageEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEditor.swift; sourceTree = "<group>"; };
 		F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImage.swift; sourceTree = "<group>"; };
+		F6E8AF0025F82CA800EF4BE4 /* SecurityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityView.swift; sourceTree = "<group>"; };
+		F6E8AF0525F82D6C00EF4BE4 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
+		F6E8AF0D25F82F7300EF4BE4 /* UsernameTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameTextField.swift; sourceTree = "<group>"; };
+		F6E8AF1225F839AF00EF4BE4 /* CreateAccountPasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountPasswordTextField.swift; sourceTree = "<group>"; };
+		F6E8AF2025F83A5500EF4BE4 /* CreateAccountRepeatPasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountRepeatPasswordTextField.swift; sourceTree = "<group>"; };
+		F6E8AF2525F83B6200EF4BE4 /* SignInUsernameTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInUsernameTextField.swift; sourceTree = "<group>"; };
+		F6E8AF2A25F83B6A00EF4BE4 /* SignInPasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPasswordTextField.swift; sourceTree = "<group>"; };
+		F6E8AF2F25F8415B00EF4BE4 /* InputVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputVerifier.swift; sourceTree = "<group>"; };
 		F6F9DFC925D4CC4700B578B3 /* SampleFit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampleFit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6F9DFCC25D4CC4700B578B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F6F9DFCE25D4CC4700B578B3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -208,6 +226,8 @@
 			isa = PBXGroup;
 			children = (
 				F631D04F25E878430002E3D1 /* MeView.swift */,
+				F6E8AF0025F82CA800EF4BE4 /* SecurityView.swift */,
+				F6E8AF0525F82D6C00EF4BE4 /* ChangePasswordView.swift */,
 				F691AFE025F6FF9600283CE5 /* Profile */,
 				F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */,
 				F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */,
@@ -253,8 +273,9 @@
 				F61BA67325D6205D00249ED1 /* SignInStatus.swift */,
 				F66932A825DE1315000D9442 /* SignInInformation.swift */,
 				F66932A325DE12F4000D9442 /* CreateAccountInformation.swift */,
+				F6E8AF2F25F8415B00EF4BE4 /* InputVerifier.swift */,
+				F6C7A3C725D60FE30023D250 /* InputStatus.swift */,
 				F66932B025DE13A8000D9442 /* PrivateInformation.swift */,
-				F6C7A3C725D60FE30023D250 /* DataEntryStatus.swift */,
 				F669338925E10070000D9442 /* SearchState.swift */,
 			);
 			path = Model;
@@ -302,7 +323,12 @@
 			children = (
 				F6F9DFFF25D4CCB200B578B3 /* AuthenticationView.swift */,
 				F6C7A3D125D616BC0023D250 /* SignInView.swift */,
+				F6E8AF2525F83B6200EF4BE4 /* SignInUsernameTextField.swift */,
+				F6E8AF2A25F83B6A00EF4BE4 /* SignInPasswordTextField.swift */,
 				F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */,
+				F6E8AF0D25F82F7300EF4BE4 /* UsernameTextField.swift */,
+				F6E8AF1225F839AF00EF4BE4 /* CreateAccountPasswordTextField.swift */,
+				F6E8AF2025F83A5500EF4BE4 /* CreateAccountRepeatPasswordTextField.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -400,6 +426,7 @@
 				F691AFC225F6095200283CE5 /* NotSetView.swift */,
 				F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */,
 				F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */,
+				F6B1224E25F86FF600EC8AEE /* FractionalWidthView.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -549,6 +576,7 @@
 				F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */,
 				F6E3095F25E4E1C600F4B7A6 /* NoResults.swift in Sources */,
 				F669339A25E10334000D9442 /* UserDetail.swift in Sources */,
+				F6E8AF2625F83B6200EF4BE4 /* SignInUsernameTextField.swift in Sources */,
 				F61BA6AF25D643CD00249ED1 /* ExerciseCategoryRow.swift in Sources */,
 				F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */,
 				F61BA69725D639AF00249ED1 /* MultiplePreview.swift in Sources */,
@@ -556,6 +584,7 @@
 				F66E6C1E25F5E7AC00F36D9D /* UploadedExercisesList.swift in Sources */,
 				F631D05025E878430002E3D1 /* MeView.swift in Sources */,
 				F6F9DFCF25D4CC4700B578B3 /* SceneDelegate.swift in Sources */,
+				F6E8AF0625F82D6C00EF4BE4 /* ChangePasswordView.swift in Sources */,
 				F6DC3FFB25E87EB200A1CD00 /* ExerciseSearchResultList.swift in Sources */,
 				F61BA6B825D75D5E00249ED1 /* SearchView.swift in Sources */,
 				F669339525E100D8000D9442 /* UserListDisplayItem.swift in Sources */,
@@ -564,6 +593,7 @@
 				F6DC400525E87F6200A1CD00 /* FavoriteExercisesList.swift in Sources */,
 				F691AFCD25F609C400283CE5 /* ProfileEditor.swift in Sources */,
 				F61BA6C325D7795C00249ED1 /* Color+Helpers.swift in Sources */,
+				F6E8AF2125F83A5500EF4BE4 /* CreateAccountRepeatPasswordTextField.swift in Sources */,
 				F691AFEA25F6FFE600283CE5 /* BirthdayEditor.swift in Sources */,
 				F66E6BF825F5C87F00F36D9D /* ProfileHost.swift in Sources */,
 				F6F9E00025D4CCB200B578B3 /* AuthenticationView.swift in Sources */,
@@ -573,9 +603,12 @@
 				F6E3097125E635E500F4B7A6 /* FollowButton.swift in Sources */,
 				F691AFC825F6097E00283CE5 /* DetailedProfileSummary.swift in Sources */,
 				F691AFBE25F6006F00283CE5 /* MiniProfileSummary.swift in Sources */,
+				F6E8AF0E25F82F7300EF4BE4 /* UsernameTextField.swift in Sources */,
 				F669335625E0DB7E000D9442 /* SearchResult.swift in Sources */,
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
+				F6E8AF3025F8415B00EF4BE4 /* InputVerifier.swift in Sources */,
 				F669332525E087F8000D9442 /* TokenEventController.swift in Sources */,
+				F6E8AF0125F82CA800EF4BE4 /* SecurityView.swift in Sources */,
 				F669333525E09932000D9442 /* NavigationViewWithSearchBar.swift in Sources */,
 				F691AFEF25F7007000283CE5 /* HeightEditor.swift in Sources */,
 				F669331B25DFB3E5000D9442 /* ExerciseDetail.swift in Sources */,
@@ -583,15 +616,18 @@
 				F66932C625DE1A09000D9442 /* ImageLoader.swift in Sources */,
 				F66932BE25DE18B1000D9442 /* Exercise.swift in Sources */,
 				F6E3095425E4DBE400F4B7A6 /* LoadingSearch.swift in Sources */,
+				F6E8AF1325F839AF00EF4BE4 /* CreateAccountPasswordTextField.swift in Sources */,
 				F61BA6A225D6407D00249ED1 /* BrowseView.swift in Sources */,
+				F6E8AF2B25F83B6A00EF4BE4 /* SignInPasswordTextField.swift in Sources */,
 				F6DC400025E87EC200A1CD00 /* UserSearchResultList.swift in Sources */,
 				F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */,
 				F6171A2525E8B4BE00C09CE9 /* Workout.swift in Sources */,
 				F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */,
 				F6E8AEF725F75A9000EF4BE4 /* ImageEditor.swift in Sources */,
+				F6B1224F25F86FF600EC8AEE /* FractionalWidthView.swift in Sources */,
 				F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */,
 				F669336425E0E110000D9442 /* ExerciseListDisplayItem.swift in Sources */,
-				F6C7A3C825D60FE30023D250 /* DataEntryStatus.swift in Sources */,
+				F6C7A3C825D60FE30023D250 /* InputStatus.swift in Sources */,
 				F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */,
 				F6E8AEFC25F75E3100EF4BE4 /* CircleImage.swift in Sources */,
 				F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */,

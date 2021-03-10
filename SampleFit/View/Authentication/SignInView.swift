@@ -23,28 +23,10 @@ struct SignInView: View {
             // Custom sign in
             VStack(spacing: 16) {
                 // username field
-                HStack(spacing: 12) {
-                    Image(systemName: "person.circle")
-                        .font(.title)
-                        .foregroundColor(signInInformation.usernameInputStatus.signInColor)
-                    TextField("User name", text: $signInInformation.username)
-                        .textContentType(.username)
-                        .font(.title3)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .frame(minHeight: 44)
-                }
+                SignInUsernameTextField(signInInformation: signInInformation)
 
                 // password field
-                HStack(spacing: 12) {
-                    Image(systemName: "lock.circle")
-                        .font(Font.title)
-                        .foregroundColor(signInInformation.passwordInputStatus.signInColor)
-                    SecureField("Password", text: $signInInformation.password)
-                        .textContentType(.newPassword)
-                        .font(.title3)
-                        .frame(minHeight: 44)
-                }
+                SignInPasswordTextField(signInInformation: signInInformation)
                 
                 // sign in button
                 Button(action: userData.signInUsingDefaultMethod) {

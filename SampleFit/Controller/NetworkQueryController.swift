@@ -9,13 +9,24 @@ import Foundation
 import SwiftUI
 import Combine
 
+struct MessagedError: Error {
+    let message: String
+}
+
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
+        // FIXME: validate username over network
+        // faking validation logic now
+        // faking networking delay of 2 seconds
         return Future<Bool, Error> { promise in
-            promise(.success(true))
+            if username.count < 3 {
+                promise(.failure(MessagedError(message: "Too short")))
+            } else {
+                promise(.success(true))
+            }
         }
         .replaceError(with: false)
         .delay(for: .seconds(2), scheduler: DispatchQueue.global())

@@ -7,47 +7,35 @@
 
 import SwiftUI
 
-struct MultiplePreview<Content>: View where Content: View {
+struct MultiplePreview<Content: View>: View {
     let content: Content
     let embedInNavigationView: Bool
     
-    init(embedInNavigationView: Bool, @ViewBuilder _ content: @escaping () -> Content) {
+    init(embedInNavigationView: Bool, content: () -> Content) {
         self.embedInNavigationView = embedInNavigationView
         self.content = content()
     }
     var body: some View {
-        if embedInNavigationView {
-            Group {
-                NavigationView {
-                    content
-                }
-                .previewDisplayName("Light mode")
-                
-                NavigationView {
-                    content
-                }
-                .environment(\.colorScheme, .dark)
-                .previewDisplayName("Dark mode")
-                
-                NavigationView {
-                    content
-                }
-                .previewDevice("iPhone SE (2nd generation)")
-                .previewDisplayName("iPhone SE")
+        Group {
+            NavigationView {
+                content
+                    .navigationBarHidden(!embedInNavigationView)
             }
-        } else {
-            Group {
+            .previewDisplayName("Light mode")
+            
+            NavigationView {
                 content
-                    .previewDisplayName("Light mode")
-                
-                content
-                    .environment(\.colorScheme, .dark)
-                    .previewDisplayName("Dark mode")
-                
-                content
-                    .previewDevice("iPhone SE (2nd generation)")
-                    .previewDisplayName("iPhone SE")
+                    .navigationBarHidden(!embedInNavigationView)
             }
+            .environment(\.colorScheme, .dark)
+            .previewDisplayName("Dark mode")
+            
+            NavigationView {
+                content
+                    .navigationBarHidden(!embedInNavigationView)
+            }
+            .previewDevice("iPhone SE (2nd generation)")
+            .previewDisplayName("iPhone SE")
         }
     }
 }

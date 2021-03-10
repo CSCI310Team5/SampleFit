@@ -21,8 +21,8 @@ class SignInInformation: ObservableObject {
         }
     }
     
-    @Published var usernameInputStatus: DataEntryStatus = .notEntered
-    @Published var passwordInputStatus: DataEntryStatus = .notEntered
+    @Published var usernameInputStatus: InputStatus = .notEntered
+    @Published var passwordInputStatus: InputStatus = .notEntered
     @Published var allowsSignIn = false
     
     private func validateUsername(_ newUsername: String) {

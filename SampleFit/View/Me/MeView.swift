@@ -13,10 +13,8 @@ struct MeView: View {
     @State private var isProfileSheetPresented = false
     var body: some View {
         List {
-            // profile mini summary
-//            MiniProfileSummary(publicProfile: userData.publicProfile)
-            
             Section {
+                // profile details
                 NavigationLink(destination: ProfileHost(publicProfile: userData.publicProfile)) {
                     Label {
                         Text("Profile Details")
@@ -24,7 +22,17 @@ struct MeView: View {
                         Image(systemName: "person.fill")
                     }
                 }
+                
+                // profile details
+                NavigationLink(destination: SecurityView().environmentObject(userData)) {
+                    Label {
+                        Text("Password & Security")
+                    } icon: {
+                        Image(systemName: "key.fill")
+                    }
+                }
             }
+
             
             Section {
                 NavigationLink(destination: FavoriteExercisesList(privateInformation: privateInformation)) {
@@ -62,7 +70,7 @@ struct MeView: View {
                 }
             }
             
-            
+            // Sign out button
             Section {
                 Button(action: { userData.signOut() }) {
                     Text("Sign Out")

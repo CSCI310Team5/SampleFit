@@ -14,12 +14,9 @@ struct MassEditor: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                // constant width container
-                ZStack(alignment: .leading) {
+                // fractional width container
+                FractionalWidthView(fraction: 0.3) {
                     Text("Weight")
-                    Rectangle()
-                        .fill(Color.clear)
-                        .frame(width: UIScreen.main.bounds.width * 0.3)
                 }
                 Divider()
                 // mass picker button

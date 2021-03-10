@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 /// Indicates the input status of an entry of information.
-enum DataEntryStatus {
+enum InputStatus {
     case notEntered
     case validating
     case valid

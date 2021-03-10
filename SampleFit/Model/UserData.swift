@@ -105,6 +105,10 @@ class UserData: ObservableObject {
         signInStatus = .signedOut
     }
     
+    func changePassword(to newPassword: String) {
+        // FIXME: Change password over the newtwork. Pass in the public profile as the user identifier.
+    }
+    
     private func _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: String, fullName: PersonNameComponents? = nil) {
         // store the credentials
         _storeProfile(identifier: identifier, fullName: fullName)

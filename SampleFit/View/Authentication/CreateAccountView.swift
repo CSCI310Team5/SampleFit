@@ -21,52 +21,11 @@ struct CreateAccountView: View {
             // Custom sign in
             VStack(spacing: 8) {
                 // username field
-                HStack(spacing: 12) {
-                    Image(systemName: "person.circle")
-                        .font(.title)
-                        .foregroundColor(createAccountInformation.usernameInputStatus.signUpColor)
-                    TextField("User name", text: $createAccountInformation.username)
-                        .textContentType(.username)
-                        .font(.title3)
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                        .frame(minHeight: 44)
-                }
-                .overlay(
-                    Group {
-                        if createAccountInformation.usernameInputStatus == .validating {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                        }
-                        if createAccountInformation.usernameInputStatus == .invalid {
-                            Text("Not Available")
-                                .font(Font.callout.bold())
-                                .foregroundColor(createAccountInformation.usernameInputStatus.signUpColor)
-                        }
-                    }
-                    .padding(.trailing, 16)
-                    
-                , alignment: .trailing)
+                UsernameTextField($createAccountInformation.username, inputStatus: createAccountInformation.usernameInputStatus, colorType: \.signUpColor)
                 // password field
-                HStack(spacing: 12) {
-                    Image(systemName: "lock.circle")
-                        .font(Font.title)
-                        .foregroundColor(createAccountInformation.passwordInputStatus.signUpColor)
-                    SecureField("Password", text: $createAccountInformation.password)
-                        .textContentType(.newPassword)
-                        .font(.title3)
-                        .frame(minHeight: 44)
-                }
+                CreateAccountPasswordTextField($createAccountInformation.password, inputStatus: createAccountInformation.passwordInputStatus)
                 // repeat password field
-                HStack(spacing: 12) {
-                    Image(systemName: "lock.circle")
-                        .font(Font.title)
-                        .foregroundColor(createAccountInformation.repeatPasswordInputStatus.signUpColor)
-                    SecureField("Repeat password", text: $createAccountInformation.repeatPassword)
-                        .textContentType(.newPassword)
-                        .font(.title3)
-                        .frame(minHeight: 44)
-                }
+                CreateAccountRepeatPasswordTextField($createAccountInformation.repeatPassword, inputStatus: createAccountInformation.repeatPasswordInputStatus)
                 
                 // create account button
                 Button(action: userData.createAccountUsingDefaultMethod) {
