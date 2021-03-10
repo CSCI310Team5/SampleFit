@@ -32,8 +32,8 @@ struct AuthenticationVerifiers {
         .eraseToAnyPublisher()
     }
     // limit max password length
-    private static let _passwordCreateAccountVerifier = InputVerifier<String>(debounce: .zero, scheduler: DispatchQueue.main, limit: 20) {
-        Just($0.count >= 5)
+    private static let _passwordCreateAccountVerifier = InputVerifier<String>(debounce: .seconds(1), scheduler: DispatchQueue.main, limit: 20) {
+        NetworkQueryController.shared.validatePassword($0)
             .map { $0 ? InputVerificationStatus.valid : InputVerificationStatus.invalid }
             .eraseToAnyPublisher()
     }

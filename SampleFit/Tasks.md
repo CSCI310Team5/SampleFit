@@ -1,10 +1,7 @@
 #  Tasks
 
-## UserData
+## UserData & NetworkQueryController
 1. Implement Change password and hook up with NetworkQueryController. Change password view should display progress indicator when in progress and dismiss only after success.
-
-## NetworkQueryController
-2. Implement Password verification logic.
 
 ## UserDetail
 1. Implement UserDetail

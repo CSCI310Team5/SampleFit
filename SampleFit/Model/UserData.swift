@@ -103,6 +103,7 @@ class UserData: ObservableObject {
         print("signing out.")
         
         signInStatus = .signedOut
+        signInAuthenticationState = AuthenticationState(for: .signIn)
     }
     
     func changePassword(to newPassword: String) {

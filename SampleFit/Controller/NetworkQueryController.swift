@@ -33,6 +33,23 @@ class NetworkQueryController {
         .eraseToAnyPublisher()
     }
     
+    /// Returns a publisher that publishes true value if success and false values if an error occured.
+    func validatePassword(_ password: String) -> AnyPublisher<Bool, Never> {
+        // FIXME: validate password over network
+        // faking validation logic now
+        // faking networking delay of 2 seconds
+        return Future<Bool, Error> { promise in
+            if password.count < 5 {
+                promise(.failure(MessagedError(message: "Too short")))
+            } else {
+                promise(.success(true))
+            }
+        }
+        .replaceError(with: false)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
+    }
+    
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
     func createAccount(using: AuthenticationState) -> AnyPublisher<Bool, Never> {
