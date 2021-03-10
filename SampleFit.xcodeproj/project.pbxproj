@@ -332,6 +332,7 @@
 				F669331A25DFB3E5000D9442 /* ExerciseDetail.swift */,
 				F669339925E10334000D9442 /* UserDetail.swift */,
 				F6E3095E25E4E1C600F4B7A6 /* NoResults.swift */,
+				F6E3097025E635E500F4B7A6 /* FollowButton.swift */,
 			);
 			path = "Shared Views";
 			sourceTree = "<group>";
@@ -412,7 +413,6 @@
 				F669331F25DFB75C000D9442 /* LiveIndicator.swift */,
 				F669333425E09932000D9442 /* NavigationViewWithSearchBar.swift */,
 				F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */,
-				F6E3097025E635E500F4B7A6 /* FollowButton.swift */,
 				F66E6C2825F5EB6400F36D9D /* DisclosureIndicator.swift */,
 				F691AFC225F6095200283CE5 /* NotSetView.swift */,
 				F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */,
