@@ -14,21 +14,14 @@ import AuthenticationServices
 class UserData: ObservableObject {
     
     // MARK: - Instance properties
-    
-    /// Notifies SwiftUI to re-render UI because of a data change.
-    var objectWillChange = ObservableObjectPublisher()
-    
     var createAccountAuthenticationState = AuthenticationState(for: .createAccount)
     var signInAuthenticationState = AuthenticationState(for: .signIn)
     var publicProfile = PublicProfile.exampleProfile
     var privateInformation = PrivateInformation()
     var searchCategoryTokenController = SearchCategoryTokenEventController()
     
-    var signInStatus = SignInStatus.never {
-        willSet {
-            objectWillChange.send()
-        }
-    }
+    @Published var signInStatus = SignInStatus.never
+    @Published var signInReturnsError = false
     private var networkQueryController = NetworkQueryController()
     
     // MARK: - Navigation
@@ -69,7 +62,9 @@ class UserData: ObservableObject {
     /// Runs when the user chooses to sign up using default method.
     func createAccountUsingDefaultMethod() {
         print("creating account using default method...")
+        let oldStatus = signInStatus
         signInStatus = .validatingFirstTime
+        signInReturnsError = false
         
         createAccountCancellable = networkQueryController.createAccount(using: createAccountAuthenticationState)
             .receive(on: DispatchQueue.main)
@@ -78,6 +73,8 @@ class UserData: ObservableObject {
                     _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: createAccountAuthenticationState.username)
                 } else {
                     print("Create account failed")
+                    signInReturnsError = true
+                    signInStatus = oldStatus
                 }
             }
     }
@@ -85,7 +82,9 @@ class UserData: ObservableObject {
     /// Runs when the user chooses to sign in using default method.
     func signInUsingDefaultMethod() {
         print("signing in using default method...")
+        let oldStatus = signInStatus
         signInStatus = .validating
+        signInReturnsError = false
         
         signInCancellable = networkQueryController.signIn(using: signInAuthenticationState)
             .receive(on: DispatchQueue.main)
@@ -94,6 +93,8 @@ class UserData: ObservableObject {
                     _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInAuthenticationState.username)
                 } else {
                     print("Sign in failed")
+                    signInReturnsError = true
+                    signInStatus = oldStatus
                 }
             }
     }

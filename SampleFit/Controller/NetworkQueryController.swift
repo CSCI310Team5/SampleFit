@@ -58,6 +58,7 @@ class NetworkQueryController {
         // faking networking delay of 2 seconds
         return Future<Bool, Error> { promise in
             promise(.success(true))
+//            promise(.failure(MessagedError(message: "Sign Up Error")))
         }
         .replaceError(with: false)
         .delay(for: .seconds(2), scheduler: DispatchQueue.global())

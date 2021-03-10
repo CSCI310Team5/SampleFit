@@ -27,6 +27,12 @@ struct SignInView: View {
                 
                 // password field
                 PasswordTextField(.password, text: $signInAuthenticationState.password, inputStatus: signInAuthenticationState.passwordInputStatus, colorType: \.signInColor)
+                    .padding(.bottom, 24)
+                
+                if userData.signInReturnsError {
+                    Text("Incorrect username or password.")
+                        .foregroundColor(.red)
+                }
                 
                 // sign in button
                 Button(action: userData.signInUsingDefaultMethod) {
@@ -49,7 +55,6 @@ struct SignInView: View {
                         )
                 }
                 .disabled(!signInAuthenticationState.allowsAuthentication || userData.signInStatus == .validating)
-                .padding(.top, 24)
             }
             .padding(.top, 60)
 

@@ -28,6 +28,12 @@ struct CreateAccountView: View {
                 
                 // repeat password field
                 PasswordTextField(.verify, text: $createAccountState.repeatPassword, inputStatus: createAccountState.repeatPasswordInputStatus, colorType: \.signUpColor)
+                    .padding(.bottom, 24)
+                
+                if userData.signInReturnsError {
+                    Text("An error occured.")
+                        .foregroundColor(.red)
+                }
                 
                 // create account button
                 Button(action: userData.createAccountUsingDefaultMethod) {
@@ -50,7 +56,6 @@ struct CreateAccountView: View {
                     )
                 }
                 .disabled(!createAccountState.allowsAuthentication || userData.signInStatus == .validatingFirstTime)
-                .padding(.top, 24)
             }
             .padding(.top, 60)
 
