@@ -4,7 +4,7 @@
 All code that talks to the backend should go into NetworkQueryController. All current functionalities are fake (they dont make network calls just yet) so that you can focus on the UI first.    
   
 ## 1. Retrieve Accounts  
-1. In AuthenticationView, user should use their email instead of username as the unique identifier. Change UI accordingly.  
+1. ✅ In AuthenticationView, user should use their email instead of username as the unique identifier. Change UI accordingly.  
 2. Add functionality that tells the backend to retrieve password for a given email. This functionality should make call into a method in NetworkQueryController, and let the backend handle the rest.  
   
 ## 3. Change passwords  

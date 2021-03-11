@@ -23,7 +23,7 @@ struct UsernameTextField: View {
             Image(systemName: "person.circle")
                 .font(.title)
                 .foregroundColor(inputStatus[keyPath: colorType])
-            TextField("User name", text: $username)
+            TextField("Email", text: $username)
                 .textContentType(.username)
                 .font(.title3)
                 .autocapitalization(.none)
