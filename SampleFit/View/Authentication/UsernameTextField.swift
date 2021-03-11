@@ -50,7 +50,9 @@ struct UsernameTextField: View {
 struct NewUsernameTextField_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: false) {
-            UsernameTextField(.constant(""), inputStatus: .notEntered, colorType: \.signInColor)
+            NavigationView {    // force color scheme rendering
+                UsernameTextField(.constant(""), inputStatus: .notEntered, colorType: \.signInColor)
+            }
         }
     }
 }

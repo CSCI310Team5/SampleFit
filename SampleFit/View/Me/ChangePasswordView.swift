@@ -50,7 +50,10 @@ struct ChangePasswordView: View {
 struct ChangePasswordView_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: false) {
-            ChangePasswordView(isPresented: .constant(false))
+            NavigationView { // force color scheme render
+                ChangePasswordView(isPresented: .constant(false))
+                    .navigationBarHidden(true)
+            }
         }
     }
 }
