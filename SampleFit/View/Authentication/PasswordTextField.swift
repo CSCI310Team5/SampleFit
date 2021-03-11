@@ -60,10 +60,8 @@ struct PasswordTextField: View {
 
 struct NewPasswordTextField_Previews: PreviewProvider {
     static var previews: some View {
-        MultiplePreview(embedInNavigationView: false) {
-            NavigationView { // force color scheme rendering
-                PasswordTextField(.password, text: .constant(""), inputStatus: InputVerificationStatus.invalid, colorType: \.signUpColor)
-            }
+        MultiplePreview(embedInNavigationView: true) {
+            PasswordTextField(.password, text: .constant(""), inputStatus: InputVerificationStatus.invalid, colorType: \.signUpColor)
         }
     }
 }

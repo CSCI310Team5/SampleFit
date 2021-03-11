@@ -17,19 +17,40 @@ struct MultiplePreview<Content: View>: View {
     }
     var body: some View {
         Group {
-            content
-                .navigationBarHidden(!embedInNavigationView)
+            if embedInNavigationView {
+                NavigationView {
+                    content
+                }
                 .previewDisplayName("Light mode")
-            
-            content
-                .navigationBarHidden(!embedInNavigationView)
-                .environment(\.colorScheme, .dark)
+                
+                NavigationView {
+                    content
+                }
                 .previewDisplayName("Dark mode")
-            
-            content
-                .navigationBarHidden(!embedInNavigationView)
+                .environment(\.colorScheme, .dark)
+                
+                NavigationView {
+                    content
+                }
                 .previewDevice("iPhone SE (2nd generation)")
                 .previewDisplayName("iPhone SE")
+
+            } else {
+                content
+                    .navigationBarHidden(!embedInNavigationView)
+                    .previewDisplayName("Light mode")
+                
+                content
+                    .navigationBarHidden(!embedInNavigationView)
+                    .environment(\.colorScheme, .dark)
+                    .previewDisplayName("Dark mode")
+                
+                content
+                    .navigationBarHidden(!embedInNavigationView)
+                    .previewDevice("iPhone SE (2nd generation)")
+                    .previewDisplayName("iPhone SE")
+            }
+            
         }
     }
 }

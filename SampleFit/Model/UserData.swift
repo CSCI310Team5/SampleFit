@@ -31,9 +31,9 @@ class UserData: ObservableObject {
     }
     
     // MARK: - Asynchronous tasks
-    var createAccountCancellable: AnyCancellable?
-    var signInCancellable: AnyCancellable?
-    var fetchExerciseFeedCancellable: AnyCancellable?
+    private var _createAccountCancellable: AnyCancellable?
+    private var _signInCancellable: AnyCancellable?
+    private var _fetchExerciseFeedCancellable: AnyCancellable?
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -66,7 +66,7 @@ class UserData: ObservableObject {
         signInStatus = .validatingFirstTime
         signInReturnsError = false
         
-        createAccountCancellable = networkQueryController.createAccount(using: createAccountAuthenticationState)
+        _createAccountCancellable = networkQueryController.createAccount(using: createAccountAuthenticationState)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
                 if success {
@@ -86,7 +86,7 @@ class UserData: ObservableObject {
         signInStatus = .validating
         signInReturnsError = false
         
-        signInCancellable = networkQueryController.signIn(using: signInAuthenticationState)
+        _signInCancellable = networkQueryController.signIn(using: signInAuthenticationState)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
                 if success {
@@ -140,7 +140,7 @@ class UserData: ObservableObject {
     
     private func _fetchExerciseFeeds(usingProfile profile: PublicProfile) {
         // fetch social information
-        fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withProfile: profile)
+        _fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withProfile: profile)
             .receive(on: DispatchQueue.main)
             .assign(to: \.privateInformation.exerciseFeeds, on: self)
     }

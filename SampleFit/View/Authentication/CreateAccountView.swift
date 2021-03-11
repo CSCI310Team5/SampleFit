@@ -89,10 +89,8 @@ struct CreateAccountView: View {
 struct SignUpView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
-        MultiplePreview(embedInNavigationView: false) {
-            NavigationView { // force color scheme render
-                CreateAccountView(createAccountState: userData.createAccountAuthenticationState)
-            }
+        MultiplePreview(embedInNavigationView: true) {
+            CreateAccountView(createAccountState: userData.createAccountAuthenticationState)
         }
         .environmentObject(userData)
         

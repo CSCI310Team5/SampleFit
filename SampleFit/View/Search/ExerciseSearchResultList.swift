@@ -26,6 +26,7 @@ struct ExerciseList_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
             ExerciseSearchResultList(exercises: Exercise.exampleExercisesSmall)
+                .environmentObject(UserData())
         }
     }
 }

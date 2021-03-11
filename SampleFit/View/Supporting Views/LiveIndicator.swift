@@ -17,6 +17,8 @@ struct LiveIndicator: View {
 
 struct LiveIndicator_Previews: PreviewProvider {
     static var previews: some View {
-        LiveIndicator()
+        MultiplePreview(embedInNavigationView: true) {
+            LiveIndicator()
+        }
     }
 }

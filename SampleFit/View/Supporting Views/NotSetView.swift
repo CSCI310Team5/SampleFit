@@ -17,6 +17,8 @@ struct NotSetView: View {
 
 struct NotSetView_Previews: PreviewProvider {
     static var previews: some View {
-        NotSetView()
+        MultiplePreview(embedInNavigationView: true) {
+            NotSetView()
+        }
     }
 }
