@@ -11,7 +11,7 @@ import SwiftUI
 struct CategorySquareView: View {
     var categoryName: String
     var body: some View {
-        Text("\(categoryName)").background(Color.orange).foregroundColor(.white).font(.title).frame(width: 150, height: 100).background(Color.orange)
+        Text("\(categoryName)").background(Color.orange).foregroundColor(.white).font(.title3).frame(width: 170, height: 60).background(Color.orange)
     }
 }
 

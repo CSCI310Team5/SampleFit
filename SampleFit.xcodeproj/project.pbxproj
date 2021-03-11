@@ -216,9 +216,9 @@
 		18DB4EC525FAD794005BB894 /* Workout */ = {
 			isa = PBXGroup;
 			children = (
+				18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */,
 				18DB4EC725FAD7A8005BB894 /* CategorySquareView.swift */,
 				18DB4EC825FAD7A8005BB894 /* WorkoutView.swift */,
-				18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */,
 			);
 			path = Workout;
 			sourceTree = "<group>";

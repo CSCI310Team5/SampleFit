@@ -21,12 +21,18 @@ struct HomeView: View {
     var body: some View {
         TabView(selection: $selection) {
             
-            
             BrowseView(privateInformation: userData.privateInformation)
                 .tabItem {
-                    Label("Video & Live", systemImage: "square.grid.2x2.fill")
+                    Label("Video & Live", systemImage: "play.fill")
                 }
                 .tag(Tab.browse)
+            
+            
+            WorkoutBrowseView()
+                .tabItem {
+                    Label("Exercise", systemImage: "square.grid.2x2.fill")
+                }
+                .tag(Tab.workout)
             
             NavigationView {
                 VStack {

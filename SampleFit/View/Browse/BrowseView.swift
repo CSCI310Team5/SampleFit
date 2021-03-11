@@ -23,7 +23,7 @@ struct BrowseView: View {
                     }
                 }
             }
-            .navigationTitle("Browse")
+            .navigationTitle("Videos & Live")
             
         }
         .environmentObject(privateInformation)
