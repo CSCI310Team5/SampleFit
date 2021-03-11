@@ -12,16 +12,19 @@ struct HomeView: View {
     @State private var selection: Tab = .me
     
     enum Tab: String {
-        case browse = "Browse"
+        case workout = "Exercise"
+        case browse = "Video & Live"
         case me = "Me"
         case search = "Search"
     }
     
     var body: some View {
         TabView(selection: $selection) {
+            
+            
             BrowseView(privateInformation: userData.privateInformation)
                 .tabItem {
-                    Label("Browse", systemImage: "square.grid.2x2.fill")
+                    Label("Video & Live", systemImage: "square.grid.2x2.fill")
                 }
                 .tag(Tab.browse)
             
