@@ -85,8 +85,9 @@ class Exercise: Identifiable, ObservableObject {
                   category: category,
                   playbackType: playbackType,
                   owningUser: owningUser,
-                  duration: playbackType == .recordedVideo ? Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes) : nil,
-                  previewImageIdentifier: "\(category.rawValue)-\(previewImageID)")
+                  duration: Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes),
+                  previewImageIdentifier: "\(category.rawValue)-\(previewImageID)",
+                  peoplelimt:5)
     }
     
     // MARK: - Instance methods

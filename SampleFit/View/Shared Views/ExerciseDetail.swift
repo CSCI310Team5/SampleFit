@@ -17,6 +17,7 @@ struct ExerciseDetail: View {
         // FIXME: Fake player now
         ScrollView {
             VStack {
+                if exercise.playbackType == .recordedVideo {
                 VideoPlayer(player: nil) {
                     Group {
                         if exercise.image != nil {
@@ -30,7 +31,11 @@ struct ExerciseDetail: View {
                     
                 }
                 .frame(height: 250)
-                
+                }else{
+                    if exercise.image != nil {
+                        exercise.image! .resizable().scaledToFit()
+                    }
+                }
                 // Exercise information
                 VStack(alignment: .leading) {
                     
@@ -47,14 +52,19 @@ struct ExerciseDetail: View {
                             } else {
                                 HStack(spacing: 6) {
                                     LiveIndicator()
-                                    Text(exercise.durationDescription)
+                                    Text("LIVE")
                                         .font(.caption)
+                                    Spacer()
+                                    Text(exercise.durationDescription).font(.caption)
+                                    Spacer()
+                                    Text("\(exercise.peopleLimit) People Max").font(.caption)
                                 }
                             }
                         }
                         
                         Spacer()
-                                            
+                        
+                        if exercise.playbackType == .recordedVideo{
                         // favorite button
                         Button(action: { privateInformation.toggleExerciseInFavorites(exercise) }) {
                             if privateInformation.hasFavorited(exercise) {
@@ -71,39 +81,50 @@ struct ExerciseDetail: View {
                             }
                         }
                         .offset(x: 20, y: -15)
-                        .padding(.trailing, 6)
+                        .padding(.trailing, 6)}
                     }
                     
-                    // Start/stop workout button
-                    Button(action: { withAnimation {isWorkingout.toggle()} }) {
-                        Group {
-                            if isWorkingout {
-                                HStack {
-                                    Image(systemName: "pause.circle.fill")
-                                        .font(.title3)
-                                    Text("End Workout")
-                                }
-                                
-                            } else {
-                                HStack {
-                                    Image(systemName: "play.circle.fill")
-                                        .font(.title3)
-                                    Text("Start Workout")
+                    if exercise.playbackType == .recordedVideo {
+                        // Start/stop workout button
+                        Button(action: { withAnimation {isWorkingout.toggle()} }) {
+                            Group {
+                                if isWorkingout {
+                                    HStack {
+                                        Image(systemName: "pause.circle.fill")
+                                            .font(.title3)
+                                        Text("End Workout")
+                                    }
+                                    
+                                } else {
+                                    HStack {
+                                        Image(systemName: "play.circle.fill")
+                                            .font(.title3)
+                                        Text("Start Workout")
+                                    }
                                 }
                             }
+                            .font(.headline)
+                            .foregroundColor(Color.systemBackground)
+                            .frame(minWidth: 100, maxWidth: 150)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .fill(Color.accentColor)
+                            )
                         }
-                        .font(.headline)
-                        .foregroundColor(Color.systemBackground)
-                        .frame(minWidth: 100, maxWidth: 150)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(
-                            RoundedRectangle(cornerRadius: 7.5)
-                                .fill(Color.accentColor)
-                        )
+                        .padding(.vertical)
+                    }else{
+                        Link("Join Live Stream", destination: URL(string: "google.com")!).font(.headline)
+                            .foregroundColor(Color.systemBackground)
+                            .frame(minWidth: 100, maxWidth: 150)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .fill(Color.accentColor)
+                            )
                     }
-                    .padding(.vertical)
-                    
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
@@ -115,8 +136,8 @@ struct ExerciseDetail: View {
                 Text(exercise.description)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
-
-                }
+                
+            }
             .listRowInsets(EdgeInsets())
             
             // link to user detail
@@ -144,8 +165,8 @@ struct ExerciseDetail: View {
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
-    @ObservedObject static var exercise: Exercise = Exercise.exampleExercisesFull[10]
-
+    @ObservedObject static var exercise: Exercise = Exercise.exampleExercisesFull[2]
+    
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
             ExerciseDetail(privateInformation: PrivateInformation.examplePrivateInformation, exercise: exercise)

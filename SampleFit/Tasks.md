@@ -14,7 +14,7 @@ All code that talks to the backend should go into NetworkQueryController. All cu
 ## 4. Watch Video & Join Live Stream  
 ✅1. Add a property in Exercise to store the video URL.  
 ✅2. Add a property in Exercise to store the live stream Zoom Link.  
-3. In ExerciseDetail, display the Zoom Link if the Exercise has a .live playback type.  
+✅3. In ExerciseDetail, display the Zoom Link if the Exercise has a .live playback type.  
 4. Probably requires a bit more effort: Load video for play.  
     a. In Exercise, add a method which loads the video into memory only when called (the video will probably? be stored in a AVVideo instance), and add another method which cleans the memory of the video (could probably be done just by assigning nil to the video property).  
     b. In ExerciseDetail, add a .onAppear() and a .onDisappear clause. If the exercise is a .recordedVideo playback type, it should call into the two methods above to create video on appear and clean up memory on disappear.  
