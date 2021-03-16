@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WorkoutBrowseView: View {
     @EnvironmentObject var privateInformation: PrivateInformation
+    @EnvironmentObject var publicInformation: PublicProfile
     
     var body: some View {
         
@@ -16,9 +17,10 @@ struct WorkoutBrowseView: View {
         
         VStack(){
             NavigationView{
+                
                 LazyVGrid(columns: columns, spacing:15 ){
                     ForEach(Exercise.Category.allCases, id: \.self) { category in
-                        NavigationLink(destination: WorkoutView(categoryName:category.description)) {
+                        NavigationLink(destination: WorkoutView(categoryName:category.description, categoryIndex: category.index)) {
                             CategorySquareView(categoryName: category.description)
                         }
                     }
@@ -26,7 +28,6 @@ struct WorkoutBrowseView: View {
                 }.position(x:UIScreen.main.bounds.size.width/2, y:150)
                 .navigationTitle("Click To Exercise")
             }
-            
         }
     }}
 
@@ -36,9 +37,7 @@ struct WorkoutBrowseView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             WorkoutBrowseView().environmentObject(userData)
-                .environmentObject(userData.privateInformation)
-            WorkoutBrowseView().environmentObject(userData)
-                .environmentObject(userData.privateInformation)
+                .environmentObject(userData.privateInformation).environmentObject(userData.publicProfile)
         }
     }
 }
