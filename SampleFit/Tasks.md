@@ -18,7 +18,7 @@ All code that talks to the backend should go into NetworkQueryController. All cu
 4. Probably requires a bit more effort: Load video for play.  
     a. In Exercise, add a method which loads the video into memory only when called (the video will probably? be stored in a AVVideo instance), and add another method which cleans the memory of the video (could probably be done just by assigning nil to the video property).  
     b. In ExerciseDetail, add a .onAppear() and a .onDisappear clause. If the exercise is a .recordedVideo playback type, it should call into the two methods above to create video on appear and clean up memory on disappear.  
-    c. In ExerciseDetail, if the exercise has a .live playback type, display a button / link to the zoom link over the preview image and hide the video player. If the exercise has a .recordedVideo playback type, show the video player and hide the preview image. (use if else / switch statements to optionally display the views)  
+☑️c. In ExerciseDetail, if the exercise has a .live playback type, display a button / link to the zoom link over the preview image and hide the video player. If the exercise has a .recordedVideo playback type, show the video player and hide the preview image. (use if else / switch statements to optionally display the views)  
   
 ## 5. Create New Exercise  
 1. In Me -> Uploads, add a "+" button as the trailing navigation item. This button should display a new view using .sheet (in which the user can enter exercise name, type, and upload link / video).  
@@ -33,10 +33,10 @@ All code that talks to the backend should go into NetworkQueryController. All cu
   
 
 ## 10. Record Workout  
-1. I haven't thought through on this yet. Feel free to implement it in any way that makes sense. I think the easier way would be to record the workout locally, and on completion, call a function into UserData, which adds the workout to PrivateInformation, and calls into a function in NetworkQueryController to talk to the backend.
+✅ 1. I haven't thought through on this yet. Feel free to implement it in any way that makes sense. I think the easier way would be to record the workout locally, and on completion, call a function into UserData, which adds the workout to PrivateInformation, and calls into a function in NetworkQueryController to talk to the backend.
 
 ## Other
-1. We can keep other UI as is for now (since there's already a LOT of work to do).
+✅ 1. We can keep other UI as is for now (since there's already a LOT of work to do).
 ☑️ 2. For a record of what needs to change: workout history UI in Me should change to reflect the requirement from previous homework.
   
 ## Networking  
