@@ -54,6 +54,19 @@ class Exercise: Identifiable, ObservableObject {
             token.representedObject = self
             return token
         }
+        
+        
+        //FIXME: Index to be changed
+        var index: Double{
+            switch self {
+            case .pushup:
+                return 1
+            case .hiit:
+                return 2
+            default:
+                return 1.5
+            }
+        }
     }
     
     // MARK: - Initializers

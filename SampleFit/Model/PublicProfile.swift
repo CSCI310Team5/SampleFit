@@ -179,10 +179,17 @@ extension PublicProfile {
         guard let height = _height else { return nil }
         return Self.heightFormatter.string(fromMeters: height.converted(to: .meters).value)
     }
+    
     var massDescription: String? {
         guard let mass = _mass else { return nil }
         return Self.massFormatter.string(fromKilograms: mass.converted(to: .kilograms).value)
     }
+    
+    var getMass: Double?{
+        guard let mass = _mass else { return nil }
+        return mass.converted(to: .kilograms).value
+    }
+
 }
 
 // MARK: - Protocol conformance
