@@ -32,7 +32,8 @@ class workoutTimer: ObservableObject{
 
 struct WorkoutView: View {
     @EnvironmentObject var privateInformation: PrivateInformation
-    @EnvironmentObject var publicInformation: PublicProfile
+    @EnvironmentObject var userData: UserData
+    @ObservedObject var publicInformation: PublicProfile
     
     var categoryName: String
     var categoryIndex: Double
@@ -103,7 +104,7 @@ struct WorkoutView: View {
 struct WorkoutView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
-        WorkoutView(categoryName: "Yoga", categoryIndex: 1.5).environmentObject(userData)
-            .environmentObject(userData.privateInformation).environmentObject(userData.publicProfile)
+        WorkoutView(publicInformation: userData.publicProfile, categoryName: "Yoga", categoryIndex: 1.5).environmentObject(userData)
+            .environmentObject(userData.privateInformation)
     }
 }
