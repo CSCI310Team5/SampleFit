@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UploadedExercisesList: View {
-    @ObservedObject var privateInformation: PrivateInformation
+    @ObservedObject var privateInformation: PublicProfile
     @Environment(\.editMode) var editMode
     @State private var isNewUploadSheetPresented = false
     var body: some View {
@@ -52,7 +52,7 @@ struct UploadedExercisesList: View {
 struct UploadedExercisesList_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UploadedExercisesList(privateInformation: PrivateInformation.examplePrivateInformation)
+            UploadedExercisesList(privateInformation: PublicProfile.exampleProfile)
         }
     }
 }

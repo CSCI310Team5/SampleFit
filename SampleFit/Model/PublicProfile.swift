@@ -17,7 +17,9 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _birthday: Date?
     private var _height: Measurement<UnitLength>?
     private var _mass: Measurement<UnitMass>?
-
+    
+    @Published var uploadedExercises: [Exercise] = []
+    
     private var _usesMetricSystem: Bool
     
     var birthdayDateRange: ClosedRange<Date>
@@ -79,6 +81,11 @@ class PublicProfile: Identifiable, ObservableObject {
         
         
         
+    }
+    
+    /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
+    func removeExerciseFromUploads(at indices: IndexSet) {
+        uploadedExercises.remove(atOffsets: indices)
     }
     
     // MARK: - Instance methods

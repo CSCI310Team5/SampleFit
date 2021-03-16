@@ -14,7 +14,6 @@ class PrivateInformation: ObservableObject {
     /// Flat array of exercises that should provide to the user as the browse exercise feeds.
     @PublishedCollection var exerciseFeeds: [Exercise] = Exercise.exampleExercisesSmall
     @Published var favoriteExercises: [Exercise] = []
-    @Published var uploadedExercises: [Exercise] = []
     @Published var followedUsers: [PublicProfile] = []
     @Published var workoutHistory: [Workout] = []
     
@@ -40,10 +39,7 @@ class PrivateInformation: ObservableObject {
     func removeExerciseFromFavorites(at indices: IndexSet) {
         favoriteExercises.remove(atOffsets: indices)
     }
-    /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
-    func removeExerciseFromUploads(at indices: IndexSet) {
-        uploadedExercises.remove(atOffsets: indices)
-    }
+   
     /// Remove users from followed list at specified index set. You should use this method to handle list onDelete events.
     func removeFollowedUser(at indicies: IndexSet) {
         followedUsers.remove(atOffsets: indicies)
