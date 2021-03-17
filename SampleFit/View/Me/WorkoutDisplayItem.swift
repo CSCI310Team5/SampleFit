@@ -9,6 +9,14 @@ import SwiftUI
 
 struct WorkoutDisplayItem: View {
     var workout: Workout
+    
+    func asString(second: Int) -> String{
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute, .second]
+        formatter.unitsStyle = .abbreviated
+        return formatter.string(from: TimeInterval(second))!
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             // top row
@@ -32,7 +40,7 @@ struct WorkoutDisplayItem: View {
             // bottom
             HStack {
                 Text(workout.categories).font(.body)
-                Text("\(String(workout.duration)) min").font(.callout).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                Text("\(asString(second: workout.duration))").font(.callout).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 
                 Spacer()
                 

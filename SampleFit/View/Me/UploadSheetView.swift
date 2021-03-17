@@ -37,6 +37,24 @@ struct UploadSheetView: View  {
                 Button("Cancel", action: { isPresented = false })
                 Spacer()
                 Button(action: {
+                    newUpload.owningUser=publicProfile
+                    newUpload.name=name
+                    newUpload.category=category
+                    newUpload.description=description
+                    newUpload.image=image
+                    if playbackType{
+                        newUpload.playbackType =  Exercise.PlaybackType.live
+                        newUpload.contentLink=contentLink
+                        newUpload.peopleLimit=peopleLimit
+                    }else{
+                        newUpload.playbackType = Exercise.PlaybackType.recordedVideo
+                    }
+                    newUpload.duration=Measurement(value: Double(duration), unit: UnitDuration.minutes)
+                    
+                    publicProfile.uploadedExercises.append(newUpload)
+                    
+                    print(publicProfile.uploadedExercises)
+                    
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
@@ -46,14 +64,13 @@ struct UploadSheetView: View  {
             .padding(.vertical, 20)
             
             Text("Create Livestream Or Upload Video").bold()
+            
             NavigationView{
                 Form{
-                   
                     HStack {
                         Text("Profile Image Preview")
-                        Spacer()
-                        image.resizable().frame(width: 100, height: 100, alignment: .trailing).padding()
-                    }
+                        image.resizable().scaledToFit()
+                    }.frame(height: 100)
                     
                     
                         Toggle(isOn: $playbackType) {
@@ -106,7 +123,11 @@ struct UploadSheetView: View  {
             }
             Spacer()
         }
-        
+//        .onDisappear(
+//            perform: {
+//                print("hahahaha")
+//            }
+//        )
     }
 }
 

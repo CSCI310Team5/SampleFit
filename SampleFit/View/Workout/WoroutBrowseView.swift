@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WorkoutBrowseView: View {
     @EnvironmentObject var userData: UserData
-    @EnvironmentObject var privateInformation: PrivateInformation
+    @ObservedObject var privateInformation: PrivateInformation
     
     
     var body: some View {
@@ -21,7 +21,7 @@ struct WorkoutBrowseView: View {
                 
                 LazyVGrid(columns: columns, spacing:15 ){
                     ForEach(Exercise.Category.allCases, id: \.self) { category in
-                        NavigationLink(destination: WorkoutView(publicInformation: userData.publicProfile, categoryName:category.description, categoryIndex: category.index)) {
+                        NavigationLink(destination: WorkoutView(privateInformation: privateInformation,publicInformation: userData.publicProfile, categoryName:category.description, categoryIndex: category.index)) {
                             CategorySquareView(categoryName: category.description)
                         }
                     }
@@ -37,8 +37,7 @@ struct WorkoutBrowseView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
         Group {
-            WorkoutBrowseView().environmentObject(userData)
-                .environmentObject(userData.privateInformation).environmentObject(userData.publicProfile)
+            WorkoutBrowseView(privateInformation: PrivateInformation.examplePrivateInformation).environmentObject(userData)
         }
     }
 }

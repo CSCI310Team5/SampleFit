@@ -28,7 +28,7 @@ struct HomeView: View {
                 .tag(Tab.browse)
             
             
-            WorkoutBrowseView()
+            WorkoutBrowseView(privateInformation: userData.privateInformation)
                 .tabItem {
                     Label("Exercise", systemImage: "square.grid.2x2.fill")
                 }

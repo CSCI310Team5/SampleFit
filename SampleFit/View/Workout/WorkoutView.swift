@@ -23,15 +23,17 @@ class workoutTimer: ObservableObject{
         }
     }
     
-    func stop(category: String) {
+    func stop(category: String) -> Workout{
         timer.invalidate()
+        let workout = Workout(caloriesBurned: Int(self.calories), date: Date(), categories: category, duration: self.seconds)
         self.seconds=0
         self.calories=0
+        return workout
     }
 }
 
 struct WorkoutView: View {
-    @EnvironmentObject var privateInformation: PrivateInformation
+    @ObservedObject var privateInformation: PrivateInformation
     @EnvironmentObject var userData: UserData
     @ObservedObject var publicInformation: PublicProfile
     
@@ -63,7 +65,8 @@ struct WorkoutView: View {
                 }
             }.padding(.vertical,100)
             Button(action: {
-                timer.isWorkingout ? self.timer.stop(category: categoryName): self.timer.start(mass: publicInformation.getMass ?? 0)
+                timer.isWorkingout ? privateInformation.workoutHistory.append(self.timer.stop(category: categoryName))
+                    : self.timer.start(mass: publicInformation.getMass ?? 0)
                 withAnimation {timer.isWorkingout.toggle()}
             }) {
                 Group {
@@ -97,8 +100,15 @@ struct WorkoutView: View {
             
         }.padding()
         .onDisappear{
-            timer.isWorkingout.toggle()
-            timer.stop(category: categoryName)
+            if timer.isWorkingout {
+                
+                privateInformation.workoutHistory.append(self.timer.stop(category: categoryName))
+                
+                timer.isWorkingout.toggle()
+            }
+            
+            
+            
             
         }
     }
@@ -107,7 +117,6 @@ struct WorkoutView: View {
 struct WorkoutView_Previews: PreviewProvider {
     static var userData = UserData()
     static var previews: some View {
-        WorkoutView(publicInformation: userData.publicProfile, categoryName: "Yoga", categoryIndex: 1.5).environmentObject(userData)
-            .environmentObject(userData.privateInformation)
+        WorkoutView(privateInformation: PrivateInformation.examplePrivateInformation,publicInformation: userData.publicProfile, categoryName: "Yoga", categoryIndex: 1.5).environmentObject(userData)
     }
 }
