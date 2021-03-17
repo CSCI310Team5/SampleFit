@@ -68,7 +68,11 @@ struct MeView: View {
                         WorkoutDisplayItem(workout: workout)
                     }
                 }
-            }
+            }else{
+                Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
+                        Text("No History Yet, Start Workout Today!")
+                    }
+                }
             
             // Sign out button
             Section {

@@ -17,7 +17,7 @@ struct FollowingUserList: View {
             } else {
                 List {
                     ForEach(privateInformation.followedUsers) { user in
-                        NavigationLink(destination: UserDetail(user: user)) {
+                        NavigationLink(destination: UserDetail(user: user, privateInformation: privateInformation)) {
                             UserListDisplayItem(user: user)
                         }
                     }

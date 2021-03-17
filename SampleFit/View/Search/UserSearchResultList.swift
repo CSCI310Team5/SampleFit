@@ -16,7 +16,7 @@ struct UserSearchResultList: View {
             LazyVStack {
                 ForEach(users) { user in
                     ZStack(alignment: .trailing) {
-                        NavigationLink(destination: UserDetail(user: user)) {
+                        NavigationLink(destination: UserDetail(user: user, privateInformation: privateInformation)) {
                             VStack {
                                 UserListDisplayItem(user: user)
                                     .padding(.top, user == users[0] ? 4 : 0)

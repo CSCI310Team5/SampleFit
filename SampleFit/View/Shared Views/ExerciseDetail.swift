@@ -141,7 +141,7 @@ struct ExerciseDetail: View {
             .listRowInsets(EdgeInsets())
             
             // link to user detail
-            NavigationLink(destination: UserDetail(user: exercise.owningUser)) {
+            NavigationLink(destination: UserDetail(user: exercise.owningUser, privateInformation: privateInformation)) {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(exercise.owningUser.identifier)

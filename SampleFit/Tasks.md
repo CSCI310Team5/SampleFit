@@ -28,8 +28,8 @@ All code that talks to the backend should go into NetworkQueryController. All cu
 
   
 ## 8. View other user's interfaces
-1. Implement UserDetail. Display public information about the user (most of which are in PublicProfile.)  
-2. Add a "follow / unfollow" button in this view. Use FollowButton. You can find an existing implementation in FolllowingUserList.  
+✅ 1. Implement UserDetail. Display public information about the user (most of which are in PublicProfile.)  
+✅ 2. Add a "follow / unfollow" button in this view. Use FollowButton. You can find an existing implementation in FolllowingUserList.  
   
 
 ## 10. Record Workout  
