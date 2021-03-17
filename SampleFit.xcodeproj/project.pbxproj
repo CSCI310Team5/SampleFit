@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */; };
 		18DB4EB425FAD70C005BB894 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EB325FAD70C005BB894 /* BrowseView.swift */; };
 		18DB4EB925FAD71B005BB894 /* ExerciseCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EB825FAD71B005BB894 /* ExerciseCategoryRow.swift */; };
 		18DB4EC925FAD7A8005BB894 /* WoroutBrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */; };
@@ -102,6 +103,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSheetView.swift; sourceTree = "<group>"; };
 		18DB4EB325FAD70C005BB894 /* BrowseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		18DB4EB825FAD71B005BB894 /* ExerciseCategoryRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseCategoryRow.swift; sourceTree = "<group>"; };
 		18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WoroutBrowseView.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */,
 				F61719FC25E88CF600C09CE9 /* FollowingUserList.swift */,
 				F6171A1F25E8B4A300C09CE9 /* WorkoutDisplayItem.swift */,
+				1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 				F691AFC825F6097E00283CE5 /* DetailedProfileSummary.swift in Sources */,
 				F691AFBE25F6006F00283CE5 /* MiniProfileSummary.swift in Sources */,
 				F6E8AF0E25F82F7300EF4BE4 /* UsernameTextField.swift in Sources */,
+				1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */,
 				F669335625E0DB7E000D9442 /* SearchResult.swift in Sources */,
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
 				F6E8AF3025F8415B00EF4BE4 /* InputVerifier.swift in Sources */,
