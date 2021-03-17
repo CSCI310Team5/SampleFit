@@ -9,7 +9,7 @@ import Foundation
 
 struct Workout: Identifiable {
     var id = UUID()
-    var caloriesBurned: Int
+    var caloriesBurned: Double
     var date: Date
     var categories: String
     var duration: Int
@@ -24,11 +24,11 @@ struct Workout: Identifiable {
     }()
     
     static let exampleWorkouts = [
-        Workout(caloriesBurned: Int.random(in: 50...2000), date: Date(), categories: "HIIT", duration: 20 ),
-        Workout(caloriesBurned: Int.random(in: 50...2000), date: Date(),categories: "YOGA", duration: 20),
-        Workout(caloriesBurned: Int.random(in: 50...2000), date: Date().advanced(by: Measurement(value: -48, unit: UnitDuration.hours).converted(to: .seconds).value),categories: "YOGA", duration: 20),
-        Workout(caloriesBurned: Int.random(in: 50...2000), date: Date().advanced(by: Measurement(value: -72, unit: UnitDuration.hours).converted(to: .seconds).value),categories: "YOGA", duration: 200),
-        Workout(caloriesBurned: Int.random(in: 50...2000), date: Date().advanced(by: Measurement(value: -96, unit: UnitDuration.hours).converted(to: .seconds).value),categories: "YOGA", duration: 20),
+        Workout(caloriesBurned: Double(Int.random(in: 50...2000)), date: Date(), categories: "HIIT", duration: 20 ),
+        Workout(caloriesBurned: Double(Int.random(in: 50...2000)), date: Date(),categories: "YOGA", duration: 20),
+        Workout(caloriesBurned: Double(Int.random(in: 50...2000)), date: Date().advanced(by: Measurement(value: -48, unit: UnitDuration.hours).converted(to: .seconds).value),categories: "YOGA", duration: 20),
+        Workout(caloriesBurned: Double(Int.random(in: 50...2000)), date: Date().advanced(by: Measurement(value: -72, unit: UnitDuration.hours).converted(to: .seconds).value),categories: "YOGA", duration: 200),
+        Workout(caloriesBurned: Double(Int.random(in: 50...2000)), date: Date().advanced(by: Measurement(value: -96, unit: UnitDuration.hours).converted(to: .seconds).value),categories: "YOGA", duration: 20),
     ]
 }
 

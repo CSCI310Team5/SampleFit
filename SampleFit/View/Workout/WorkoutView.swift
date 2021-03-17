@@ -16,16 +16,16 @@ class workoutTimer: ObservableObject{
     @Published var isWorkingout = false
     @Published var calories: Double = 0
     
-    func start(mass: Double) {
+    func start(mass: Double, index: Double) {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.seconds += 1
-            self.calories = Double(self.seconds)*3.5/12000*mass
+            self.calories = Double(self.seconds)*3.5/12000*mass*index
         }
     }
     
     func stop(category: String) -> Workout{
         timer.invalidate()
-        let workout = Workout(caloriesBurned: Int(self.calories), date: Date(), categories: category, duration: self.seconds)
+        let workout = Workout(caloriesBurned: self.calories, date: Date(), categories: category, duration: self.seconds)
         self.seconds=0
         self.calories=0
         return workout
@@ -59,14 +59,14 @@ struct WorkoutView: View {
                 Text("Time Exercised: \(asString(second: timer.seconds))").padding()
                 
                 if publicInformation.massDescription != nil {
-                    Text("Calories Burned So Far: \((String(format: "%.2f", timer.calories*categoryIndex)) ) Cal")
+                    Text("Calories Burned So Far: \((String(format: "%.2f", timer.calories)) ) Cal")
                 }else{
                     Text("Set your weight in your profile page to start recording calorie burned").foregroundColor(.red)
                 }
             }.padding(.vertical,100)
             Button(action: {
                 timer.isWorkingout ? privateInformation.workoutHistory.append(self.timer.stop(category: categoryName))
-                    : self.timer.start(mass: publicInformation.getMass ?? 0)
+                    : self.timer.start(mass: publicInformation.getMass ?? 0, index: categoryIndex)
                 withAnimation {timer.isWorkingout.toggle()}
             }) {
                 Group {

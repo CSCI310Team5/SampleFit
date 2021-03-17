@@ -45,7 +45,7 @@ struct WorkoutDisplayItem: View {
                 Spacer()
                 
                     HStack(alignment: .lastTextBaseline, spacing: 1) {
-                        Text("\(workout.caloriesBurned)")
+                        Text("\(String(format: "%.2f", workout.caloriesBurned) )")
                             .font(Font.system(.title2, design: .rounded).weight(.semibold))
                         Text("cal")
                             .font(.callout)
