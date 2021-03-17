@@ -27,7 +27,7 @@ class Exercise: Identifiable, ObservableObject {
     
     
     
-    enum PlaybackType: Int {
+    enum PlaybackType: Int, CaseIterable {
         case live = 1
         case recordedVideo
     }

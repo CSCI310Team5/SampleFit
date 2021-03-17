@@ -38,7 +38,7 @@ struct UploadedExercisesList: View {
             }
         }
         .sheet(isPresented: $isNewUploadSheetPresented) {
-            UploadSheetView(isPresented: $isNewUploadSheetPresented)
+            UploadSheetView(publicProfile: publicProfile, isPresented: $isNewUploadSheetPresented)
         }
         .navigationBarItems(trailing:
             Button(action: { isNewUploadSheetPresented = true }) {
