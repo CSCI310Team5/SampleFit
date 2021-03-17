@@ -48,8 +48,6 @@ struct WorkoutView: View {
     }
     
     
-    
-    
     var body: some View {
         
         VStack {
@@ -98,6 +96,11 @@ struct WorkoutView: View {
             Spacer()
             
         }.padding()
+        .onDisappear{
+            timer.isWorkingout.toggle()
+            timer.stop(category: categoryName)
+            
+        }
     }
 }
 
