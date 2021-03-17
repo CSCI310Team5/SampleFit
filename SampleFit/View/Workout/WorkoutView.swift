@@ -63,7 +63,7 @@ struct WorkoutView: View {
                 }else{
                     Text("Set your weight in your profile page to start recording calorie burned").foregroundColor(.red)
                 }
-            }.padding(.top,100)
+            }.padding(.vertical,100)
             Button(action: {
                 timer.isWorkingout ? self.timer.stop(category: categoryName): self.timer.start(mass: publicInformation.getMass ?? 0)
                 withAnimation {timer.isWorkingout.toggle()}
@@ -94,10 +94,10 @@ struct WorkoutView: View {
                         .fill(Color.accentColor)
                 )
             }
-            .padding(.vertical)
+            .padding()
             Spacer()
             
-        }
+        }.padding()
     }
 }
 

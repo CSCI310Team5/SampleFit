@@ -8,26 +8,27 @@
 import SwiftUI
 
 struct UploadedExercisesList: View {
-    @ObservedObject var privateInformation: PublicProfile
+    @ObservedObject var publicProfile: PublicProfile
+    @ObservedObject var privateProfile: PrivateInformation
     @Environment(\.editMode) var editMode
     @State private var isNewUploadSheetPresented = false
     var body: some View {
         Group {
-            if privateInformation.uploadedExercises.isEmpty {
+            if publicProfile.uploadedExercises.isEmpty {
                 NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.")
                     .animation(.easeInOut)
                     .transition(.opacity)
             } else {
                 List {
-                    ForEach(privateInformation.uploadedExercises) { exercise in
-                        NavigationLink(destination: ExerciseDetail(privateInformation: privateInformation, exercise: exercise)) {
+                    ForEach(publicProfile.uploadedExercises) { exercise in
+                        NavigationLink(destination: ExerciseDetail(privateInformation: privateProfile, exercise: exercise)) {
                             // hide detail and shrink row item on edit
                             ExerciseListDisplayItem(exercise: exercise, hideDetails: editMode?.wrappedValue == .active)
                                 .scaleEffect(editMode?.wrappedValue == .active ? 0.9 : 1)
                         }
                     }
                     .onDelete {
-                        self.privateInformation.removeExerciseFromUploads(at: $0)
+                        self.publicProfile.removeExerciseFromUploads(at: $0)
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -52,7 +53,7 @@ struct UploadedExercisesList: View {
 struct UploadedExercisesList_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UploadedExercisesList(privateInformation: PublicProfile.exampleProfile)
+            UploadedExercisesList( publicProfile: PublicProfile.exampleProfile, privateProfile: PrivateInformation.examplePrivateInformation)
         }
     }
 }

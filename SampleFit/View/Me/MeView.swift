@@ -43,7 +43,7 @@ struct MeView: View {
                     }
                 }
                 
-                NavigationLink(destination: NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.").navigationBarTitle("Uploads", displayMode: .inline)) {
+                NavigationLink(destination: UploadedExercisesList(publicProfile: userData.publicProfile, privateProfile: privateInformation)) {
                     Label {
                         Text("Uploads")
                     } icon: {
