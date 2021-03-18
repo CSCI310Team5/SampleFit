@@ -83,6 +83,11 @@ struct CreateAccountView: View {
         })
         .padding(.horizontal, 24)
         .navigationBarTitle("Sign Up")
+        .toolbar{
+            Button(action: {userData.signInStatus = .signedOut} , label: {
+                Text("Log In")
+            })
+        }
     }
 }
 

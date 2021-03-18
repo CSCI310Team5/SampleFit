@@ -18,19 +18,28 @@ class NetworkQueryController {
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
-        // FIXME: validate username over network
-        // faking validation logic now
-        // faking networking delay of 2 seconds
-        return Future<Bool, Error> { promise in
-            if username.count <= 3 {
-                promise(.failure(MessagedError(message: "Too short")))
-            } else {
-                promise(.success(true))
-            }
+        struct emailCheck: Codable{
+            var email: String
         }
-        .replaceError(with: false)
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        .eraseToAnyPublisher()
+        let email = emailCheck(email: username)
+        let encode = try! JSONEncoder().encode(email)
+        let url = URL(string: "http://127.0.0.1:8000/user/emails")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    print("GET IN")
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
     }
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
@@ -39,7 +48,7 @@ class NetworkQueryController {
         // faking validation logic now
         // faking networking delay of 2 seconds
         return Future<Bool, Error> { promise in
-            if password.count < 5 {
+            if password.count < 8 {
                 promise(.failure(MessagedError(message: "Too short")))
             } else {
                 promise(.success(true))
@@ -53,11 +62,6 @@ class NetworkQueryController {
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
     func createAccount(using authenticationState: AuthenticationState) -> AnyPublisher<Bool, Never> {
-        // FIXME: Create account over network
-        // assuming success now
-//        // faking networking delay of 2 seconds
-      
-        
         struct AuthenticationData: Codable{
             var email: String
             var password: String
@@ -72,50 +76,71 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         
-        print(String(data: encode, encoding: .utf8)!)
+        //        print(String(data: encode, encoding: .utf8)!)
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
-                print(decode.OK)
-               
-            })
-            
+            //            .handleEvents(receiveOutput: { outputValue in
+            //
+            //                print("This is the OutPUT!!!: \( outputValue)")
+            //                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+            //                let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
+            //                print(decode.OK)
+            //            })
             .map {
                 $0.data
             }
-//            .decode(type: SignUpData.self, decoder: JSONDecoder())
-            .map { _ in
-                return true
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map {result in
+                if(result.OK==1){
+                    print("GET IN")
+                    return true}
+                return false
             }
             .replaceError(with: false)
-            .handleEvents(receiveOutput: {
-                print("This is the final output: \($0)")
-            })
+            //            .handleEvents(receiveOutput: {
+            //                print("This is the final output: \($0)")
+            //            })
             .eraseToAnyPublisher()
-        
-//        return Future<Bool, Error> { promise in
-//            promise(.success(true))
-////            promise(.failure(MessagedError(message: "Sign Up Error")))
-//        }
-//
-        
     }
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
-    func signIn(using: AuthenticationState) -> AnyPublisher<Bool, Never> {
-        // FIXME: Sign in over network
-        // assuming success now
-        // faking networking delay of 2 seconds
-        return Future<Bool, Error> { promise in
-            promise(.success(true))
+    func signIn(using authenticationState: AuthenticationState) -> AnyPublisher<String, Never> {
+        struct AuthenticationData: Codable{
+            var email: String
+            var password: String
         }
-        .replaceError(with: false)
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        .eraseToAnyPublisher()
+        struct LogInData: Codable{
+            var token: String
+        }
+        let authen = AuthenticationData(email:authenticationState.username, password: authenticationState.password)
+        
+        let encode = try! JSONEncoder().encode(authen)
+//                print(String(data: encode, encoding: .utf8)!)
+        let url = URL(string: "http://127.0.0.1:8000/user/login")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        return
+            URLSession.shared.dataTaskPublisher(for: request)
+//                        .handleEvents(receiveOutput: { outputValue in
+//
+//                            print("This is the OutPUT!!!: \( outputValue)")
+//                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+//                        })
+            .map{
+                $0.data
+            }
+            .decode(type: LogInData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.token.isEmpty){
+                    return ""
+                }
+//                print("Login token: \(result.token)")
+                return result.token
+            }
+            .replaceError(with: "")
+            .eraseToAnyPublisher()
     }
     
     /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.

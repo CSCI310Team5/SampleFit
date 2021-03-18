@@ -82,6 +82,11 @@ struct SignInView: View {
         })
         .padding(.horizontal, 24)
         .navigationBarTitle("Sign In")
+        .toolbar{
+            Button(action: {userData.signInStatus = .never} , label: {
+                Text("Sign Up")
+            })
+        }
     }
 }
 
