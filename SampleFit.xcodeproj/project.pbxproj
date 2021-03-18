@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */; };
+		18C7E2182602EF9200D8B3F3 /* NetworkResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7E2172602EF9200D8B3F3 /* NetworkResponses.swift */; };
 		18DB4EB425FAD70C005BB894 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EB325FAD70C005BB894 /* BrowseView.swift */; };
 		18DB4EB925FAD71B005BB894 /* ExerciseCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EB825FAD71B005BB894 /* ExerciseCategoryRow.swift */; };
 		18DB4EC925FAD7A8005BB894 /* WoroutBrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */; };
@@ -104,6 +105,7 @@
 
 /* Begin PBXFileReference section */
 		1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSheetView.swift; sourceTree = "<group>"; };
+		18C7E2172602EF9200D8B3F3 /* NetworkResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResponses.swift; sourceTree = "<group>"; };
 		18DB4EB325FAD70C005BB894 /* BrowseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		18DB4EB825FAD71B005BB894 /* ExerciseCategoryRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExerciseCategoryRow.swift; sourceTree = "<group>"; };
 		18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WoroutBrowseView.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				F6E8AF2F25F8415B00EF4BE4 /* InputVerifier.swift */,
 				F6C7A3C725D60FE30023D250 /* InputVerificationStatus.swift */,
 				F669338925E10070000D9442 /* SearchState.swift */,
+				18C7E2172602EF9200D8B3F3 /* NetworkResponses.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 				F669336425E0E110000D9442 /* ExerciseListDisplayItem.swift in Sources */,
 				F6C7A3C825D60FE30023D250 /* InputVerificationStatus.swift in Sources */,
 				F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */,
+				18C7E2182602EF9200D8B3F3 /* NetworkResponses.swift in Sources */,
 				F6E8AEFC25F75E3100EF4BE4 /* CircleImage.swift in Sources */,
 				F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */,
 			);

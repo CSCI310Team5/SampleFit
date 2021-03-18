@@ -52,17 +52,57 @@ class NetworkQueryController {
     
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
-    func createAccount(using: AuthenticationState) -> AnyPublisher<Bool, Never> {
+    func createAccount(using authenticationState: AuthenticationState) -> AnyPublisher<Bool, Never> {
         // FIXME: Create account over network
         // assuming success now
-        // faking networking delay of 2 seconds
-        return Future<Bool, Error> { promise in
-            promise(.success(true))
-//            promise(.failure(MessagedError(message: "Sign Up Error")))
+//        // faking networking delay of 2 seconds
+      
+        
+        struct AuthenticationData: Codable{
+            var email: String
+            var password: String
         }
-        .replaceError(with: false)
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        .eraseToAnyPublisher()
+        
+        let authen = AuthenticationData(email:authenticationState.username, password: authenticationState.password)
+        
+        let encode = try! JSONEncoder().encode(authen)
+        
+        let url = URL(string: "http://127.0.0.1:8000/user/signup")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        
+        print(String(data: encode, encoding: .utf8)!)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: { outputValue in
+                
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
+                print(decode.OK)
+               
+            })
+            
+            .map {
+                $0.data
+            }
+//            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map { _ in
+                return true
+            }
+            .replaceError(with: false)
+            .handleEvents(receiveOutput: {
+                print("This is the final output: \($0)")
+            })
+            .eraseToAnyPublisher()
+        
+//        return Future<Bool, Error> { promise in
+//            promise(.success(true))
+////            promise(.failure(MessagedError(message: "Sign Up Error")))
+//        }
+//
+        
     }
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.

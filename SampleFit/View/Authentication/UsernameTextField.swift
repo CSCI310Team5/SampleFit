@@ -24,7 +24,7 @@ struct UsernameTextField: View {
                 .font(.title)
                 .foregroundColor(inputStatus[keyPath: colorType])
             TextField("Email", text: $username)
-                .textContentType(.username)
+                .textContentType(.emailAddress)
                 .font(.title3)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
