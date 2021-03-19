@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import SwiftUI
 
 /// User's information that is publicly available to other users. You should use PublicProfile to uniquely identify a user's information.
@@ -51,7 +52,6 @@ class PublicProfile: Identifiable, ObservableObject {
         return massFormatter
     }()
     
-    
     init(identifier: String, fullName: PersonNameComponents?) {
         self.identifier = identifier
         
@@ -79,9 +79,14 @@ class PublicProfile: Identifiable, ObservableObject {
             massRange = Array(stride(from: 50, to: 650, by: 1)).map { Measurement(value: $0, unit: UnitMass.pounds) }
         }
         
-        
-        
     }
+    
+    //MARK: - Asynchronous tasks
+    private var networkQueryController = NetworkQueryController()
+    private var _nicknameUpdateCancellable: AnyCancellable?
+    private var _heightUpdateCancellable: AnyCancellable?
+    private var _weightUpdateCancellable: AnyCancellable?
+    
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {
@@ -100,12 +105,38 @@ class PublicProfile: Identifiable, ObservableObject {
         return copyProfile
     }
     
-    func update(using newProfile: PublicProfile) {
-        self._nickname = newProfile.nickname
-        self.image = newProfile.image
-        self._birthday = newProfile._birthday
-        self._height = newProfile._height
-        self._mass = newProfile._mass
+    func update(using newProfile: PublicProfile, token: String) {
+        
+        if self._nickname != newProfile.nickname{
+            
+            _nicknameUpdateCancellable=networkQueryController.changeNickname(email: self.identifier, nickname: newProfile.nickname, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self._nickname = newProfile.nickname
+                }
+        }
+        
+        if self.image != newProfile.image{
+            self.image = newProfile.image
+        }
+        if self._birthday != newProfile._birthday{
+            self._birthday = newProfile._birthday
+        }
+        if self._height != newProfile._height{
+            _heightUpdateCancellable=networkQueryController.changeHeight(email: self.identifier, height: newProfile._height!.converted(to: .centimeters).value, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self._height = newProfile._height
+                }
+        }
+        if self._mass != newProfile._mass{
+            _weightUpdateCancellable=networkQueryController.changeWeight(email: self.identifier, weight: (newProfile._mass?.converted(to: .kilograms).value)!, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self._mass = newProfile._mass
+                }
+            
+        }
     }
     
     func shouldAppearOnSearchText(_ text: String) -> Bool {

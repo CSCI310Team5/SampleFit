@@ -19,7 +19,10 @@ class UserData: ObservableObject {
     var publicProfile = PublicProfile.exampleProfile
     var privateInformation = PrivateInformation()
     var searchCategoryTokenController = SearchCategoryTokenEventController()
+    
+    //MARK: RECORD TOKEN WHEN LOGGED IN
     var token = ""
+    
     @Published var signInStatus = SignInStatus.never
     @Published var signInReturnsError = false
     private var networkQueryController = NetworkQueryController()
@@ -88,9 +91,10 @@ class UserData: ObservableObject {
         
         _signInCancellable = networkQueryController.signIn(using: signInAuthenticationState)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] success in
-                if !success.isEmpty {
+            .sink { [unowned self] token in
+                if !token.isEmpty {
                     _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInAuthenticationState.username)
+                    self.token=token
                 } else {
                     print("Sign in failed")
                     signInReturnsError = true
