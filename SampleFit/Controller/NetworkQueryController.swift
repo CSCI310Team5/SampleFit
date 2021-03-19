@@ -174,6 +174,85 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    //FIXME: To be integrated
+    func follow(email: String, followUser: String, token: String)-> AnyPublisher<Bool, Never>{
+        struct EncodeData: Codable{
+            var email: String
+            var follow: String
+        }
+        let encodeData = EncodeData(email: email, follow: followUser)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/profile/follow")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    //FIXME: To be integrated
+    func unfollow(email: String, unfollowUser: String, token: String)-> AnyPublisher<Bool, Never>{
+        struct EncodeData: Codable{
+            var email: String
+            var follow: String
+        }
+        let encodeData = EncodeData(email: email, follow: unfollowUser)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/profile/follow")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    func changePassword(email: String, newPassword: String, token: String)-> AnyPublisher<Bool, Never>{
+        struct EncodeData: Codable{
+            var email: String
+            var newPassword: String
+        }
+        let encodeData = EncodeData(email: email, newPassword: newPassword)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/profile/password")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
     
     
     func changeNickname(email: String, nickname: String, token:String)-> AnyPublisher<Bool, Never>{
@@ -203,6 +282,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    //FIXME: To be completed and integrated
     func changeBirthday(email: String, birthday: Date, token: String)-> AnyPublisher<Bool, Never>{
             
             struct EncodeData: Codable{

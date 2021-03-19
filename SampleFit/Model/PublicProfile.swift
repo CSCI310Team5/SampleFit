@@ -82,10 +82,12 @@ class PublicProfile: Identifiable, ObservableObject {
     }
     
     func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
-        if (weight != nil){ self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
-        if (height != nil) {self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
-        if (nickname != nil) {self.nickname=nickname!}
-        if (birthday != nil) {self._birthday=birthday}
+        print("profile set: \(weight)\(height)\(nickname)")
+        self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)
+        self._height=Measurement(value: height!, unit: UnitLength.centimeters)
+        self.nickname=nickname!
+        self._birthday=birthday
+        print("profile npw: \(self._mass)\(self._height)\(self.nickname)")
     }
     
     //MARK: - Asynchronous tasks

@@ -38,6 +38,7 @@ class UserData: ObservableObject {
     private var _signInCancellable: AnyCancellable?
     private var _fetchExerciseFeedCancellable: AnyCancellable?
     private var _profileCancellable : AnyCancellable?
+    private var _newPasswordCancellable: AnyCancellable?
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -115,7 +116,11 @@ class UserData: ObservableObject {
     }
     
     func changePassword(to newPassword: String) {
-        // FIXME: Change password over the newtwork. Pass in the public profile as the user identifier.
+        _newPasswordCancellable=networkQueryController.changePassword(email: publicProfile.identifier, newPassword: newPassword, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink {_ in
+                
+            }
     }
     
     private func _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: String, fullName: PersonNameComponents? = nil) {
