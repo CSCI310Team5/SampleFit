@@ -278,7 +278,7 @@ class NetworkQueryController {
                     profile.uploadedExercises = []
                     var _imageLoadingCancellable: AnyCancellable?
                     _imageLoadingCancellable =
-                        self.loadImage(fromURL: r.avatar).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned
+                        self.loadImage(fromURL: r.avatar).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
                         }
                     profileList.append(profile)
                 }

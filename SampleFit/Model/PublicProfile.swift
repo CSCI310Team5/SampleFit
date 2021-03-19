@@ -14,7 +14,7 @@ class PublicProfile: Identifiable, ObservableObject {
     @Published var identifier: String = ""
     private var _nickname: String?
     /// user's profile image. Defaults to person.fill.
-    @Published var image : Image? = Image(systemName: "person.fill.questionmark")
+    @Published var image : Image = Image(systemName: "person.fill.questionmark")
     private var _birthday: Date?
     private var _height: Measurement<UnitLength>?
     private var _mass: Measurement<UnitMass>?
