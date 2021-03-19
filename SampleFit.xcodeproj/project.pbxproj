@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181A237F26054C6F008A02D2 /* RetrivePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */; };
 		1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */; };
 		18C7E2182602EF9200D8B3F3 /* NetworkResponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C7E2172602EF9200D8B3F3 /* NetworkResponses.swift */; };
 		18DB4EB425FAD70C005BB894 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EB325FAD70C005BB894 /* BrowseView.swift */; };
@@ -104,6 +105,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrivePasswordView.swift; sourceTree = "<group>"; };
 		1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSheetView.swift; sourceTree = "<group>"; };
 		18C7E2172602EF9200D8B3F3 /* NetworkResponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResponses.swift; sourceTree = "<group>"; };
 		18DB4EB325FAD70C005BB894 /* BrowseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 				F6C7A3CC25D613F70023D250 /* CreateAccountView.swift */,
 				F6E8AF0D25F82F7300EF4BE4 /* UsernameTextField.swift */,
 				F6E8AF1225F839AF00EF4BE4 /* PasswordTextField.swift */,
+				181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -644,6 +647,7 @@
 				F669336425E0E110000D9442 /* ExerciseListDisplayItem.swift in Sources */,
 				F6C7A3C825D60FE30023D250 /* InputVerificationStatus.swift in Sources */,
 				F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */,
+				181A237F26054C6F008A02D2 /* RetrivePasswordView.swift in Sources */,
 				18C7E2182602EF9200D8B3F3 /* NetworkResponses.swift in Sources */,
 				F6E8AEFC25F75E3100EF4BE4 /* CircleImage.swift in Sources */,
 				F691AFC325F6095200283CE5 /* NotSetView.swift in Sources */,

@@ -42,6 +42,38 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func retrievePassword(_ username: String) -> AnyPublisher<Bool, Never> {
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: username)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/requestTempPassword")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        return URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+            
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+//                            let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
+//                            print(decode)
+                        })
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    print("GET IN")
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validatePassword(_ password: String) -> AnyPublisher<Bool, Never> {
         // FIXME: validate password over network

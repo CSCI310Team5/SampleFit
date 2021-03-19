@@ -16,23 +16,31 @@ struct SignInView: View {
     @ObservedObject var signInAuthenticationState: AuthenticationState
     @Environment(\.colorScheme) var colorScheme
     @State private var currentColorScheme: ColorScheme = .light
-    
+    @State private var retrivePassword: Bool = false
     var body: some View {
         VStack {
-            
             // Custom sign in
             VStack(spacing: 16) {
+                
+                if userData.signInReturnsError {
+                    Text("Incorrect username or password.")
+                        .foregroundColor(.red)
+                }else{Text("")}
                 // username field
                 UsernameTextField($signInAuthenticationState.username, inputStatus: signInAuthenticationState.usernameInputStatus, colorType: \.signInColor)
                 
                 // password field
                 PasswordTextField(.password, text: $signInAuthenticationState.password, inputStatus: signInAuthenticationState.passwordInputStatus, colorType: \.signInColor)
-                    .padding(.bottom, 24)
-                
-                if userData.signInReturnsError {
-                    Text("Incorrect username or password.")
-                        .foregroundColor(.red)
-                }
+           
+                    
+                Button(action: {retrivePassword.toggle()} , label: {
+                        Spacer()
+                        Text("Forgot Password").foregroundColor(.red)
+                    }).padding(.vertical,10)
+                    
+                    .sheet(isPresented: $retrivePassword, content: {
+                        RetrivePasswordView(retrievePassword:  $retrivePassword)
+                    })
                 
                 // sign in button
                 Button(action: userData.signInUsingDefaultMethod) {
@@ -56,7 +64,7 @@ struct SignInView: View {
                 }
                 .disabled(!signInAuthenticationState.allowsAuthentication || userData.signInStatus == .validating)
             }
-            .padding(.top, 60)
+            .padding(.top, 40)
 
             
             Divider()
@@ -87,6 +95,7 @@ struct SignInView: View {
                 Text("Sign Up")
             })
         }
+        
     }
 }
 
