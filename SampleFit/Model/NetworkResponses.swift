@@ -13,7 +13,7 @@ struct SignUpData: Codable{
 
 struct ProfileData: Codable{
     var nickname : String?
-    var birthday: Date?
+    var birthday: String?
     var weight : Double?
     var height: Double?
 }

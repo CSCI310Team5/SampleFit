@@ -141,8 +141,11 @@ class UserData: ObservableObject {
             .sink{[unowned self] token in
                 print("GET IN SINK")
                 publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
-                
-                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: token.birthday ?? nil)
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+                var date: Date?
+                if token.birthday != nil { date = formatter.date(from: token.birthday!)}
+                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
             }
         print("GET OUT SINK")
     }

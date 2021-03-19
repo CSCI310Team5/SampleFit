@@ -156,8 +156,15 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-        
+        print(String(data: encode, encoding: .utf8)!)
         return URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+            
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
+                            print(decode)
+                        })
             .map{
                 $0.data
             }
