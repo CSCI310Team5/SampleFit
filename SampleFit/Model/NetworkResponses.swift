@@ -17,3 +17,11 @@ struct ProfileData: Codable{
     var weight : Double?
     var height: Double?
 }
+
+//possible JSON format for publicprofile response
+struct OtherUserProfile: Codable{
+    var email: String
+    var nickname: String = ""
+    var avatar: URL
+    var uploadedVideos: [Exercise]
+}

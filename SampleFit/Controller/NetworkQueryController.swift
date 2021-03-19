@@ -254,6 +254,31 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func getFollowList(email: String, token: String)-> AnyPublisher<[PublicProfile], Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/followList")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
     
     func changeNickname(email: String, nickname: String, token:String)-> AnyPublisher<Bool, Never>{
         
