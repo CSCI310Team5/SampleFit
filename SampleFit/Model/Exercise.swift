@@ -75,11 +75,11 @@ class Exercise: Identifiable, ObservableObject {
         var index: Double{
             switch self {
             case .pushup:
-                return 1
+                return 8.5
             case .hiit:
-                return 2
+                return 6.5
             default:
-                return 1.5
+                return 5
             }
         }
     }

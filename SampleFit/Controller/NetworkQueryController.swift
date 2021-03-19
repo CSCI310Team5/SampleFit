@@ -156,15 +156,15 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-        print(String(data: encode, encoding: .utf8)!)
+//        print(String(data: encode, encoding: .utf8)!)
         return URLSession.shared.dataTaskPublisher(for: request)
-                        .handleEvents(receiveOutput: { outputValue in
-            
-                            print("This is the OutPUT!!!: \( outputValue)")
-                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
-                            print(decode)
-                        })
+//                        .handleEvents(receiveOutput: { outputValue in
+//
+//                            print("This is the OutPUT!!!: \( outputValue)")
+//                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+//                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
+//                            print(decode)
+//                        })
             .map{
                 $0.data
             }
@@ -334,7 +334,61 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    
+    func addWorkoutHistory(workout: Workout, token: String, email: String)->AnyPublisher<Bool,Never>{
+        
+        struct EncodeData: Codable{
+            var email: String
+            var completionTime: String
+            var duration: Int
+            var calories: Double
+            var category: String
+        }
+        var category="O"
+        //change the description string to the format the backend wants
+        for c in Exercise.Category.allCases{
+            if workout.categories == c.description{
+                category=c.networkCall
+            }
+        }
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .none
+        formatter.dateStyle = .short
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.string(from: Date())
+
+        let calories =  round(100*workout.caloriesBurned)/100.0
+        
+        let encodeData = EncodeData(email: email, completionTime: date, duration: workout.duration, calories: calories, category: category )
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/addExerciseHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        print(String(data: encode, encoding: .utf8)!)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: { outputValue in
+
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
+                print(decode)
+            })
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
     
     func changeNickname(email: String, nickname: String, token:String)-> AnyPublisher<Bool, Never>{
         

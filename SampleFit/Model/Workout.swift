@@ -18,8 +18,8 @@ struct Workout: Identifiable {
         let locale = Locale.autoupdatingCurrent
         let formatter = DateFormatter()
         formatter.locale = locale
-        formatter.dateStyle = .none
-        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
         return formatter
     }()
     

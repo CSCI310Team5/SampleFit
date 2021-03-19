@@ -17,7 +17,10 @@ class PrivateInformation: ObservableObject {
     @Published var followedUsers: [PublicProfile] = []
     @Published var workoutHistory: [Workout] = []
     
+    //MARK: - Asynchronous tasks
+    private var networkQueryController = NetworkQueryController()
     private var _exerciseFeedsWillChangeCancellable: AnyCancellable?
+    private var _addWorkoutHistoryCancellable: AnyCancellable?
     
     // MARK: - Initializers
     init() {
@@ -25,7 +28,14 @@ class PrivateInformation: ObservableObject {
             self.objectWillChange.send()
         }
     }
-    
+
+    func addWorkoutHistory(workout: Workout, token: String, email: String){
+        _addWorkoutHistoryCancellable=networkQueryController.addWorkoutHistory(workout: workout, token: token, email: email)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self]  token in
+                workoutHistory.append(workout)
+            }
+    }
     
     // MARK: - Instance methods
     

@@ -65,7 +65,7 @@ struct WorkoutView: View {
                 }
             }.padding(.vertical,100)
             Button(action: {
-                timer.isWorkingout ? privateInformation.workoutHistory.append(self.timer.stop(category: categoryName))
+                timer.isWorkingout ? privateInformation.addWorkoutHistory(workout: self.timer.stop(category: categoryName), token: userData.token, email: publicInformation.identifier)
                     : self.timer.start(mass: publicInformation.getMass ?? 0, index: categoryIndex)
                 withAnimation {timer.isWorkingout.toggle()}
             }) {
@@ -102,7 +102,7 @@ struct WorkoutView: View {
         .onDisappear{
             if timer.isWorkingout {
                 
-                privateInformation.workoutHistory.append(self.timer.stop(category: categoryName))
+                privateInformation.addWorkoutHistory(workout: self.timer.stop(category: categoryName), token: userData.token, email: publicInformation.identifier)
                 
                 timer.isWorkingout.toggle()
             }
