@@ -81,6 +81,13 @@ class PublicProfile: Identifiable, ObservableObject {
         
     }
     
+    func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
+        if (weight != nil){ self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
+        if (height != nil) {self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
+        if (nickname != nil) {self.nickname=nickname!}
+        if (birthday != nil) {self._birthday=birthday}
+    }
+    
     //MARK: - Asynchronous tasks
     private var networkQueryController = NetworkQueryController()
     private var _nicknameUpdateCancellable: AnyCancellable?

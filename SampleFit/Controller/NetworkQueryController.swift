@@ -138,6 +138,42 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func getProfile(email:String, token:String) -> AnyPublisher<ProfileData,Never>{
+        
+        print("GET IN NETWORK")
+        struct EncodeData: Codable{
+            var email: String
+        }
+        
+        let email = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(email)
+        let url = URL(string: "http://127.0.0.1:8000/user/profile")!
+        var request = URLRequest(url: url)
+        request.httpMethod="GET"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        print(String(data: encode, encoding: .utf8)!)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+            
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
+                            print(decode)
+                        })
+            .map{
+                $0.data
+            }
+            .decode(type: ProfileData.self, decoder: JSONDecoder())
+            .map{result in
+                return result
+            }
+            .replaceError(with: ProfileData())
+            .eraseToAnyPublisher()
+    }
+    
     func changeNickname(email: String, nickname: String, token:String)-> AnyPublisher<Bool, Never>{
         
         struct EncodeData: Codable{

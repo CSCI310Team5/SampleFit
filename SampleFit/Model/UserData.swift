@@ -37,6 +37,7 @@ class UserData: ObservableObject {
     private var _createAccountCancellable: AnyCancellable?
     private var _signInCancellable: AnyCancellable?
     private var _fetchExerciseFeedCancellable: AnyCancellable?
+    private var _profileCancellable : AnyCancellable?
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -93,8 +94,9 @@ class UserData: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] token in
                 if !token.isEmpty {
-                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInAuthenticationState.username)
                     self.token=token
+                    _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: signInAuthenticationState.username)
+                   
                 } else {
                     print("Sign in failed")
                     signInReturnsError = true
@@ -125,7 +127,17 @@ class UserData: ObservableObject {
     }
     
     private func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
-        publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
+        
+        print("GET IN \(token)")
+        _profileCancellable = networkQueryController.getProfile(email: identifier, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] token in
+                print("GET IN SINK")
+                publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
+                
+                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: token.birthday ?? nil)
+            }
+        print("GET OUT SINK")
     }
     
     /// Manages sign in status after the user chooses to sign in.
