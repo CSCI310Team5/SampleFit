@@ -85,8 +85,8 @@ class PublicProfile: Identifiable, ObservableObject {
     
     func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
        
-        self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)
-        self._height=Measurement(value: height!, unit: UnitLength.centimeters)
+        if weight != nil {self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
+        if height != nil {self._height=Measurement(value: height!, unit: UnitLength.centimeters)}
         self.nickname=nickname!
         self._birthday=birthday
 
@@ -97,7 +97,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _nicknameUpdateCancellable: AnyCancellable?
     private var _heightUpdateCancellable: AnyCancellable?
     private var _weightUpdateCancellable: AnyCancellable?
-    
+    private var _createExerciseCancellable: AnyCancellable?
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {
@@ -114,6 +114,19 @@ class PublicProfile: Identifiable, ObservableObject {
         copyProfile._height = _height
         copyProfile._mass = _mass
         return copyProfile
+    }
+    
+    func createExercise(newExercise: Exercise, token: String){
+        if newExercise.playbackType.rawValue==1{
+            _createExerciseCancellable=networkQueryController.createLive(exercise: newExercise, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self.uploadedExercises.append(newExercise)
+                }
+        }
+        else{
+            //To be written for upload video
+        }
     }
     
     func update(using newProfile: PublicProfile, token: String) {

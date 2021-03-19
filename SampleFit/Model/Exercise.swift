@@ -38,7 +38,7 @@ class Exercise: Identifiable, ObservableObject {
         case cycling
         case jogging
         case other
-        
+      
         var description: String {
             switch self {
             case .pushup:
@@ -55,6 +55,21 @@ class Exercise: Identifiable, ObservableObject {
             return token
         }
         
+        var networkCall: String{
+            switch self{
+            case .pushup:
+                return "PU"
+            case .hiit:
+                return "HT"
+            case .jogging:
+                return "JG"
+            case .cycling:
+                return "CY"
+            case .other:
+                return "O"
+            }
+            
+        }
         
         //FIXME: Index to be changed
         var index: Double{
@@ -87,6 +102,8 @@ class Exercise: Identifiable, ObservableObject {
             .assign(to: \.image, on: self)
     }
     
+    
+  
     /// Creates a sample exercise.
     convenience init(sampleExerciseInCategory category: Category, playbackType: PlaybackType, previewImageID: Int) {
         let owningUser = PublicProfile.exampleProfiles.randomElement()!
@@ -102,6 +119,7 @@ class Exercise: Identifiable, ObservableObject {
                   previewImageIdentifier: "\(category.rawValue)-\(previewImageID)",
                   peoplelimt:5)
     }
+    
     
     // MARK: - Instance methods
     

@@ -7,14 +7,15 @@
 
 import SwiftUI
 import MobileCoreServices
-
+import Combine
+import Foundation
 
 
     
 struct UploadSheetView: View  {
     
     @ObservedObject var publicProfile: PublicProfile
-    
+    @EnvironmentObject var userData: UserData
     @Binding var isPresented: Bool
     
     @State private var name=""
@@ -30,7 +31,7 @@ struct UploadSheetView: View  {
     @ObservedObject var newUpload: Exercise = Exercise(id: Int.random(in: Int.min...Int.max), name: "", description: "", category: .pushup, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 2, unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: 0, contentlink: "")
     
     let pickerController = UIImagePickerController()
-    
+        
     var body: some View {
         VStack {
             HStack {
@@ -41,20 +42,16 @@ struct UploadSheetView: View  {
                     newUpload.name=name
                     newUpload.category=category
                     newUpload.description=description
-                    newUpload.image=image
+                    newUpload.duration=Measurement(value: Double(duration), unit: UnitDuration.minutes)
                     if playbackType{
                         newUpload.playbackType =  Exercise.PlaybackType.live
                         newUpload.contentLink=contentLink
                         newUpload.peopleLimit=peopleLimit
                     }else{
                         newUpload.playbackType = Exercise.PlaybackType.recordedVideo
+                        newUpload.image=image
                     }
-                    newUpload.duration=Measurement(value: Double(duration), unit: UnitDuration.minutes)
-                    
-                    publicProfile.uploadedExercises.append(newUpload)
-                    
-                    print(publicProfile.uploadedExercises)
-                    
+                    publicProfile.createExercise(newExercise: newUpload, token: userData.token)
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
@@ -67,23 +64,24 @@ struct UploadSheetView: View  {
             
             NavigationView{
                 Form{
+                    if !playbackType{
                     HStack {
                         Text("Profile Image Preview")
                         image.resizable().scaledToFit()
                     }.frame(height: 100)
-                    
+                    }
                     
                         Toggle(isOn: $playbackType) {
                             Text("LiveStream")
                         }
-                        
+                    if !playbackType{
                         Button("Add Profile Image"){
                             isImagePickerPresented.toggle()
                         }
                         .sheet(isPresented: $isImagePickerPresented) {
                             ImagePicker(image: $image, isPresented: $isImagePickerPresented)
                         }
-                    
+                    }
                         
                         TextField("Name",text:$name)
                         

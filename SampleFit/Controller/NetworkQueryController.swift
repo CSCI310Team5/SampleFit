@@ -293,6 +293,57 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func createLive(exercise: Exercise, token: String)->AnyPublisher<Bool,Never>{
+        
+        struct EncodeData: Codable{
+            var email: String=""
+            var zoom_link: URL?
+            var title: String=""
+            var category: String=""
+            var description: String = ""
+            var timeLimit: Int = 0
+            var peopleLimit: Int = 0
+        }
+ 
+        
+        var encodeData = EncodeData()
+        encodeData.email=exercise.owningUser.identifier
+        encodeData.zoom_link = URL(string: exercise.contentLink)
+        encodeData.title=exercise.name
+        encodeData.description=exercise.description
+        encodeData.category=exercise.category.networkCall
+        encodeData.timeLimit=Int((exercise.duration?.converted(to: .minutes).value)!)
+        encodeData.peopleLimit=exercise.peopleLimit
+        
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/createLivestream")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+                print(String(data: encode, encoding: .utf8)!)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+            
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
+                            print(decode.OK)
+                        })
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
     
     func changeNickname(email: String, nickname: String, token:String)-> AnyPublisher<Bool, Never>{
         

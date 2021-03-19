@@ -10,6 +10,7 @@ import SwiftUI
 struct UploadedExercisesList: View {
     @ObservedObject var publicProfile: PublicProfile
     @ObservedObject var privateProfile: PrivateInformation
+    @EnvironmentObject var userData: UserData
     @Environment(\.editMode) var editMode
     @State private var isNewUploadSheetPresented = false
     var body: some View {
