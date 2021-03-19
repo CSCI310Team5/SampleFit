@@ -73,8 +73,9 @@ class UserData: ObservableObject {
         
         _createAccountCancellable = networkQueryController.createAccount(using: createAccountAuthenticationState)
             .receive(on: DispatchQueue.main)
-            .sink { [unowned self] success in
-                if success {
+            .sink { [unowned self]  token in
+                if !token.isEmpty {
+                    self.token=token
                     _storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: createAccountAuthenticationState.username)
                 } else {
                     print("Create account failed")

@@ -61,10 +61,13 @@ class NetworkQueryController {
     
     
     /// Returns a publisher that publishes true values if success and false values if an eror occured.
-    func createAccount(using authenticationState: AuthenticationState) -> AnyPublisher<Bool, Never> {
+    func createAccount(using authenticationState: AuthenticationState) -> AnyPublisher<String, Never> {
         struct AuthenticationData: Codable{
             var email: String
             var password: String
+        }
+        struct LogInData: Codable{
+            var token: String
         }
         
         let authen = AuthenticationData(email:authenticationState.username, password: authenticationState.password)
@@ -89,14 +92,15 @@ class NetworkQueryController {
             .map {
                 $0.data
             }
-            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .decode(type: LogInData.self, decoder: JSONDecoder())
             .map {result in
-                if(result.OK==1){
-                    print("GET IN")
-                    return true}
-                return false
+                if(result.token.isEmpty){
+                    return ""
+                }
+                return result.token
+                
             }
-            .replaceError(with: false)
+            .replaceError(with: "")
             //            .handleEvents(receiveOutput: {
             //                print("This is the final output: \($0)")
             //            })
