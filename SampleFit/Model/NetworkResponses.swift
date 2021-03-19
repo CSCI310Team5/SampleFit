@@ -25,3 +25,10 @@ struct OtherUserProfile: Codable{
     var avatar: URL
 //    var uploadedVideos: [Exercise]
 }
+
+struct WorkoutHistory: Codable{
+    var completionTime: String
+    var duration: String
+    var calories: String
+    var category: String
+}

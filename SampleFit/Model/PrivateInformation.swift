@@ -21,14 +21,38 @@ class PrivateInformation: ObservableObject {
     private var networkQueryController = NetworkQueryController()
     private var _exerciseFeedsWillChangeCancellable: AnyCancellable?
     private var _addWorkoutHistoryCancellable: AnyCancellable?
+    private var _getWorkoutHistoryCancellable: AnyCancellable?
     
     // MARK: - Initializers
     init() {
         _exerciseFeedsWillChangeCancellable = $exerciseFeeds.debounce(for: 0.5, scheduler: DispatchQueue.main).sink { _ in
             self.objectWillChange.send()
         }
+        
     }
 
+    
+    func storeWorkoutHistory(token: String, email: String){
+        _getWorkoutHistoryCancellable = networkQueryController.getWorkoutHistory(token: token, email: email)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] workouts in
+                for workout in workouts{
+                    var newHistory = Workout(caloriesBurned: Double(workout.calories)!, date: Date(), categories: "", duration: Int(workout.duration)!)
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-dd"
+                    let date = formatter.date(from: workout.completionTime)
+                    newHistory.date = date!
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall==workout.category{
+                            newHistory.categories=category.description
+                        }
+                    }
+                    
+                    workoutHistory.append(newHistory)
+                }
+            }}
+    
     func addWorkoutHistory(workout: Workout, token: String, email: String){
         _addWorkoutHistoryCancellable=networkQueryController.addWorkoutHistory(workout: workout, token: token, email: email)
             .receive(on: DispatchQueue.main)

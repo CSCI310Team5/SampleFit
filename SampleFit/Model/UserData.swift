@@ -39,6 +39,7 @@ class UserData: ObservableObject {
     private var _fetchExerciseFeedCancellable: AnyCancellable?
     private var _profileCancellable : AnyCancellable?
     private var _newPasswordCancellable: AnyCancellable?
+    private var _getWorkoutHistoryCancellable: AnyCancellable?
     
     func signInwithAppleDidComplete(with result: Result<ASAuthorization, Error>) {
         switch result {
@@ -135,7 +136,8 @@ class UserData: ObservableObject {
     
     private func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
         
-        print("GET IN \(token)")
+        privateInformation.storeWorkoutHistory(token: token, email: identifier)
+        
         _profileCancellable = networkQueryController.getProfile(email: identifier, token: token)
             .receive(on: DispatchQueue.main)
             .sink{[unowned self] token in
@@ -147,6 +149,7 @@ class UserData: ObservableObject {
                 if token.birthday != nil { date = formatter.date(from: token.birthday!)}
                 self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
             }
+        
         print("GET OUT SINK")
     }
     

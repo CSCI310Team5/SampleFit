@@ -156,6 +156,9 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+//        print("Token: \(token)")
+//
 //        print(String(data: encode, encoding: .utf8)!)
         return URLSession.shared.dataTaskPublisher(for: request)
 //                        .handleEvents(receiveOutput: { outputValue in
@@ -331,6 +334,32 @@ class NetworkQueryController {
                 return false
             }
             .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func getWorkoutHistory(token: String, email: String)->AnyPublisher<[WorkoutHistory],Never>{
+        
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/getExerciseHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody = encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+       
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: [WorkoutHistory].self, decoder: JSONDecoder())
+            .map{result in
+                return result
+            }
+            .replaceError(with: [])
             .eraseToAnyPublisher()
     }
     
