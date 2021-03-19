@@ -23,5 +23,5 @@ struct OtherUserProfile: Codable{
     var email: String
     var nickname: String = ""
     var avatar: URL
-    var uploadedVideos: [Exercise]
+//    var uploadedVideos: [Exercise]
 }

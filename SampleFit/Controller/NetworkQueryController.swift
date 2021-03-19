@@ -269,13 +269,23 @@ class NetworkQueryController {
             .map{
                 $0.data
             }
-            .decode(type: SignUpData.self, decoder: JSONDecoder())
+                .decode(type: [OtherUserProfile].self, decoder: JSONDecoder())
             .map{result in
-                if(result.OK==1){
-                    return true}
-                return false
+                var profileList : [PublicProfile] = []
+                for r in result{
+                    let profile = PublicProfile(identifier: r.email, fullName: nil)
+                    profile.nickname = r.nickname
+                    profile.uploadedExercises = []
+                    var _imageLoadingCancellable: AnyCancellable?
+                    _imageLoadingCancellable =
+                        self.loadImage(fromURL: r.avatar).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned
+                        }
+                    profileList.append(profile)
+                }
+                return profileList
+                    
             }
-            .replaceError(with: false)
+            .replaceError(with: [])
             .eraseToAnyPublisher()
     }
     

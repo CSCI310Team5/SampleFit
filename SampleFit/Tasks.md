@@ -8,7 +8,7 @@ All code that talks to the backend should go into NetworkQueryController. All cu
 2. Add functionality that tells the backend to retrieve password for a given email. This functionality should make call into a method in NetworkQueryController, and let the backend handle the rest.  
   
 ## 3. Change passwords  
-1. Implement changePassword() in UserData, which should call into a new method in NetworkQueryController.  
+✅1. Implement changePassword() in UserData, which should call into a new method in NetworkQueryController.  
 2. Optional: ChangePasswordView should display circular progress indicator when in progress and dismiss only after success.  
   
 ## 4. Watch Video & Join Live Stream  
@@ -37,14 +37,14 @@ All code that talks to the backend should go into NetworkQueryController. All cu
 
 ## Other
 ✅ 1. We can keep other UI as is for now (since there's already a LOT of work to do).
-☑️ 2. For a record of what needs to change: workout history UI in Me should change to reflect the requirement from previous homework.
+✅ 2. For a record of what needs to change: workout history UI in Me should change to reflect the requirement from previous homework.
   
 ## Networking  
 1. You can delay implementing networking code by faking the network result first (like all the functions currently in it).  
-2. Prioritize Sign Up / Sign In / Sign Out functionalities first. These are specified by the homework 3 requirements.  
-    ❓a. Ask the backend to remove password checking on any sign up / sign in. This is currently NOT handled on the frontend.  
-    b. In the sign Up / Sign In / Sign Out functionalities, serialize AuthenticiationState to a JSON object that the backend wants.  
-    c. Send the JSON object over the network using URLSession APIs.  
+✅2. Prioritize Sign Up / Sign In / Sign Out functionalities first. These are specified by the homework 3 requirements.  
+    ✅a. Ask the backend to remove password checking on any sign up / sign in. This is currently NOT handled on the frontend.  
+    ✅b. In the sign Up / Sign In / Sign Out functionalities, serialize AuthenticiationState to a JSON object that the backend wants.  
+    ✅c. Send the JSON object over the network using URLSession APIs.  
 3. In NetworkQueryController, add functions which retrieves all necessary information in PublicProfile.
 4. In NetworkQueryController, add functions which retrieves all necessary information in PrivateInformation.
 
