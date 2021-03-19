@@ -149,7 +149,7 @@ class NetworkQueryController {
         let encode = try! JSONEncoder().encode(email)
         let url = URL(string: "http://127.0.0.1:8000/user/profile")!
         var request = URLRequest(url: url)
-        request.httpMethod="GET"
+        request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
@@ -173,6 +173,8 @@ class NetworkQueryController {
             .replaceError(with: ProfileData())
             .eraseToAnyPublisher()
     }
+    
+    
     
     func changeNickname(email: String, nickname: String, token:String)-> AnyPublisher<Bool, Never>{
         
@@ -201,10 +203,33 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    //    func changeBirthday(email: String, birthday: Date)-> AnyPublisher<Bool, Never>{
-    //
-    //    }
-    //
+    func changeBirthday(email: String, birthday: Date, token: String)-> AnyPublisher<Bool, Never>{
+            
+            struct EncodeData: Codable{
+                var email: String
+                var birthday: Date
+            }
+            let encodeData = EncodeData(email: email, birthday: birthday)
+            let encode = try! JSONEncoder().encode(encodeData)
+            let url = URL(string: "http://127.0.0.1:8000/user/profile/weight")!
+            var request = URLRequest(url: url)
+            request.httpMethod="POST"
+            request.httpBody=encode
+            request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+            return URLSession.shared.dataTaskPublisher(for: request)
+                .map{
+                    $0.data
+                }
+                .decode(type: SignUpData.self, decoder: JSONDecoder())
+                .map{result in
+                    if(result.OK==1){
+                        return true}
+                    return false
+                }
+                .replaceError(with: false)
+                .eraseToAnyPublisher()
+        }
+    
     func changeWeight(email: String, weight: Double, token:String)-> AnyPublisher<Bool, Never>{
         
         struct EncodeData: Codable{

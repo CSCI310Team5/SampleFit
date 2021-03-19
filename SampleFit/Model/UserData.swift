@@ -81,6 +81,7 @@ class UserData: ObservableObject {
                     signInStatus = oldStatus
                 }
             }
+       
     }
     
     /// Runs when the user chooses to sign in using default method.
