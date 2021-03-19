@@ -157,16 +157,7 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
-        print(String(data: encode, encoding: .utf8)!)
-        
         return URLSession.shared.dataTaskPublisher(for: request)
-                        .handleEvents(receiveOutput: { outputValue in
-            
-                            print("This is the OutPUT!!!: \( outputValue)")
-                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
-                            print(decode)
-                        })
             .map{
                 $0.data
             }
@@ -365,20 +356,28 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    //FIXME: To be completed and integrated
+
     func changeBirthday(email: String, birthday: Date, token: String)-> AnyPublisher<Bool, Never>{
             
             struct EncodeData: Codable{
                 var email: String
-                var birthday: Date
+                var birthday: String
             }
-            let encodeData = EncodeData(email: email, birthday: birthday)
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .none
+        formatter.dateStyle = .short
+        formatter.dateFormat = "yyyy-MM-dd"
+        let date = formatter.string(from: birthday)
+            let encodeData = EncodeData(email: email, birthday: date)
             let encode = try! JSONEncoder().encode(encodeData)
-            let url = URL(string: "http://127.0.0.1:8000/user/profile/weight")!
+            let url = URL(string: "http://127.0.0.1:8000/user/profile/birthday")!
             var request = URLRequest(url: url)
             request.httpMethod="POST"
             request.httpBody=encode
             request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+               
+    
             return URLSession.shared.dataTaskPublisher(for: request)
                 .map{
                     $0.data

@@ -87,7 +87,7 @@ class PublicProfile: Identifiable, ObservableObject {
        
         if weight != nil {self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
         if height != nil {self._height=Measurement(value: height!, unit: UnitLength.centimeters)}
-        self.nickname=nickname!
+        if height != nil {self.nickname=nickname!}
         self._birthday=birthday
 
     }
@@ -97,6 +97,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _nicknameUpdateCancellable: AnyCancellable?
     private var _heightUpdateCancellable: AnyCancellable?
     private var _weightUpdateCancellable: AnyCancellable?
+    private var _birthdayUpdateCancellable: AnyCancellable?
     private var _createExerciseCancellable: AnyCancellable?
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
@@ -144,7 +145,13 @@ class PublicProfile: Identifiable, ObservableObject {
             self.image = newProfile.image
         }
         if self._birthday != newProfile._birthday{
-            self._birthday = newProfile._birthday
+            
+            _birthdayUpdateCancellable=networkQueryController.changeBirthday(email: self.identifier, birthday: newProfile._birthday!, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self._birthday = newProfile._birthday
+                }
+          
         }
         if self._height != newProfile._height{
             _heightUpdateCancellable=networkQueryController.changeHeight(email: self.identifier, height: newProfile._height!.converted(to: .centimeters).value, token: token)
