@@ -14,10 +14,12 @@ class PublicProfile: Identifiable, ObservableObject {
     @Published var identifier: String = ""
     private var _nickname: String?
     /// user's profile image. Defaults to person.fill.
-    @Published var image = Image(systemName: "person.fill.questionmark")
+    @Published var image : Image? = Image(systemName: "person.fill.questionmark")
     private var _birthday: Date?
     private var _height: Measurement<UnitLength>?
     private var _mass: Measurement<UnitMass>?
+    
+    private var imageLoadingCancellable: AnyCancellable?
     
     @Published var uploadedExercises: [Exercise] = []
     
@@ -82,12 +84,12 @@ class PublicProfile: Identifiable, ObservableObject {
     }
     
     func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
-        print("profile set: \(weight)\(height)\(nickname)")
+       
         self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)
         self._height=Measurement(value: height!, unit: UnitLength.centimeters)
         self.nickname=nickname!
         self._birthday=birthday
-        print("profile npw: \(self._mass)\(self._height)\(self.nickname)")
+
     }
     
     //MARK: - Asynchronous tasks
