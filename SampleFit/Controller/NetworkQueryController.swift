@@ -177,7 +177,6 @@ class NetworkQueryController {
     
     func getProfile(email:String, token:String) -> AnyPublisher<ProfileData,Never>{
         
-        print("GET IN NETWORK")
         struct EncodeData: Codable{
             var email: String
         }
@@ -629,29 +628,32 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func getLivestreamByCategory(category: String) -> AnyPublisher<[Exercise],Never>{
-        struct EncodeData: Codable{
-            var category: String
-        }
-        let encodeData = EncodeData(category: category)
-        let encode = try! JSONEncoder().encode(encodeData)
-        let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
-        var request = URLRequest(url: url)
-        request.httpMethod="POST"
-        request.httpBody=encode
-        //        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .map{
-                $0.data
-            }
-            .decode(type: [Livestream].self, decoder: JSONDecoder())
-            .map{result in
-                print(result)
-                return []
-            }
-            .replaceError(with: [])
-            .eraseToAnyPublisher()
-    }
+//    func getLivestreamByCategory(category: String) -> AnyPublisher<[Exercise],Never>{
+//        struct EncodeData: Codable{
+//            var category: String
+//        }
+//        print("GET INTO LIVE STREAM")
+//        let encodeData = EncodeData(category: category)
+//        let encode = try! JSONEncoder().encode(encodeData)
+//        let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
+//        var request = URLRequest(url: url)
+//        request.httpMethod="POST"
+//        request.httpBody=encode
+////                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+//        
+////                print(String(data: encode, encoding: .utf8)!)
+//        return URLSession.shared.dataTaskPublisher(for: request)
+//            .map{
+//                $0.data
+//            }
+//            .decode(type: [Livestream].self, decoder: JSONDecoder())
+//            .map{result in
+////                print(result)
+////                return []
+//            }
+//            .replaceError(with: [])
+//            .eraseToAnyPublisher()
+//    }
     
     
     /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
@@ -669,9 +671,9 @@ class NetworkQueryController {
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
-         FIXME: Search for exercise results for user over network
-         assuming success now
-         faking networking delay of 2 seconds
+//         FIXME: Search for exercise results for user over network
+//         assuming success now
+//         faking networking delay of 2 seconds
                 return Future { promise in
                     promise(.success(Exercise.exampleExercisesFull.filter {
                         if let category = category {
