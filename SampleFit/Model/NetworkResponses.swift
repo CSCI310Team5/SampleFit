@@ -33,3 +33,13 @@ struct WorkoutHistory: Codable{
     var calories: String
     var category: String
 }
+
+struct Livestream: Codable{
+    var email: String=""
+    var zoom_link: URL?
+    var title: String=""
+    var category: String=""
+    var description: String = ""
+    var timeLimit: Int = 0
+    var peopleLimit: Int = 0
+}
