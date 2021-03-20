@@ -42,6 +42,7 @@ class UserData: ObservableObject {
     private var _getWorkoutHistoryCancellable: AnyCancellable?
     private var _retrievePasswordCancellable : AnyCancellable?
     private var _emailCheckCancellable: AnyCancellable?
+    private var _avatarCancellable: AnyCancellable?
     
     @Published var changeDone: Int = 0
     
@@ -159,16 +160,22 @@ class UserData: ObservableObject {
             _profileCancellable = networkQueryController.getProfile(email: identifier, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink{[unowned self] token in
-                    print("GET IN SINK")
+                    print("GET IN GET PROFILE SINK")
                     publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy-MM-dd"
                     var date: Date?
                     if token.birthday != nil { date = formatter.date(from: token.birthday!)}
                     self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
+                    
+                    if token.avatar != nil {
+                        _avatarCancellable=networkQueryController.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(token.avatar!)")!).receive(on: DispatchQueue.main)
+                            .sink{[unowned self] avatar in
+                                self.publicProfile.image=avatar}
+                    }
                 }
             
-            print("GET OUT SINK")
+            print("GET OUT PROFILE SINK")
         }
         
         /// Manages sign in status after the user chooses to sign in.

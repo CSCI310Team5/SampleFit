@@ -16,13 +16,14 @@ struct ProfileData: Codable{
     var birthday: String?
     var weight : Double?
     var height: Double?
+    var avatar: String?
 }
 
 //possible JSON format for publicprofile response
 struct OtherUserProfile: Codable{
     var email: String
     var nickname: String = ""
-    var avatar: URL
+    var avatar: String
 //    var uploadedVideos: [Exercise]
 }
 

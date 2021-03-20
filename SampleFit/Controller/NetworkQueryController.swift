@@ -152,7 +152,7 @@ class NetworkQueryController {
         let authen = AuthenticationData(email:authenticationState.username, password: authenticationState.password)
         
         let encode = try! JSONEncoder().encode(authen)
-        //                print(String(data: encode, encoding: .utf8)!)
+                        print(String(data: encode, encoding: .utf8)!)
         let url = URL(string: "http://127.0.0.1:8000/user/login")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
@@ -316,7 +316,7 @@ class NetworkQueryController {
                     profile.uploadedExercises = []
                     var _imageLoadingCancellable: AnyCancellable?
                     _imageLoadingCancellable =
-                        self.loadImage(fromURL: r.avatar).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
+                        self.loadImage(fromURL: URL(string: r.avatar)!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
                         }
                     profileList.append(profile)
                 }
@@ -527,9 +527,6 @@ class NetworkQueryController {
         httpBody.appendString("--\(boundary)--")
 
         request.httpBody = httpBody as Data
-
-//        print(String(data: httpBody as Data, encoding: .utf8)!)
-   
         
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
@@ -692,11 +689,14 @@ class NetworkQueryController {
         // FIXME: Load image over network
         // assuming success now
         // faking networking delay of 2 seconds
-        return Future<UIImage?, Error> { promise in
-            promise(.success(UIImage(systemName: "network")))
-        }
+//        return Future<UIImage?, Error> { promise in
+//            promise(.success(UIImage(systemName: "network")))
+//        }
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map{
+                UIImage(data: $0.data)
+            }
         .replaceError(with: nil)
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
         .eraseToAnyPublisher()
     }
     

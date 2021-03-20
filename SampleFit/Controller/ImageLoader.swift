@@ -17,7 +17,7 @@ class ImageLoader {
                 .eraseToAnyPublisher()
         } else {
             // FIXME: Use actual identifer to load image from network
-            return NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://apple.com")!)
+            return NetworkQueryController.shared.loadImage(fromURL: URL(string:identifier)!)
         }
     }
     
