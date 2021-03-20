@@ -24,6 +24,8 @@ class PrivateInformation: ObservableObject {
     private var _getWorkoutHistoryCancellable: AnyCancellable?
     private var _getFollowListCancellable: AnyCancellable?
     private var _FollowStatusChangeCancellable: AnyCancellable?
+    private var _LikeStatusChangeCancellable: AnyCancellable?
+    private var _getlikedVideosCancellable: AnyCancellable?
     
     // MARK: - Initializers
     init() {
@@ -31,6 +33,14 @@ class PrivateInformation: ObservableObject {
             self.objectWillChange.send()
         }
         
+    }
+    
+    func getFavoriteExercises(email: String, token: String){
+        _getlikedVideosCancellable=networkQueryController.getLikedVideos(email: email, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] videos in
+                favoriteExercises=videos
+            }
     }
 
     func getFollowList(token: String, email: String){
@@ -88,13 +98,26 @@ class PrivateInformation: ObservableObject {
     func removeFollowedUser(at indicies: IndexSet) {
         followedUsers.remove(atOffsets: indicies)
     }
-    func toggleExerciseInFavorites(_ exercise: Exercise) {
+    func toggleExerciseInFavorites(_ exercise: Exercise, email: String, token: String) {
         if self.hasFavorited(exercise) {
-            favoriteExercises.removeAll { $0 == exercise }
+            
+            _LikeStatusChangeCancellable=networkQueryController.unlikeVideo(email: email, videoId: exercise.id, token: token).receive(on: DispatchQueue.main)
+                .sink{[unowned self] success in
+                    if success{
+                        favoriteExercises.removeAll { $0 == exercise }
+                    }
+                }
         } else {
-            _addExerciseToFavorites(exercise)
+            
+            _LikeStatusChangeCancellable=networkQueryController.likeVideo(email: email, videoId: exercise.id, token: token).receive(on: DispatchQueue.main)
+                .sink{[unowned self] success in
+                    if success{
+                        _addExerciseToFavorites(exercise)
+                    }
+                }
         }
     }
+    
     func toggleUserInFollowed(_ user: PublicProfile, token:String, email: String) {
         if self.hasFollowed(user) {
             _FollowStatusChangeCancellable=networkQueryController.unfollow(email: email , unfollowUser: user.identifier, token: token).receive(on: DispatchQueue.main).sink{[unowned self] result in

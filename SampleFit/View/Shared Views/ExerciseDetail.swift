@@ -9,6 +9,7 @@ import SwiftUI
 import AVKit
 
 struct ExerciseDetail: View {
+    @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
     var exercise: Exercise
     @State private var isWorkingout = false
@@ -66,7 +67,7 @@ struct ExerciseDetail: View {
                         
                         if exercise.playbackType == .recordedVideo{
                         // favorite button
-                        Button(action: { privateInformation.toggleExerciseInFavorites(exercise) }) {
+                            Button(action: { privateInformation.toggleExerciseInFavorites(exercise, email: userData.publicProfile.identifier, token: userData.token) }) {
                             if privateInformation.hasFavorited(exercise) {
                                 Image(systemName: "star.fill")
                                     .resizable()

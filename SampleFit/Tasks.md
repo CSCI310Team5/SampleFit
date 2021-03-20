@@ -40,12 +40,11 @@ All code that talks to the backend should go into NetworkQueryController. All cu
 ✅ 2. For a record of what needs to change: workout history UI in Me should change to reflect the requirement from previous homework.
   
 ## Networking  
-1. You can delay implementing networking code by faking the network result first (like all the functions currently in it).  
+✅1. You can delay implementing networking code by faking the network result first (like all the functions currently in it).  
 ✅2. Prioritize Sign Up / Sign In / Sign Out functionalities first. These are specified by the homework 3 requirements.  
     ✅a. Ask the backend to remove password checking on any sign up / sign in. This is currently NOT handled on the frontend.  
     ✅b. In the sign Up / Sign In / Sign Out functionalities, serialize AuthenticiationState to a JSON object that the backend wants.  
     ✅c. Send the JSON object over the network using URLSession APIs.  
-3. In NetworkQueryController, add functions which retrieves all necessary information in PublicProfile.
-4. In NetworkQueryController, add functions which retrieves all necessary information in PrivateInformation.
-
-
+✅3. In NetworkQueryController, add functions which retrieves all necessary information in PublicProfile.
+✅ 4. In NetworkQueryController, add functions which retrieves all necessary information in PrivateInformation.
+5. for PrivateInformation: Need exerciseFeeds, not sure what is required and where to do

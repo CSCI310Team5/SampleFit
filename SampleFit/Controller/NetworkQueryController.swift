@@ -24,6 +24,7 @@ struct MessagedError: Error {
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
     private var _imageLoadingCancellable: AnyCancellable?
+    private var _otherUserProfileLoadingCancellable: AnyCancellable?
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
@@ -43,7 +44,6 @@ class NetworkQueryController {
             .decode(type: SignUpData.self, decoder: JSONDecoder())
             .map{result in
                 if(result.OK==1){
-                    print("GET IN")
                     return true}
                 return false
             }
@@ -68,7 +68,6 @@ class NetworkQueryController {
             .decode(type: SignUpData.self, decoder: JSONDecoder())
             .map{result in
                 if(result.OK==1){
-                    print("GET IN")
                     return true}
                 return false
             }
@@ -378,7 +377,157 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    
+    
+    
+    func getLikedVideos(email: String, token: String) -> AnyPublisher<[Exercise],Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        
+      
+        
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/likedVids")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
 
+        return URLSession.shared.dataTaskPublisher(for: request)
+
+            .map{
+                $0.data
+            }
+            .decode(type: [VideoFormat].self, decoder: JSONDecoder())
+            
+            .map{result in
+                var likedVideos : [Exercise] = []
+                
+                for video in result{
+                    
+                    var uploadCategory: Exercise.Category = Exercise.Category.cycling
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall == video.videoCategory{
+                            uploadCategory=category
+                        }
+                    }
+                    
+                    var profile = PublicProfile(identifier: email, fullName: nil)
+                    
+                    self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: video.email).receive(on: DispatchQueue.main).sink{[unowned self] returnedProfile in
+                        
+                        profile=returnedProfile
+                    }
+                    
+                    let excercise = Exercise(id: video.videoID, name: video.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: profile, duration: nil, previewImageIdentifier: video.videoImage)
+                    
+                    excercise.peopleLimit=0
+                    excercise.contentLink=video.videoURL
+                    
+                    likedVideos.append(excercise)
+                }
+                
+                return likedVideos
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+    
+    //returns everything except uploaded exercises list
+    func getOtherUserInfoExeptUploadedExercises(email:String)->AnyPublisher<PublicProfile, Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/getOtherUserInfo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+ 
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: OtherUserProfile.self, decoder: JSONDecoder())
+            .map{result in
+                let profile: PublicProfile = PublicProfile(identifier: email, fullName: nil)
+                if !result.avatar.isEmpty{
+                self._imageLoadingCancellable =
+                    NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(result.avatar)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
+                    }}
+                profile.nickname=result.nickname
+                return profile
+            }
+            .replaceError(with: PublicProfile(identifier: email, fullName: nil))
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func likeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
+//        struct EncodeData: Codable{
+//            var email: String
+//            var videoID: String
+//        }
+//
+        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+
+//        let encodeData = EncodeData(email: email, videoID: videoId)
+//        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/likeVideo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=dataThing
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        
+//                print(String(data: encode, encoding: .utf8)!)
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func unlikeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+        }
+        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        
+        let encodeData = EncodeData(email: email, videoID: videoId)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/unlikeVideo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=dataThing
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
     
     
     func createLive(exercise: Exercise, token: String)->AnyPublisher<Bool,Never>{
@@ -472,16 +621,9 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
-        print(String(data: encode, encoding: .utf8)!)
+//        print(String(data: encode, encoding: .utf8)!)
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
-                print(decode)
-            })
             .map{
                 $0.data
             }
@@ -573,13 +715,6 @@ class NetworkQueryController {
         
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
-                print(decode)
-            })
             .map{
                 $0.data
             }

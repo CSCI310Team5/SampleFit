@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BrowseView: View {
     @ObservedObject var privateInformation: PrivateInformation
-    
+    @EnvironmentObject var userData: UserData
     var body: some View {
         NavigationView {
             
