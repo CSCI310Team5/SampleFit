@@ -86,6 +86,7 @@ struct MeView: View {
         }
         .listStyle(InsetGroupedListStyle())
         .navigationTitle("Me")
+        
     }
 }
 

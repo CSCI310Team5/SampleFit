@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserDetail: View {
-    
+    @EnvironmentObject var userData: UserData
     var user: PublicProfile
     @ObservedObject var privateInformation: PrivateInformation
     
@@ -17,7 +17,7 @@ struct UserDetail: View {
             
             HStack {
                 Spacer()
-                FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user) }).padding()
+                FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token , email: userData.publicProfile.identifier) }).padding()
             }
             
             VStack{
@@ -41,6 +41,9 @@ struct UserDetail: View {
         }
         .navigationTitle("\(user.identifier)")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear{
+            
+        }
     }
 }
 

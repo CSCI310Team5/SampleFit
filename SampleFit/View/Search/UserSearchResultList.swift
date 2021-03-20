@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserSearchResultList: View {
+    @EnvironmentObject var userData: UserData
     var users: [PublicProfile]
     @ObservedObject var privateInformation: PrivateInformation
     
@@ -24,7 +25,7 @@ struct UserSearchResultList: View {
                             }
                         }
                         
-                        FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user) })
+                        FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token, email: userData.publicProfile.identifier) })
                     }
                     .padding(.horizontal, 20)
                     

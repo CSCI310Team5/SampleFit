@@ -22,6 +22,8 @@ class PrivateInformation: ObservableObject {
     private var _exerciseFeedsWillChangeCancellable: AnyCancellable?
     private var _addWorkoutHistoryCancellable: AnyCancellable?
     private var _getWorkoutHistoryCancellable: AnyCancellable?
+    private var _getFollowListCancellable: AnyCancellable?
+    private var _FollowStatusChangeCancellable: AnyCancellable?
     
     // MARK: - Initializers
     init() {
@@ -31,6 +33,13 @@ class PrivateInformation: ObservableObject {
         
     }
 
+    func getFollowList(token: String, email: String){
+        _getFollowListCancellable=networkQueryController.getFollowList(email:email , token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] workouts in
+                followedUsers=workouts
+            }
+    }
     
     func storeWorkoutHistory(token: String, email: String){
         workoutHistory=[]
@@ -86,11 +95,14 @@ class PrivateInformation: ObservableObject {
             _addExerciseToFavorites(exercise)
         }
     }
-    func toggleUserInFollowed(_ user: PublicProfile) {
+    func toggleUserInFollowed(_ user: PublicProfile, token:String, email: String) {
         if self.hasFollowed(user) {
-            followedUsers.removeAll { $0 == user }
+            _FollowStatusChangeCancellable=networkQueryController.unfollow(email: email , unfollowUser: user.identifier, token: token).receive(on: DispatchQueue.main).sink{[unowned self] result in
+                followedUsers.removeAll { $0 == user }
+            }
         } else {
-            _addFollowedUser(user)
+            _FollowStatusChangeCancellable=networkQueryController.follow(email: email , followUser: user.identifier, token: token).receive(on: DispatchQueue.main).sink{[unowned self] result in
+                _addFollowedUser(user)}
         }
     }
     

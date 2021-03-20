@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FollowingUserList: View {
+    @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
     
     var body: some View {
@@ -33,7 +34,6 @@ struct FollowingUserList: View {
             }
         }
         .navigationBarTitle("Following", displayMode: .inline)
-        
     }
 }
 

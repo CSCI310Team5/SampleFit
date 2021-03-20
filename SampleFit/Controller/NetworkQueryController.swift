@@ -23,6 +23,7 @@ struct MessagedError: Error {
 
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
+    private var _imageLoadingCancellable: AnyCancellable?
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
@@ -210,8 +211,7 @@ class NetworkQueryController {
             .replaceError(with: ProfileData())
             .eraseToAnyPublisher()
     }
-    
-    //FIXME: To be integrated
+
     func follow(email: String, followUser: String, token: String)-> AnyPublisher<Bool, Never>{
         struct EncodeData: Codable{
             var email: String
@@ -238,7 +238,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    //FIXME: To be integrated
+    
     func unfollow(email: String, unfollowUser: String, token: String)-> AnyPublisher<Bool, Never>{
         struct EncodeData: Codable{
             var email: String
@@ -246,7 +246,7 @@ class NetworkQueryController {
         }
         let encodeData = EncodeData(email: email, follow: unfollowUser)
         let encode = try! JSONEncoder().encode(encodeData)
-        let url = URL(string: "http://127.0.0.1:8000/user/profile/follow")!
+        let url = URL(string: "http://127.0.0.1:8000/user/profile/unfollow")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
         request.httpBody=encode
@@ -313,11 +313,12 @@ class NetworkQueryController {
                     let profile = PublicProfile(identifier: r.email, fullName: nil)
                     profile.nickname = r.nickname
                     profile.uploadedExercises = []
-                    var _imageLoadingCancellable: AnyCancellable?
-                    _imageLoadingCancellable =
-                        self.loadImage(fromURL: URL(string: r.avatar)!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
-                        }
+                    if !r.avatar.isEmpty{
+                    self._imageLoadingCancellable =
+                        NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(r.avatar)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
+                        }}
                     profileList.append(profile)
+
                 }
                 return profileList
                 

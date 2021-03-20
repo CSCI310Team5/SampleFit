@@ -176,7 +176,8 @@ class UserData: ObservableObject {
                     }
                 }
             
-            print("GET OUT PROFILE SINK")
+                privateInformation.getFollowList(token: token, email: identifier)
+            
         }
         
         /// Manages sign in status after the user chooses to sign in.
