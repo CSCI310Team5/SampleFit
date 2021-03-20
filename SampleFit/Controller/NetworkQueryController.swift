@@ -9,6 +9,14 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension NSMutableData {
+  func appendString(_ string: String) {
+    if let data = string.data(using: .utf8) {
+      self.append(data)
+    }
+  }
+}
+
 struct MessagedError: Error {
     let message: String
 }
@@ -53,13 +61,6 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         return URLSession.shared.dataTaskPublisher(for: request)
-                        .handleEvents(receiveOutput: { outputValue in
-            
-                            print("This is the OutPUT!!!: \( outputValue)")
-                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
-//                            let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
-//                            print(decode)
-                        })
             .map{
                 $0.data
             }
@@ -463,6 +464,71 @@ class NetworkQueryController {
         var request = URLRequest(url: url)
         request.httpMethod="POST"
         request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    func changeAvatar(email: String, avatar: Image, token:String)-> AnyPublisher<Bool, Never>{
+        
+        let boundary = "Boundary-\(UUID().uuidString)"
+        
+        let url = URL(string: "http://127.0.0.1:8000/user/profile/nickname")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        func convertFormField(named name: String, value: String, using boundary: String) -> String {
+          var fieldString = "--\(boundary)\r\n"
+          fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
+          fieldString += "\r\n"
+          fieldString += "\(value)\r\n"
+
+          return fieldString
+        }
+        
+        func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
+            
+          let data = NSMutableData()
+
+          data.appendString("--\(boundary)\r\n")
+          data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
+          data.appendString("Content-Type: \(mimeType)\r\n\r\n")
+          data.append(fileData)
+          data.appendString("\r\n")
+
+          return data as Data
+        }
+        
+        let httpBody = NSMutableData()
+        
+        httpBody.appendString(convertFormField(named: "email", value:email , using: boundary))
+    
+//
+//        httpBody.append(convertFileData(fieldName: "image_field",
+//                                        fileName: "imagename.png",
+//                                        mimeType: "image/png",
+//                                        fileData: UIImage.pngData(avatar)
+//                                        using: boundary))
+
+        httpBody.appendString("--\(boundary)--")
+
+        request.httpBody = httpBody as Data
+
+        print(String(data: httpBody as Data, encoding: .utf8)!)
+
+        
+        
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
