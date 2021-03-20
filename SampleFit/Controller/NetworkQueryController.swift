@@ -469,15 +469,9 @@ class NetworkQueryController {
     
     
     func likeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
-//        struct EncodeData: Codable{
-//            var email: String
-//            var videoID: String
-//        }
-//
+
         let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
 
-//        let encodeData = EncodeData(email: email, videoID: videoId)
-//        let encode = try! JSONEncoder().encode(encodeData)
         let url = URL(string: "http://127.0.0.1:8000/user/likeVideo")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
@@ -502,14 +496,9 @@ class NetworkQueryController {
     
     
     func unlikeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
-        struct EncodeData: Codable{
-            var email: String
-            var videoID: String
-        }
+
         let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
         
-        let encodeData = EncodeData(email: email, videoID: videoId)
-        let encode = try! JSONEncoder().encode(encodeData)
         let url = URL(string: "http://127.0.0.1:8000/user/unlikeVideo")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
@@ -892,14 +881,9 @@ class NetworkQueryController {
         .eraseToAnyPublisher()
     }
     
+    
     /// Returns a publisher that publishes image values if success and nil values if an eror occured.
     func loadImage(fromURL url: URL) -> AnyPublisher<UIImage?, Never> {
-        // FIXME: Load image over network
-        // assuming success now
-        // faking networking delay of 2 seconds
-        //        return Future<UIImage?, Error> { promise in
-        //            promise(.success(UIImage(systemName: "network")))
-        //        }
         return URLSession.shared.dataTaskPublisher(for: url)
             .map{
                 UIImage(data: $0.data)
