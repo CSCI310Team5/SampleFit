@@ -43,6 +43,7 @@ class UserData: ObservableObject {
     private var _retrievePasswordCancellable : AnyCancellable?
     private var _emailCheckCancellable: AnyCancellable?
     private var _avatarCancellable: AnyCancellable?
+    private var _fetchLivestreamCancellable : AnyCancellable?
     
     @Published var changeDone: Int = 0
     
@@ -197,7 +198,24 @@ class UserData: ObservableObject {
             _fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withProfile: profile)
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.privateInformation.exerciseFeeds, on: self)
+
+//                        privateInformation.exerciseFeeds=[]
+//                        for category in Exercise.Category.allCases{
+//                            _fetchLiveFeeds(category: category.networkCall)
+//                        }
+//            print(privateInformation.exerciseFeeds)
+
         }
+    
+//    private func _fetchLiveFeeds(category:String){
+//        _fetchLivestreamCancellable=networkQueryController.getLivestreamByCategory(category: category)
+//            .receive(on: DispatchQueue.main)
+//            .sink{[unowned self] exercises in
+//                for exercise in exercises{
+//                    privateInformation.exerciseFeeds.append(exercise)
+//                }
+//            }
+//    }
         
         static var signedInUserData: UserData {
             let userData = UserData()
