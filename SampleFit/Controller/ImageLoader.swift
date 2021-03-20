@@ -13,7 +13,7 @@ class ImageLoader {
     /// Returns an image with the specified identifier (either local or network URL), or returns a nil if image not found.
     func image(withIdentifier identifier: String) -> AnyPublisher<UIImage?, Never> {
         if _isImageIdentifierLocallyLodable(identifier) {
-            return Just(UIImage(systemName: identifier))
+            return Just(UIImage(named: identifier))
                 .eraseToAnyPublisher()
         } else {
             // FIXME: Use actual identifer to load image from network
@@ -28,7 +28,7 @@ class ImageLoader {
             "jogging-1", "jogging-2", "jogging-3",
             "hiit-1", "hiit-2", "hiit-3",
             "pushup-1", "pushup-2", "pushup-3",
-            "other-1", "other-2", "other-3",
+            "other-1", "other-2", "other-3", ""
         ]
         return localIdentifiers.contains(identifier)
     }

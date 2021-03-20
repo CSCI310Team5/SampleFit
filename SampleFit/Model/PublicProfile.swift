@@ -147,7 +147,7 @@ class PublicProfile: Identifiable, ObservableObject {
             _nicknameUpdateCancellable=networkQueryController.changeNickname(email: self.identifier, nickname: newProfile.nickname, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
-                    self._nickname = newProfile.nickname
+                    self.nickname = newProfile.nickname
                 }
         }
         
@@ -163,7 +163,7 @@ class PublicProfile: Identifiable, ObservableObject {
             _birthdayUpdateCancellable=networkQueryController.changeBirthday(email: self.identifier, birthday: newProfile._birthday!, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
-                    self._birthday = newProfile._birthday
+                    self.birthdayBinding = newProfile._birthday!
                 }
           
         }
@@ -171,17 +171,17 @@ class PublicProfile: Identifiable, ObservableObject {
             _heightUpdateCancellable=networkQueryController.changeHeight(email: self.identifier, height: newProfile._height!.converted(to: .centimeters).value, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
-                    self._height = newProfile._height
+                    self.heightBinding = newProfile._height!
                 }
         }
         if self._mass != newProfile._mass{
             _weightUpdateCancellable=networkQueryController.changeWeight(email: self.identifier, weight: (newProfile._mass?.converted(to: .kilograms).value)!, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
-                    self._mass = newProfile._mass
+                    self.massBinding = newProfile._mass!
                 }
-            
         }
+        objectWillChange.send()
     }
     
     func shouldAppearOnSearchText(_ text: String) -> Bool {
