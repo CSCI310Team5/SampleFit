@@ -9,7 +9,8 @@ import SwiftUI
 
 struct UserDetail: View {
     @EnvironmentObject var userData: UserData
-    var user: PublicProfile
+
+    @ObservedObject var user: PublicProfile
     @ObservedObject var privateInformation: PrivateInformation
     
     var body: some View {
@@ -42,7 +43,7 @@ struct UserDetail: View {
         .navigationTitle("\(user.identifier)")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-            
+            user.getExerciseUploads(userEmail: user.identifier)
         }
     }
 }
