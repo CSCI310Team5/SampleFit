@@ -327,6 +327,60 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func getUserUploads(email: String, nickname: String, avatar: UIImage) -> AnyPublisher<[Exercise],Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        
+        struct DecodeData: Codable{
+            var uploadedVideos: [VideoFormat]
+        }
+        
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/getOtherUserInfo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+ 
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: DecodeData.self, decoder: JSONDecoder())
+            .map{result in
+                var videoUploaded : [Exercise] = []
+                let profile: PublicProfile = PublicProfile(identifier: email, fullName: nil)
+                profile.image=avatar
+                profile.nickname=nickname
+                
+                for upload in result.uploadedVideos{
+                    
+                    var uploadCategory: Exercise.Category = Exercise.Category.cycling
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall == upload.videoCategory{
+                            uploadCategory=category
+                        }
+                    }
+                        
+                    let excercise = Exercise(id: upload.videoID, name: upload.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: profile, duration: nil, previewImageIdentifier: upload.videoImage)
+                    
+                    excercise.peopleLimit=0
+                    excercise.contentLink=upload.videoURL
+                    
+                    videoUploaded.append(excercise)
+                }
+                
+                return videoUploaded
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+    
+
+    
+    
     func createLive(exercise: Exercise, token: String)->AnyPublisher<Bool,Never>{
         
         var encodeData = Livestream()

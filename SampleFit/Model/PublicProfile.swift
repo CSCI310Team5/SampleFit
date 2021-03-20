@@ -100,6 +100,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _birthdayUpdateCancellable: AnyCancellable?
     private var _createExerciseCancellable: AnyCancellable?
     private var _avatarUpadateCancellable: AnyCancellable?
+    private var _getUploadedExercisesCancellable: AnyCancellable?
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {
@@ -116,6 +117,14 @@ class PublicProfile: Identifiable, ObservableObject {
         copyProfile._height = _height
         copyProfile._mass = _mass
         return copyProfile
+    }
+    
+    //retrieves exercise uploads of a user, given that person's email
+    func getExerciseUploads(userEmail: String){
+        _getUploadedExercisesCancellable=networkQueryController.getUserUploads(email: userEmail, nickname: nickname, avatar: image!).receive(on: DispatchQueue.main)
+            .sink { [unowned self] output in
+                self.uploadedExercises=output
+            }
     }
     
     func createExercise(newExercise: Exercise, token: String){

@@ -11,7 +11,7 @@ import Combine
 
 /// Represents an exercise (a video or a livestream) that other users can view.
 class Exercise: Identifiable, ObservableObject {
-    @Published var id: Int
+    @Published var id: String
     @Published var name: String
     @Published var description: String
     @Published var category: Category
@@ -20,7 +20,6 @@ class Exercise: Identifiable, ObservableObject {
     @Published var duration: Measurement<UnitDuration>?
     @Published var image: UIImage?
     @Published var peopleLimit: Int
-    // MARK: we also need something that points to the link to the prerecorded/zoom link
     @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
     private var imageLoadingCancellable: AnyCancellable?
@@ -86,7 +85,7 @@ class Exercise: Identifiable, ObservableObject {
     
     // MARK: - Initializers
     
-    init(id: Int, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "") {
+    init(id: String, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "") {
         self.id = id
         self.name = name
         self.description = description
@@ -109,7 +108,7 @@ class Exercise: Identifiable, ObservableObject {
         let owningUser = PublicProfile.exampleProfiles.randomElement()!
         let loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vehicula lectus vitae quam maximus semper. Duis eget magna id neque sagittis pretium. Morbi sit amet diam et eros cursus mattis a vitae dolor. Etiam in ex at sapien consectetur euismod. Curabitur in fringilla lectus. Duis dictum orci libero, ac semper risus facilisis sit amet. Praesent a tellus nulla."
         
-        self.init(id: Int.random(in: Int.min...Int.max),
+        self.init(id: String(Int.random(in: Int.min...Int.max)),
                   name: "\(category.description) with \(owningUser.identifier)",
                   description: loremIpsum,
                   category: category,
@@ -185,7 +184,7 @@ class Exercise: Identifiable, ObservableObject {
 
 extension Exercise {
     var durationDescription: String {
-        guard let durationInMinutes = duration?.value else { return "LIVE" }
+        guard let durationInMinutes = duration?.value else { return "No Time" }
         return "\(Int(durationInMinutes.rounded()))min"
     }
 }

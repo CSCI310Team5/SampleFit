@@ -43,3 +43,15 @@ struct Livestream: Codable{
     var timeLimit: Int = 0
     var peopleLimit: Int = 0
 }
+
+
+// FIXME: maybe inform backend that video has timelength too?
+struct VideoFormat: Codable{
+    var videoID: String
+    var videoName: String
+    var description: String
+    var videoCategory: String
+    var videoImage: String
+    var videoURL: String
+    var email: String
+}
