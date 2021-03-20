@@ -40,7 +40,7 @@ struct FeaturedExercisesView: View {
             Group {
                 if exercises[0].image != nil {
                     ZStack {
-                        exercises[0].image!
+                        Image(uiImage: exercises[0].image!)
                         
                         // tint
                         Rectangle()

@@ -13,7 +13,7 @@ struct ImageEditor: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            CircleImage(image: draftProfile.image, isEditingActive: true)
+            CircleImage(image: draftProfile.image!, isEditingActive: true)
                 .onTapGesture {
                     self.isImagePickerPresented = true
                 }

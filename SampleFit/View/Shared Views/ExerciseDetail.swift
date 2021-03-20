@@ -21,7 +21,7 @@ struct ExerciseDetail: View {
                 VideoPlayer(player: nil) {
                     Group {
                         if exercise.image != nil {
-                            exercise.image!
+                            Image(uiImage:exercise.image!)
                                 .resizable()
                                 .scaledToFit()
                         }
@@ -33,7 +33,7 @@ struct ExerciseDetail: View {
                 .frame(height: 250)
                 }else{
                     if exercise.image != nil {
-                        exercise.image! .resizable().scaledToFit()
+                        Image(uiImage: exercise.image!) .resizable().scaledToFit()
                     }
                 }
                 // Exercise information

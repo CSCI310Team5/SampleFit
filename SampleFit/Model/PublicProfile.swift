@@ -14,7 +14,7 @@ class PublicProfile: Identifiable, ObservableObject {
     @Published var identifier: String = ""
     private var _nickname: String?
     /// user's profile image. Defaults to person.fill.
-    @Published var image : Image = Image(systemName: "person.fill.questionmark")
+    @Published var image : UIImage? = UIImage(systemName: "person.fill.questionmark")
     private var _birthday: Date?
     private var _height: Measurement<UnitLength>?
     private var _mass: Measurement<UnitMass>?
@@ -99,6 +99,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _weightUpdateCancellable: AnyCancellable?
     private var _birthdayUpdateCancellable: AnyCancellable?
     private var _createExerciseCancellable: AnyCancellable?
+    private var _avatarUpadateCancellable: AnyCancellable?
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {
@@ -142,8 +143,12 @@ class PublicProfile: Identifiable, ObservableObject {
         }
         
         if self.image != newProfile.image{
-            self.image = newProfile.image
+            _avatarUpadateCancellable = networkQueryController.changeAvatar(email: identifier, avatar: newProfile.image!, token: token).receive(on: DispatchQueue.main)
+                .sink{ [unowned self] success in
+                    self.image = newProfile.image
+                }
         }
+        
         if self._birthday != newProfile._birthday{
             
             _birthdayUpdateCancellable=networkQueryController.changeBirthday(email: self.identifier, birthday: newProfile._birthday!, token: token)

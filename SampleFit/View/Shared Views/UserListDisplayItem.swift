@@ -14,7 +14,7 @@ struct UserListDisplayItem: View {
         VStack {
             HStack(spacing: 16) {
                 // user image
-                user.image
+                Image(uiImage: user.image!)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 44, height: 44)

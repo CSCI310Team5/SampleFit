@@ -11,9 +11,9 @@ import Combine
 
 class ImageLoader {
     /// Returns an image with the specified identifier (either local or network URL), or returns a nil if image not found.
-    func image(withIdentifier identifier: String) -> AnyPublisher<Image?, Never> {
+    func image(withIdentifier identifier: String) -> AnyPublisher<UIImage?, Never> {
         if _isImageIdentifierLocallyLodable(identifier) {
-            return Just(Image(identifier))
+            return Just(UIImage(systemName: identifier))
                 .eraseToAnyPublisher()
         } else {
             // FIXME: Use actual identifer to load image from network

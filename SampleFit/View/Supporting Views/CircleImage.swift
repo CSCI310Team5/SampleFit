@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct CircleImage: View {
-    var image: Image
+    var image: UIImage?
     var isEditingActive = false
     var body: some View {
-        image
+        Image(uiImage: (image ?? UIImage(systemName: "person.fill.questionmark"))!)
             .resizable()
             .scaledToFill()
             .frame(width: 80, height: 80)
@@ -23,7 +23,7 @@ struct CircleImage: View {
 struct CircleImage_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            CircleImage(image: Image("jogging-1"))
+            CircleImage(image: UIImage(systemName: "jogging-1")!)
         }
     }
 }

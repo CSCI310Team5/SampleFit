@@ -479,13 +479,15 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func changeAvatar(email: String, avatar: Image, token:String)-> AnyPublisher<Bool, Never>{
+    func changeAvatar(email: String, avatar: UIImage, token:String)-> AnyPublisher<Bool, Never>{
+      
         
-        let boundary = "Boundary-\(UUID().uuidString)"
         
-        let url = URL(string: "http://127.0.0.1:8000/user/profile/nickname")!
+        let url = URL(string: "http://127.0.0.1:8000/user/profile/avatar")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
+        
+        let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
         func convertFormField(named name: String, value: String, using boundary: String) -> String {
@@ -498,7 +500,6 @@ class NetworkQueryController {
         }
         
         func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
-            
           let data = NSMutableData()
 
           data.appendString("--\(boundary)\r\n")
@@ -509,28 +510,36 @@ class NetworkQueryController {
 
           return data as Data
         }
-        
+
+       
         let httpBody = NSMutableData()
+
         
-        httpBody.appendString(convertFormField(named: "email", value:email , using: boundary))
-    
-//
-//        httpBody.append(convertFileData(fieldName: "image_field",
-//                                        fileName: "imagename.png",
-//                                        mimeType: "image/png",
-//                                        fileData: UIImage.pngData(avatar)
-//                                        using: boundary))
+    httpBody.appendString(convertFormField(named: "email", value: email, using: boundary))
+        
+
+        httpBody.append(convertFileData(fieldName: "avatar",
+                                        fileName: "imagename.png",
+                                        mimeType: "image/png",
+                                        fileData: avatar.pngData()!,
+                                        using: boundary))
 
         httpBody.appendString("--\(boundary)--")
 
         request.httpBody = httpBody as Data
 
-        print(String(data: httpBody as Data, encoding: .utf8)!)
-
-        
+//        print(String(data: httpBody as Data, encoding: .utf8)!)
+   
         
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
+                                    .handleEvents(receiveOutput: { outputValue in
+            
+                                        print("This is the OutPUT!!!: \( outputValue)")
+                                        print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                                        let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
+                                        print(decode)
+                                    })
             .map{
                 $0.data
             }
@@ -679,12 +688,12 @@ class NetworkQueryController {
     }
     
     /// Returns a publisher that publishes image values if success and nil values if an eror occured.
-    func loadImage(fromURL url: URL) -> AnyPublisher<Image?, Never> {
+    func loadImage(fromURL url: URL) -> AnyPublisher<UIImage?, Never> {
         // FIXME: Load image over network
         // assuming success now
         // faking networking delay of 2 seconds
-        return Future<Image?, Error> { promise in
-            promise(.success(Image(systemName: "network")))
+        return Future<UIImage?, Error> { promise in
+            promise(.success(UIImage(systemName: "network")))
         }
         .replaceError(with: nil)
         .delay(for: .seconds(2), scheduler: DispatchQueue.global())

@@ -67,7 +67,8 @@ struct UploadSheetView: View  {
                     if !playbackType{
                     HStack {
                         Text("Profile Image Preview")
-                        image.resizable().scaledToFit()
+                        Image(uiImage: image!)
+                            .resizable().scaledToFit()
                     }.frame(height: 100)
                     }
                     

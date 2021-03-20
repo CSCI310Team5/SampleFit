@@ -18,7 +18,7 @@ class Exercise: Identifiable, ObservableObject {
     @Published var playbackType: PlaybackType
     @Published var owningUser: PublicProfile
     @Published var duration: Measurement<UnitDuration>?
-    @Published var image: Image?
+    @Published var image: UIImage?
     @Published var peopleLimit: Int
     // MARK: we also need something that points to the link to the prerecorded/zoom link
     @Published var contentLink: String

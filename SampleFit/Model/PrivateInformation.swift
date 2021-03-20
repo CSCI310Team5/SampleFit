@@ -33,6 +33,7 @@ class PrivateInformation: ObservableObject {
 
     
     func storeWorkoutHistory(token: String, email: String){
+        workoutHistory=[]
         _getWorkoutHistoryCancellable = networkQueryController.getWorkoutHistory(token: token, email: email)
             .receive(on: DispatchQueue.main)
             .sink{[unowned self] workouts in
