@@ -669,32 +669,22 @@ class NetworkQueryController {
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
-        // FIXME: Search for exercise results for user over network
-        // assuming success now
-        // faking networking delay of 2 seconds
-        //        return Future { promise in
-        //            promise(.success(Exercise.exampleExercisesFull.filter {
-        //                if let category = category {
-        //                    return $0.category == category && $0.shouldAppearOnSearchText(searchText)
-        //                } else {
-        //                    return $0.shouldAppearOnSearchText(searchText)
-        //                }
-        //            }))
-        //        }
-        //        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        //        .eraseToAnyPublisher()
+         FIXME: Search for exercise results for user over network
+         assuming success now
+         faking networking delay of 2 seconds
+                return Future { promise in
+                    promise(.success(Exercise.exampleExercisesFull.filter {
+                        if let category = category {
+                            return $0.category == category && $0.shouldAppearOnSearchText(searchText)
+                        } else {
+                            return $0.shouldAppearOnSearchText(searchText)
+                        }
+                    }))
+                }
+                .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+                .eraseToAnyPublisher()
         
-        var result : [Exercise] = []
-        if let category = category{
-            var livestreamByCategoryCancellable: AnyCancellable?
-            livestreamByCategoryCancellable = NetworkQueryController.shared.getLivestreamByCategory(category: category.networkCall)
-                .receive(on: DispatchQueue.main)
-                .sink{ [unowned self] lives in
-                    for i in lives{
-                    result.append(i)
-                }             }
-        }
-        return result
+
     }
     
     
