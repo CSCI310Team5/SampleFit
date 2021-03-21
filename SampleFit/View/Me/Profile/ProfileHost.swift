@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileHost: View {
+    @EnvironmentObject var userData: UserData
     @ObservedObject var publicProfile: PublicProfile
     @State private var isEditing = false
     

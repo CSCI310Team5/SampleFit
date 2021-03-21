@@ -21,7 +21,7 @@ struct DetailedProfileSummary: View {
                     
                     // username
                     HStack {
-                        Text("Username")
+                        Text("Email")
                         Spacer()
                         Text(publicProfile.identifier)
                     }

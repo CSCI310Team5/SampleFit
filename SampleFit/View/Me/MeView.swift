@@ -43,7 +43,7 @@ struct MeView: View {
                     }
                 }
                 
-                NavigationLink(destination: NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.").navigationBarTitle("Uploads", displayMode: .inline)) {
+                NavigationLink(destination: UploadedExercisesList(publicProfile: userData.publicProfile, privateProfile: privateInformation)) {
                     Label {
                         Text("Uploads")
                     } icon: {
@@ -68,7 +68,11 @@ struct MeView: View {
                         WorkoutDisplayItem(workout: workout)
                     }
                 }
-            }
+            }else{
+                Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
+                        Text("No History Yet, Start Workout Today!")
+                    }
+                }
             
             // Sign out button
             Section {
@@ -82,6 +86,7 @@ struct MeView: View {
         }
         .listStyle(InsetGroupedListStyle())
         .navigationTitle("Me")
+        
     }
 }
 

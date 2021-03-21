@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExerciseCategoryRow: View {
     @EnvironmentObject var privateInformation: PrivateInformation
+    @EnvironmentObject var userData: UserData
     var categoryName: String
     var items: [Exercise]
     

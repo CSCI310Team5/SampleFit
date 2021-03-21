@@ -11,18 +11,22 @@ import Combine
 
 /// Represents an exercise (a video or a livestream) that other users can view.
 class Exercise: Identifiable, ObservableObject {
-    @Published var id: Int
+    @Published var id: String
     @Published var name: String
     @Published var description: String
     @Published var category: Category
     @Published var playbackType: PlaybackType
     @Published var owningUser: PublicProfile
     @Published var duration: Measurement<UnitDuration>?
-    @Published var image: Image?
+    @Published var image: UIImage?
+    @Published var peopleLimit: Int
+    @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
     private var imageLoadingCancellable: AnyCancellable?
     
-    enum PlaybackType: Int {
+    
+    
+    enum PlaybackType: Int, CaseIterable {
         case live = 1
         case recordedVideo
     }
@@ -33,7 +37,7 @@ class Exercise: Identifiable, ObservableObject {
         case cycling
         case jogging
         case other
-        
+      
         var description: String {
             switch self {
             case .pushup:
@@ -49,11 +53,39 @@ class Exercise: Identifiable, ObservableObject {
             token.representedObject = self
             return token
         }
+        
+        var networkCall: String{
+            switch self{
+            case .pushup:
+                return "PU"
+            case .hiit:
+                return "HT"
+            case .jogging:
+                return "JG"
+            case .cycling:
+                return "CY"
+            case .other:
+                return "O"
+            }
+            
+        }
+        
+        //FIXME: Index to be changed
+        var index: Double{
+            switch self {
+            case .pushup:
+                return 8.5
+            case .hiit:
+                return 6.5
+            default:
+                return 5
+            }
+        }
     }
     
     // MARK: - Initializers
     
-    init(id: Int, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String) {
+    init(id: String, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "") {
         self.id = id
         self.name = name
         self.description = description
@@ -61,26 +93,32 @@ class Exercise: Identifiable, ObservableObject {
         self.playbackType = playbackType
         self.owningUser = owningUser
         self.duration = duration
+        self.peopleLimit = peoplelimt
+        self.contentLink = contentlink
         self.previewImageIdentifier = previewImageIdentifier
         self.imageLoadingCancellable = ImageLoader.shared.image(withIdentifier: previewImageIdentifier)
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
     }
     
+    
+  
     /// Creates a sample exercise.
     convenience init(sampleExerciseInCategory category: Category, playbackType: PlaybackType, previewImageID: Int) {
         let owningUser = PublicProfile.exampleProfiles.randomElement()!
         let loremIpsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vehicula lectus vitae quam maximus semper. Duis eget magna id neque sagittis pretium. Morbi sit amet diam et eros cursus mattis a vitae dolor. Etiam in ex at sapien consectetur euismod. Curabitur in fringilla lectus. Duis dictum orci libero, ac semper risus facilisis sit amet. Praesent a tellus nulla."
         
-        self.init(id: Int.random(in: Int.min...Int.max),
+        self.init(id: String(Int.random(in: Int.min...Int.max)),
                   name: "\(category.description) with \(owningUser.identifier)",
                   description: loremIpsum,
                   category: category,
                   playbackType: playbackType,
                   owningUser: owningUser,
-                  duration: playbackType == .recordedVideo ? Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes) : nil,
-                  previewImageIdentifier: "\(category.rawValue)-\(previewImageID)")
+                  duration: Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes),
+                  previewImageIdentifier: "\(category.rawValue)-\(previewImageID)",
+                  peoplelimt:5)
     }
+    
     
     // MARK: - Instance methods
     
@@ -146,7 +184,7 @@ class Exercise: Identifiable, ObservableObject {
 
 extension Exercise {
     var durationDescription: String {
-        guard let durationInMinutes = duration?.value else { return "LIVE" }
+        guard let durationInMinutes = duration?.value else { return "No Time" }
         return "\(Int(durationInMinutes.rounded()))min"
     }
 }

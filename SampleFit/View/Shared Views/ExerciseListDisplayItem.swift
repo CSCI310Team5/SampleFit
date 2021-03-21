@@ -14,8 +14,8 @@ struct ExerciseListDisplayItem: View {
         HStack(alignment: .center) {
             // image
             Group {
-                if exercise.image != nil {
-                    exercise.image!
+                if (exercise.image) != nil {
+                    Image(uiImage: exercise.image!)
                         .resizable()
                         .scaledToFill()
                 } else {

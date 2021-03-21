@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BrowseView: View {
     @ObservedObject var privateInformation: PrivateInformation
-    
+    @EnvironmentObject var userData: UserData
     var body: some View {
         NavigationView {
             
@@ -23,7 +23,7 @@ struct BrowseView: View {
                     }
                 }
             }
-            .navigationTitle("Browse")
+            .navigationTitle("Videos & Live")
             
         }
         .environmentObject(privateInformation)
@@ -40,7 +40,7 @@ struct FeaturedExercisesView: View {
             Group {
                 if exercises[0].image != nil {
                     ZStack {
-                        exercises[0].image!
+                        Image(uiImage: exercises[0].image!)
                         
                         // tint
                         Rectangle()

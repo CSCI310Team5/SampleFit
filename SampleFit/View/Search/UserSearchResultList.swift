@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserSearchResultList: View {
+    @EnvironmentObject var userData: UserData
     var users: [PublicProfile]
     @ObservedObject var privateInformation: PrivateInformation
     
@@ -16,7 +17,7 @@ struct UserSearchResultList: View {
             LazyVStack {
                 ForEach(users) { user in
                     ZStack(alignment: .trailing) {
-                        NavigationLink(destination: UserDetail(user: user)) {
+                        NavigationLink(destination: UserDetail(user: user, privateInformation: privateInformation)) {
                             VStack {
                                 UserListDisplayItem(user: user)
                                     .padding(.top, user == users[0] ? 4 : 0)
@@ -24,7 +25,7 @@ struct UserSearchResultList: View {
                             }
                         }
                         
-                        FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user) })
+                        FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token, email: userData.publicProfile.identifier) })
                     }
                     .padding(.horizontal, 20)
                     

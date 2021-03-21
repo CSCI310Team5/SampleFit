@@ -22,6 +22,7 @@ enum PickerVisibility {
 }
 
 struct ProfileEditor: View {
+    @EnvironmentObject var userData: UserData
     @ObservedObject var originalProfile: PublicProfile
     @ObservedObject var draftProfile: PublicProfile
     @Binding var isEditorPresented: Bool
@@ -87,7 +88,7 @@ struct ProfileEditor: View {
     }
     
     func confirmEdit() {
-        self.originalProfile.update(using: draftProfile)
+        self.originalProfile.update(using: draftProfile, token: userData.token)
         self.isEditorPresented = false
     }
 }

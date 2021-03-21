@@ -27,7 +27,7 @@ struct AuthenticationVerifiers {
     }
 
     // limit max username length, check only 1 second after consecutive changes
-    private static let _usernameCreateAccountVerifier = InputVerifier<String>(debounce: .seconds(1), scheduler: DispatchQueue.main, limit: 16) { NetworkQueryController.shared.validateUsername($0)
+    private static let _usernameCreateAccountVerifier = InputVerifier<String>(debounce: .seconds(1), scheduler: DispatchQueue.main, limit: 20) { NetworkQueryController.shared.validateUsername($0)
         .map { $0 ? InputVerificationStatus.valid : InputVerificationStatus.invalid }
         .eraseToAnyPublisher()
     }

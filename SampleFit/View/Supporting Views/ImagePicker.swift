@@ -10,7 +10,7 @@ import PhotosUI
 
 /// You can use ImagePicker to select a single image from the user's photo album.
 struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var image: Image
+    @Binding var image: UIImage?
     @Binding var isPresented: Bool
     
     func makeUIViewController(context: Context) -> some UIViewController {
@@ -45,8 +45,8 @@ struct ImagePicker: UIViewControllerRepresentable {
                             print("ImagePicker: image loading error.")
                             return
                         }
-                        let newImage = Image(uiImage: image)
-                        self.parent.image = newImage
+//                        let newImage = Image(uiImage: image)
+                        self.parent.image = image
                     }
                 }
             } else {
@@ -60,10 +60,10 @@ struct ImagePicker: UIViewControllerRepresentable {
 }
 
 struct ImagePicker_Preview: View {
-    @State private var image = Image(systemName: "person.fill.questionmark")
+    @State private var image = UIImage(systemName: "person.fill.questionmark")
     @State private var isPresented = false
     var body: some View {
-        image
+        Image(uiImage: image!)
             .resizable()
             .scaledToFit()
             .frame(width: 100, height: 100)

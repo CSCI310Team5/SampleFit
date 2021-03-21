@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import SwiftUI
 
 /// User's information that is publicly available to other users. You should use PublicProfile to uniquely identify a user's information.
@@ -13,11 +14,15 @@ class PublicProfile: Identifiable, ObservableObject {
     @Published var identifier: String = ""
     private var _nickname: String?
     /// user's profile image. Defaults to person.fill.
-    @Published var image = Image(systemName: "person.fill.questionmark")
+    @Published var image : UIImage? = UIImage(systemName: "person.fill.questionmark")
     private var _birthday: Date?
     private var _height: Measurement<UnitLength>?
     private var _mass: Measurement<UnitMass>?
-
+    
+    private var imageLoadingCancellable: AnyCancellable?
+    
+    @Published var uploadedExercises: [Exercise] = []
+    
     private var _usesMetricSystem: Bool
     
     var birthdayDateRange: ClosedRange<Date>
@@ -49,7 +54,6 @@ class PublicProfile: Identifiable, ObservableObject {
         return massFormatter
     }()
     
-    
     init(identifier: String, fullName: PersonNameComponents?) {
         self.identifier = identifier
         
@@ -77,8 +81,30 @@ class PublicProfile: Identifiable, ObservableObject {
             massRange = Array(stride(from: 50, to: 650, by: 1)).map { Measurement(value: $0, unit: UnitMass.pounds) }
         }
         
-        
-        
+    }
+    
+    func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
+       
+        if weight != nil {self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
+        if height != nil {self._height=Measurement(value: height!, unit: UnitLength.centimeters)}
+        if height != nil {self.nickname=nickname!}
+        self._birthday=birthday
+
+    }
+    
+    //MARK: - Asynchronous tasks
+    private var networkQueryController = NetworkQueryController()
+    private var _nicknameUpdateCancellable: AnyCancellable?
+    private var _heightUpdateCancellable: AnyCancellable?
+    private var _weightUpdateCancellable: AnyCancellable?
+    private var _birthdayUpdateCancellable: AnyCancellable?
+    private var _createExerciseCancellable: AnyCancellable?
+    private var _avatarUpadateCancellable: AnyCancellable?
+    private var _getUploadedExercisesCancellable: AnyCancellable?
+    
+    /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
+    func removeExerciseFromUploads(at indices: IndexSet) {
+        uploadedExercises.remove(atOffsets: indices)
     }
     
     // MARK: - Instance methods
@@ -93,12 +119,69 @@ class PublicProfile: Identifiable, ObservableObject {
         return copyProfile
     }
     
-    func update(using newProfile: PublicProfile) {
-        self._nickname = newProfile.nickname
-        self.image = newProfile.image
-        self._birthday = newProfile._birthday
-        self._height = newProfile._height
-        self._mass = newProfile._mass
+    //retrieves exercise uploads of a user, given that person's email
+    func getExerciseUploads(userEmail: String){
+        _getUploadedExercisesCancellable=networkQueryController.getUserUploads(email: userEmail, nickname: nickname, avatar: image!).receive(on: DispatchQueue.main)
+            .sink { [unowned self] output in
+                self.uploadedExercises=output
+            }
+    }
+    
+    func createExercise(newExercise: Exercise, token: String){
+        if newExercise.playbackType.rawValue==1{
+            _createExerciseCancellable=networkQueryController.createLive(exercise: newExercise, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self.uploadedExercises.append(newExercise)
+                }
+        }
+        else{
+            //To be written for upload video
+        }
+    }
+    
+    func update(using newProfile: PublicProfile, token: String) {
+        
+        if self._nickname != newProfile.nickname{
+            
+            _nicknameUpdateCancellable=networkQueryController.changeNickname(email: self.identifier, nickname: newProfile.nickname, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self.nickname = newProfile.nickname
+                }
+        }
+        
+        if self.image != newProfile.image{
+            _avatarUpadateCancellable = networkQueryController.changeAvatar(email: identifier, avatar: newProfile.image!, token: token).receive(on: DispatchQueue.main)
+                .sink{ [unowned self] success in
+                    self.image = newProfile.image
+                }
+        }
+        
+        if self._birthday != newProfile._birthday{
+            
+            _birthdayUpdateCancellable=networkQueryController.changeBirthday(email: self.identifier, birthday: newProfile._birthday!, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self.birthdayBinding = newProfile._birthday!
+                }
+          
+        }
+        if self._height != newProfile._height{
+            _heightUpdateCancellable=networkQueryController.changeHeight(email: self.identifier, height: newProfile._height!.converted(to: .centimeters).value, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self.heightBinding = newProfile._height!
+                }
+        }
+        if self._mass != newProfile._mass{
+            _weightUpdateCancellable=networkQueryController.changeWeight(email: self.identifier, weight: (newProfile._mass?.converted(to: .kilograms).value)!, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                    self.massBinding = newProfile._mass!
+                }
+        }
+        objectWillChange.send()
     }
     
     func shouldAppearOnSearchText(_ text: String) -> Bool {
@@ -179,10 +262,17 @@ extension PublicProfile {
         guard let height = _height else { return nil }
         return Self.heightFormatter.string(fromMeters: height.converted(to: .meters).value)
     }
+    
     var massDescription: String? {
         guard let mass = _mass else { return nil }
         return Self.massFormatter.string(fromKilograms: mass.converted(to: .kilograms).value)
     }
+    
+    var getMass: Double?{
+        guard let mass = _mass else { return nil }
+        return mass.converted(to: .kilograms).value
+    }
+
 }
 
 // MARK: - Protocol conformance

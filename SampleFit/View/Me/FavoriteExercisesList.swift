@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoriteExercisesList: View {
     @ObservedObject var privateInformation: PrivateInformation
+    @EnvironmentObject var userData: UserData
     @Environment(\.editMode) var editMode
     var body: some View {
         Group {
@@ -36,7 +37,9 @@ struct FavoriteExercisesList: View {
             }
         }
         .navigationBarTitle("Favorites", displayMode: .inline)
-
+        .onAppear{
+            privateInformation.getFavoriteExercises(email: userData.publicProfile.identifier, token: userData.token)
+        }
     }
 }
 
