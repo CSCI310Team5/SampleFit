@@ -13,17 +13,28 @@ struct UserDetail: View {
     @ObservedObject var user: PublicProfile
     @ObservedObject var privateInformation: PrivateInformation
     
+
     var body: some View {
         VStack {
             
             HStack {
                 Spacer()
-                FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token , email: userData.publicProfile.identifier) }).padding()
+                if user.identifier != userData.publicProfile.identifier{
+                    FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token , email: userData.publicProfile.identifier) }).padding()
+                }
+                else{
+                    Text("").padding()
+                }
             }
             
             VStack{
                 CircleImage(image: user.image).padding(.bottom)
-                Text(user.identifier).bold().font(.headline).padding()
+                
+                HStack {
+                    Text(user.identifier).bold().font(.headline).padding()
+                    if !user.nickname.isEmpty {Text("(\(user.nickname))")}
+                }
+                
             }.padding(.bottom).padding(.top,-20)
             
             

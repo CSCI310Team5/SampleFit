@@ -38,6 +38,15 @@ class Exercise: Identifiable, ObservableObject {
         case jogging
         case other
       
+        
+        static func identify(networkCall:String) -> Category{
+            for category in Exercise.Category.allCases{
+                if category.networkCall == networkCall{
+                    return category
+                }}
+            return .other
+        }
+        
         var description: String {
             switch self {
             case .pushup:
