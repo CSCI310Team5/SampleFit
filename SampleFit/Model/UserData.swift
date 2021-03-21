@@ -178,6 +178,7 @@ class UserData: ObservableObject {
             }
         
         privateInformation.getFollowList(token: token, email: identifier)
+        privateInformation.getFavoriteExercises(email: identifier, token: token)
         
     }
     

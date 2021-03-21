@@ -37,9 +37,6 @@ struct FavoriteExercisesList: View {
             }
         }
         .navigationBarTitle("Favorites", displayMode: .inline)
-        .onAppear{
-            privateInformation.getFavoriteExercises(email: userData.publicProfile.identifier, token: userData.token)
-        }
     }
 }
 

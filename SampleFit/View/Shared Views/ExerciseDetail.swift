@@ -19,7 +19,7 @@ struct ExerciseDetail: View {
         ScrollView {
             VStack {
                 if exercise.playbackType == .recordedVideo {
-                VideoPlayer(player: nil) {
+                    VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!)) {
                     Group {
                         if exercise.image != nil {
                             Image(uiImage:exercise.image!)

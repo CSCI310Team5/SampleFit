@@ -26,9 +26,11 @@ struct UserListDisplayItem: View {
                     )
                 
                 // name label
-                Text(user.identifier)
+                VStack{
+                    Text(user.identifier).font(.headline)
                     .fixedSize(horizontal: true, vertical: false)
-                
+                    if !user.nickname.isEmpty {Text("(\(user.nickname))").fixedSize(horizontal: true, vertical: false).foregroundColor(.gray).font(.footnote)}else{Text("")}
+                }
                 Spacer()
                 
                 // Placeholder to button to avoid complex text padding layout

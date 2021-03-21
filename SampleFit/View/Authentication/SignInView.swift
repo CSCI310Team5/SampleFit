@@ -31,17 +31,17 @@ struct SignInView: View {
                 
                 // password field
                 PasswordTextField(.password, text: $signInAuthenticationState.password, inputStatus: signInAuthenticationState.passwordInputStatus, colorType: \.signInColor)
-           
-                    
-                Button(action: {retrivePassword.toggle()} , label: {
-                        Spacer()
+                
+                HStack{
+                    Spacer()
+                    Button(action: {retrivePassword.toggle()} , label: {
                         Text("Forgot Password").foregroundColor(.red)
-                    }).padding(.vertical,10)
+                    }).padding(.vertical,10).scaledToFit()
                     
                     .sheet(isPresented: $retrivePassword, content: {
                         RetrivePasswordView(retrievePassword:  $retrivePassword)
                     })
-                
+                }
                 // sign in button
                 Button(action: userData.signInUsingDefaultMethod) {
                     Group {
@@ -53,19 +53,19 @@ struct SignInView: View {
                                 .padding(.vertical)
                         }
                     }
-                        .font(.headline)
-                        .foregroundColor(Color(UIColor.systemBackground))
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(
-                            RoundedRectangle(cornerRadius: 7.5)
-                                .fill(signInAuthenticationState.allowsAuthentication ? signInAuthenticationState.passwordInputStatus.signInColor : Color.secondary)
-                        )
+                    .font(.headline)
+                    .foregroundColor(Color(UIColor.systemBackground))
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 44)
+                    .background(
+                        RoundedRectangle(cornerRadius: 7.5)
+                            .fill(signInAuthenticationState.allowsAuthentication ? signInAuthenticationState.passwordInputStatus.signInColor : Color.secondary)
+                    )
                 }
                 .disabled(!signInAuthenticationState.allowsAuthentication || userData.signInStatus == .validating)
             }
             .padding(.top, 40)
-
+            
             
             Divider()
                 .padding(.vertical, 8)
@@ -81,7 +81,7 @@ struct SignInView: View {
             .frame(height: 44)
             .id(currentColorScheme.hashValue)
             .disabled(userData.signInStatus == .validating)
-
+            
             Spacer()
         }
         // detects color scheme change and re-render
@@ -101,11 +101,11 @@ struct SignInView: View {
 
 struct SignInView_Previews: PreviewProvider {
     static var userData = UserData()
-
+    
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
             SignInView(signInAuthenticationState: userData.signInAuthenticationState)
-
+            
         }
         .environmentObject(userData)
     }

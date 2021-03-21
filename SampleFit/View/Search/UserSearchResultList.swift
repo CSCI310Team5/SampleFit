@@ -24,8 +24,11 @@ struct UserSearchResultList: View {
                                 Divider()
                             }
                         }
+                        // ensure this user is not the user himself
+                        if user.identifier != userData.publicProfile.identifier{
+                            FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token, email: userData.publicProfile.identifier) })
+                        }
                         
-                        FollowButton(following: privateInformation.hasFollowed(user), action: { privateInformation.toggleUserInFollowed(user, token: userData.token, email: userData.publicProfile.identifier) })
                     }
                     .padding(.horizontal, 20)
                     

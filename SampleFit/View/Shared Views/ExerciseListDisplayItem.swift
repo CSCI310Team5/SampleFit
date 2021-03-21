@@ -36,28 +36,26 @@ struct ExerciseListDisplayItem: View {
             VStack(alignment: .leading) {
                 if !hideDetails {
                     HStack(spacing: 4) {
-                        if exercise.playbackType == .recordedVideo {
-                            Text(exercise.durationDescription)
-                        } else {
+                        if exercise.playbackType == .live{
                             // live
                             Text(exercise.durationDescription)
                                 .bold()
                                 .foregroundColor(.red)
                         }
+                        
                         Text("·")
-                            .font(.title3)
                         Text(exercise.category.description)
                     }
                     .font(.caption)
                 }
                 
-                Text(exercise.name)
+                Text(exercise.name).font(.subheadline)
             }
             
             Spacer()
 
         }
-        .frame(maxWidth: UIScreen.main.bounds.width * 0.85)
+        .frame(width: UIScreen.main.bounds.width * 0.75)
     }
 }
 
