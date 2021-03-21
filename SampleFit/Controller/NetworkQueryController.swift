@@ -26,6 +26,35 @@ class NetworkQueryController {
     private var _imageLoadingCancellable: AnyCancellable?
     private var _otherUserProfileLoadingCancellable: AnyCancellable?
     
+    private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
+        
+        let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
+            
+            self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: live.email)
+                .receive(on: DispatchQueue.main)
+                .sink{returnedProfile in
+                    exercise.owningUser=returnedProfile
+            }
+        return exercise
+    }
+    
+    private func videoToExercise(upload: VideoFormat, uploadCategory: Exercise.Category)->Exercise{
+       
+        
+        let excercise = Exercise(id: upload.videoID, name: upload.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: PublicProfile(identifier: upload.email, fullName: nil), duration: nil, previewImageIdentifier: upload.videoImage)
+        
+        self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: upload.email)
+            .receive(on: DispatchQueue.main)
+            .sink{returnedProfile in
+                excercise.owningUser=returnedProfile
+            }
+        
+        excercise.peopleLimit=0
+        excercise.contentLink=upload.videoURL
+        
+        return excercise
+    }
+    
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
         struct emailCheck: Codable{
@@ -354,22 +383,16 @@ class NetworkQueryController {
                 let profile: PublicProfile = PublicProfile(identifier: email, fullName: nil)
                 profile.image=avatar
                 profile.nickname=nickname
+                var uploadCategory: Exercise.Category = Exercise.Category.cycling
                 
                 for upload in result.uploadedVideos{
-                    
-                    var uploadCategory: Exercise.Category = Exercise.Category.cycling
-                    
                     for category in Exercise.Category.allCases{
                         if category.networkCall == upload.videoCategory{
                             uploadCategory=category
-                        }
-                    }
-                        
-                    let excercise = Exercise(id: upload.videoID, name: upload.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: profile, duration: nil, previewImageIdentifier: upload.videoImage)
+                        }}
                     
-                    excercise.peopleLimit=0
-                    excercise.contentLink=upload.videoURL
-                    
+                    let excercise = self.videoToExercise(upload: upload, uploadCategory: uploadCategory)
+
                     videoUploaded.append(excercise)
                 }
                 
@@ -413,18 +436,7 @@ class NetworkQueryController {
                             uploadCategory=category
                         }
                     }
-                    
-                    var profile = PublicProfile(identifier: email, fullName: nil)
-                    
-                    self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: video.email).receive(on: DispatchQueue.main).sink{[unowned self] returnedProfile in
-                        
-                        profile=returnedProfile
-                    }
-                    
-                    let excercise = Exercise(id: video.videoID, name: video.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: profile, duration: nil, previewImageIdentifier: video.videoImage)
-                    
-                    excercise.peopleLimit=0
-                    excercise.contentLink=video.videoURL
+                    let excercise = self.videoToExercise(upload: video, uploadCategory: uploadCategory)
                     
                     likedVideos.append(excercise)
                 }
@@ -461,7 +473,7 @@ class NetworkQueryController {
                 profile.nickname=result.nickname
                 return profile
             }
-            .replaceError(with: PublicProfile(identifier: email, fullName: nil))
+            .assertNoFailure()
             .eraseToAnyPublisher()
     }
     
@@ -821,24 +833,10 @@ class NetworkQueryController {
                 var livestreams: [Exercise]=[]
                 
                 for live in result{
-                    
-                    let profile = PublicProfile(identifier: live.email, fullName: nil)
-                    
-                    self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: live.email)
-                        .receive(on: DispatchQueue.main)
-                        .sink{returnedProfile in
-                            profile.nickname=returnedProfile.nickname
-                            profile.image=returnedProfile.image
-                    }
-                    
-                    let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: profile, duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
-                    
-                    
-                    livestreams.append(exercise)
+                    let tmp = self.livestreamToExercise(live: live, category: category)
+                    livestreams.append(tmp)
                 }
-               
                 return livestreams
-                
             }
             .replaceError(with: [])
             .eraseToAnyPublisher()
