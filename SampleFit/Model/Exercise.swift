@@ -149,6 +149,10 @@ class Exercise: Identifiable, ObservableObject {
     func startLivestreamTimer() {
         _startTime = Date()
         
+       checkExpiration()
+    }
+    
+    func checkExpiration() {
         // checking locally if the event expired
         if playbackType == .live {
             self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
@@ -157,7 +161,13 @@ class Exercise: Identifiable, ObservableObject {
                     print($0)
                 })
                 .map { Int($0.timeIntervalSinceReferenceDate) / 60 }
-                .map { $0 == Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
+                .handleEvents(receiveOutput: {
+                    print($0)
+                })
+                .map { $0 >= Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
+                .handleEvents(receiveOutput: {
+                    print($0)
+                })
                 .assign(to: \.isExpired, on: self)
         }
     }
