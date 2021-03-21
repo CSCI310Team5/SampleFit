@@ -197,12 +197,9 @@ class UserData: ObservableObject {
         
         private func _fetchExerciseFeeds() {
             for category in Exercise.Category.allCases {
-                _fetchLivestreamCancellable = networkQueryController.getLivestreamByCategory(category: category, token: token)
-                    .receive(on: DispatchQueue.main)
-                    .sink {
-                        print("fetching!!!!")
-                        self.privateInformation.exerciseFeeds.append(contentsOf: $0)
-                    }
+                var tmp = fetchVideoFeeds(category: category, token: token)
+                self.privateInformation.exerciseFeeds.append(contentsOf: tmp)
+                fetchLiveFeeds(category: category, token: token)
             }
         }
     
@@ -215,15 +212,15 @@ class UserData: ObservableObject {
                 }
         }
     }
-//    func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise] {
-//        var output:[Exercise]=[]
-//        _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
-//            .receive(on: DispatchQueue.main)
-//            .sink{[unowned self] exercises in
-//                output=exercises
-//            }
-//        return output
-//    }
+    func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise] {
+        var output:[Exercise]=[]
+        _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] exercises in
+                output=exercises
+            }
+        return output
+    }
     
     
         

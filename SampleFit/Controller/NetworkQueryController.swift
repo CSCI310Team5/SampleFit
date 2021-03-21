@@ -397,7 +397,7 @@ class NetworkQueryController {
                     videoUploaded.append(excercise)
                 }
                 
-                return videoUploaded
+            return videoUploaded
             }
             .replaceError(with: [])
             .eraseToAnyPublisher()
