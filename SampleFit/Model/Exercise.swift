@@ -117,6 +117,7 @@ class Exercise: Identifiable, ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
         
+        checkExpiration()
     }
     
     
