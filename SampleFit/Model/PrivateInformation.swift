@@ -46,8 +46,16 @@ class PrivateInformation: ObservableObject {
     func getFollowList(token: String, email: String){
         _getFollowListCancellable=networkQueryController.getFollowList(email:email , token: token)
             .receive(on: DispatchQueue.main)
-            .sink{[unowned self] workouts in
-                followedUsers=workouts
+            .sink{[unowned self] returnedList in
+                for r in returnedList{
+                    let profile = PublicProfile(identifier: r.email, fullName: nil)
+                    profile.nickname = r.nickname
+                    profile.uploadedExercises = []
+                    if r.avatar != nil && !r.avatar!.isEmpty{
+                        profile.loadAvatar(url: r.avatar!)
+                    }
+                    followedUsers.append(profile)
+                }
             }
     }
     

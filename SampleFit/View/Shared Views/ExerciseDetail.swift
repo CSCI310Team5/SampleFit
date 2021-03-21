@@ -11,7 +11,7 @@ import AVKit
 struct ExerciseDetail: View {
     @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
-    var exercise: Exercise
+    @State var exercise: Exercise
     @State private var isWorkingout = false
     
     var body: some View {
@@ -162,6 +162,9 @@ struct ExerciseDetail: View {
         }
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear{
+            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
+        }
     }
 }
 

@@ -162,7 +162,7 @@ class UserData: ObservableObject {
         _profileCancellable = networkQueryController.getProfile(email: identifier, token: token)
             .receive(on: DispatchQueue.main)
             .sink{[unowned self] token in
-                print("GET IN GET PROFILE SINK")
+
                 publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
                 let formatter = DateFormatter()
                 formatter.dateFormat = "yyyy-MM-dd"

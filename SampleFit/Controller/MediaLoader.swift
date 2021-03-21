@@ -16,7 +16,6 @@ class MediaLoader {
             return Just(UIImage(named: identifier))
                 .eraseToAnyPublisher()
         } else {
-            // FIXME: Use actual identifer to load image from network
             return NetworkQueryController.shared.loadImage(fromURL: URL(string:identifier)!)
         }
     }

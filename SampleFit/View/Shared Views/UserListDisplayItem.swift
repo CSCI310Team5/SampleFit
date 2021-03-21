@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserListDisplayItem: View {
-    var user: PublicProfile
+    @ObservedObject var user: PublicProfile
     
     var body: some View {
         VStack {

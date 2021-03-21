@@ -24,18 +24,10 @@ struct MessagedError: Error {
 
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
-    private var _imageLoadingCancellable: AnyCancellable?
-    private var _otherUserProfileLoadingCancellable: AnyCancellable?
-    
+ 
     private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
         
         let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
-        
-        self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: live.email)
-            .receive(on: DispatchQueue.main)
-            .sink{returnedProfile in
-                exercise.owningUser=returnedProfile
-            }
         return exercise
     }
     
@@ -43,12 +35,6 @@ class NetworkQueryController {
         
         
         let excercise = Exercise(id: upload.videoID, name: upload.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: PublicProfile(identifier: upload.email, fullName: nil), duration: nil, previewImageIdentifier: upload.videoImage)
-        
-        self._otherUserProfileLoadingCancellable = NetworkQueryController.shared.getOtherUserInfoExeptUploadedExercises(email: upload.email)
-            .receive(on: DispatchQueue.main)
-            .sink{returnedProfile in
-                excercise.owningUser=returnedProfile
-            }
         
         excercise.peopleLimit=0
         excercise.contentLink=upload.videoURL
@@ -186,13 +172,13 @@ class NetworkQueryController {
                 if(result.token.isEmpty){
                     return ""
                 }
-                //                print("Login token: \(result.token)")
                 return result.token
             }
             .replaceError(with: "")
             .eraseToAnyPublisher()
     }
     
+    //returns this user's height, weight, etc
     func getProfile(email:String, token:String) -> AnyPublisher<ProfileData,Never>{
         
         struct EncodeData: Codable{
@@ -206,18 +192,9 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-        
-        //        print("Token: \(token)")
-        //
-        //        print(String(data: encode, encoding: .utf8)!)
+
         return URLSession.shared.dataTaskPublisher(for: request)
-            //                        .handleEvents(receiveOutput: { outputValue in
-            //
-            //                            print("This is the OutPUT!!!: \( outputValue)")
-            //                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
-            //                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
-            //                            print(decode)
-            //                        })
+
             .map{
                 $0.data
             }
@@ -228,6 +205,31 @@ class NetworkQueryController {
             .replaceError(with: ProfileData())
             .eraseToAnyPublisher()
     }
+    
+    //returns everything except uploaded exercises list needed to show userDetail view
+    func getOtherUserInfoExeptUploadedExercises(email:String)->AnyPublisher<OtherUserProfile, Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/getOtherUserInfo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map {
+                $0.data
+            }
+            .decode(type: OtherUserProfile.self, decoder: JSONDecoder())
+            .map{result in
+                return result
+            }
+            .replaceError(with: OtherUserProfile(email: email))
+            .eraseToAnyPublisher()
+    }
+    
     
     func follow(email: String, followUser: String, token: String)-> AnyPublisher<Bool, Never>{
         struct EncodeData: Codable{
@@ -308,7 +310,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func getFollowList(email: String, token: String)-> AnyPublisher<[PublicProfile], Never>{
+    func getFollowList(email: String, token: String)-> AnyPublisher<[OtherUserProfile], Never>{
         struct EncodeData: Codable{
             var email: String
         }
@@ -320,32 +322,12 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                print(String(data: outputValue.data, encoding: .utf8))
-                let decode = try! JSONDecoder().decode([OtherUserProfile].self, from: outputValue.data)
-                print("\(decode)")
-            })
             .map{
                 $0.data
             }
             .decode(type: [OtherUserProfile].self, decoder: JSONDecoder())
             .map{result in
-                var profileList : [PublicProfile] = []
-                for r in result{
-                    let profile = PublicProfile(identifier: r.email, fullName: nil)
-                    profile.nickname = r.nickname
-                    profile.uploadedExercises = []
-                    if r.avatar != nil && !r.avatar!.isEmpty {
-                        self._imageLoadingCancellable =
-                            NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(r.avatar!)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
-                            }}
-                    profileList.append(profile)
-                    
-                }
-                return profileList
-                
+                return result
             }
             .replaceError(with: [])
             .eraseToAnyPublisher()
@@ -397,8 +379,6 @@ class NetworkQueryController {
     }
     
     
-    
-    
     func getLikedVideos(email: String, token: String) -> AnyPublisher<[Exercise],Never>{
         struct EncodeData: Codable{
             var email: String
@@ -438,49 +418,6 @@ class NetworkQueryController {
                 return likedVideos
             }
             .replaceError(with: [])
-            .eraseToAnyPublisher()
-    }
-    
-    //returns everything except uploaded exercises list
-    func getOtherUserInfoExeptUploadedExercises(email:String)->AnyPublisher<PublicProfile, Never>{
-        struct EncodeData: Codable{
-            var email: String
-        }
-        
-        let encodeData = EncodeData(email: email)
-        let encode = try! JSONEncoder().encode(encodeData)
-        let url = URL(string: "http://127.0.0.1:8000/user/getOtherUserInfo")!
-        var request = URLRequest(url: url)
-        request.httpMethod="POST"
-        request.httpBody=encode
-        let profile: PublicProfile = PublicProfile(identifier: email, fullName: nil)
-        
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                print(String(data: outputValue.data, encoding: .utf8))
-                let decode = try! JSONDecoder().decode(OtherUserProfile.self, from: outputValue.data)
-                print("\(decode)")
-            })
-            .map {
-                $0.data
-            }
-            .decode(type: OtherUserProfile.self, decoder: JSONDecoder())
-            .map{result in
-                if result.avatar != nil && !result.avatar!.isEmpty {
-                    self._imageLoadingCancellable =
-                        NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(result.avatar!)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
-                            /* http:/sdfsdfsdfd8000/media/users/avatars/zihanqiusc.edu.png */
-                        }}
-                profile.nickname=result.nickname
-                return profile
-            }
-            .handleEvents(receiveOutput: {
-                print($0)
-            })
-            .replaceError(with: PublicProfile(identifier: "errorprofileEmail@usc.edu", fullName: nil))
             .eraseToAnyPublisher()
     }
     
@@ -831,12 +768,6 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
-//            .handleEvents(receiveOutput: { outputValue in
-//                print("This is the OutPUT!!!: \( outputValue)")
-//                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-//                print(String(data: outputValue.data, encoding: .utf8))
-//                let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
-//            })
             .map{
                 $0.data
             }.decode(type: [Livestream].self, decoder: JSONDecoder())
@@ -879,42 +810,18 @@ class NetworkQueryController {
     
     
     
-    /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
-    func exerciseFeedsForUser(token: String) -> AnyPublisher<[Exercise], Never> {
-        
-        var exercises: [Exercise] = []
-        
-        
-        /*
-         func fetchLiveFeeds(category: Exercise.Category, token: String) -> [Exercise]{
-         var output:[Exercise]=[]
-         _fetchLivestreamCancellable=networkQueryController.getLivestreamByCategory(category: category, token: token)
-         .receive(on: DispatchQueue.main)
-         .sink{[unowned self] exercises in
-         output=exercises
-         }
-         return output
-         }
-         func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise]{
-         var output:[Exercise]=[]
-         _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
-         .receive(on: DispatchQueue.main)
-         .sink{[unowned self] exercises in
-         output=exercises
-         }
-         return output
-         }
-         */
-        
-        
-        
-        return Future<[Exercise], Error> { promise in
-            promise(.success(Exercise.exampleExercisesFull))
-        }
-        .replaceError(with: Exercise.exampleExercisesSmall)
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        .eraseToAnyPublisher()
-    }
+//    /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
+//    func exerciseFeedsForUser(token: String) -> AnyPublisher<[Exercise], Never> {
+//
+//        var exercises: [Exercise] = []
+//
+//        return Future<[Exercise], Error> { promise in
+//            promise(.success(Exercise.exampleExercisesFull))
+//        }
+//        .replaceError(with: Exercise.exampleExercisesSmall)
+//        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+//        .eraseToAnyPublisher()
+//    }
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
@@ -983,21 +890,37 @@ class NetworkQueryController {
     
     
     /// Quries the network for user results and returns a publisher that emits either relevant user credentials on success or an error on failure.
-    func searchUserResults(searchText: String) -> AnyPublisher<[PublicProfile], Error> {
-
-        return Future { promise in
-            promise(.success(PublicProfile.exampleProfiles.filter { $0.shouldAppearOnSearchText(searchText) }))
+    func searchUserResults(searchText: String) -> AnyPublisher<[OtherUserProfile], Never> {
+        struct EncodeData: Codable{
+            var search: String
         }
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        .eraseToAnyPublisher()
+        let encodeData = EncodeData(search: searchText)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/search/user")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: [OtherUserProfile].self, decoder: JSONDecoder())
+            .map{result in
+                return result
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
     }
     
     
     /// Returns a publisher that publishes image values if success and nil values if an eror occured.
     func loadImage(fromURL url: URL) -> AnyPublisher<UIImage?, Never> {
+        
         return URLSession.shared.dataTaskPublisher(for: url)
             .map{
-                UIImage(data: $0.data)
+                
+                 UIImage(data: $0.data)
+                
             }
             .replaceError(with: nil)
             .eraseToAnyPublisher()

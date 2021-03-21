@@ -77,12 +77,19 @@ class SearchState: ObservableObject {
         case .user:
             self.searchCancellable = NetworkQueryController.shared.searchUserResults(searchText: searchText)
                 .receive(on: DispatchQueue.main)
-                .replaceError(with: [])
-                .map { $0.sorted(by: <) }
-                .handleEvents(receiveOutput: {
-                    self.searchStatus = $0.isEmpty ? .noResults : .hasResults
-                })
-                .assign(to: \.userSearchResults, on: self)
+                .sink{[unowned self] returnedList in
+                    for r in returnedList{
+                        let profile = PublicProfile(identifier: r.email, fullName: nil)
+                        profile.nickname = r.nickname
+                        profile.uploadedExercises = []
+                        if r.avatar != nil && !r.avatar!.isEmpty{
+                            profile.loadAvatar(url: r.avatar!)
+                        }
+                        userSearchResults.append(profile)
+                    }
+                    userSearchResults.sort(by: <)
+                    self.searchStatus = userSearchResults.isEmpty ? .noResults : .hasResults
+                }
         }
     }
     

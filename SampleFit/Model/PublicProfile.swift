@@ -67,7 +67,7 @@ class PublicProfile: Identifiable, ObservableObject {
         let startComponents = DateComponents(year: 1900)
         let endComponents = calendar.dateComponents(in: calendar.timeZone, from: Date())
         self.birthdayDateRange = calendar.date(from: startComponents)! ... calendar.date(from: endComponents)!
-
+        
         _usesMetricSystem = Locale.autoupdatingCurrent.usesMetricSystem
         if _usesMetricSystem {
             // height ranges from 50cm to 200cm
@@ -84,12 +84,12 @@ class PublicProfile: Identifiable, ObservableObject {
     }
     
     func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
-       
+        
         if weight != nil {self._mass=Measurement(value: weight!, unit: UnitMass.kilograms)}
         if height != nil {self._height=Measurement(value: height!, unit: UnitLength.centimeters)}
         if height != nil {self.nickname=nickname!}
         self._birthday=birthday
-
+        
     }
     
     //MARK: - Asynchronous tasks
@@ -101,6 +101,8 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _createExerciseCancellable: AnyCancellable?
     private var _avatarUpadateCancellable: AnyCancellable?
     private var _getUploadedExercisesCancellable: AnyCancellable?
+    private var _otherUserInfoLoadingCancellable: AnyCancellable?
+    private var _imageLoadingCancellable: AnyCancellable?
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {
@@ -118,6 +120,31 @@ class PublicProfile: Identifiable, ObservableObject {
         copyProfile._mass = _mass
         return copyProfile
     }
+    
+    // retrives user's avatar, nickname
+    func getRemainingUserInfo(userEmail: String){
+        _otherUserInfoLoadingCancellable = networkQueryController.getOtherUserInfoExeptUploadedExercises(email: userEmail)
+            .receive(on: DispatchQueue.main)
+            .sink{returnedProfile in
+                self.nickname=returnedProfile.nickname
+                if returnedProfile.avatar != nil && !returnedProfile.avatar!.isEmpty{
+                    self.loadAvatar(url: returnedProfile.avatar!)
+                }
+            }}
+    
+    //load avatar given url
+    func loadAvatar(url: String){
+        self._imageLoadingCancellable = NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(url)")!)
+            .receive(on: DispatchQueue.main)
+            .handleEvents(
+                receiveOutput: { outputValue in
+                    print("Th: \( String(describing: outputValue))")
+                          }
+              
+            )
+            .assign(to: \.image, on: self)
+    }
+    
     
     //retrieves exercise uploads of a user, given that person's email
     func getExerciseUploads(userEmail: String){
@@ -168,7 +195,7 @@ class PublicProfile: Identifiable, ObservableObject {
                 .sink { [unowned self] success in
                     self.birthdayBinding = newProfile._birthday!
                 }
-          
+            
         }
         if self._height != newProfile._height{
             _heightUpdateCancellable=networkQueryController.changeHeight(email: self.identifier, height: newProfile._height!.converted(to: .centimeters).value, token: token)
@@ -275,7 +302,7 @@ extension PublicProfile {
         guard let mass = _mass else { return nil }
         return mass.converted(to: .kilograms).value
     }
-
+    
 }
 
 // MARK: - Protocol conformance

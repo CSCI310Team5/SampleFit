@@ -13,6 +13,7 @@ struct UserDetail: View {
     @ObservedObject var user: PublicProfile
     @ObservedObject var privateInformation: PrivateInformation
     
+
     var body: some View {
         VStack {
             
