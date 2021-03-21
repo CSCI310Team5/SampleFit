@@ -42,15 +42,16 @@ struct ExerciseDetail: View {
                             if exercise.playbackType != .recordedVideo{
                                 if exercise.isExpired {
                                     Text("This livestream has ended.")
-                                }
-                                HStack(spacing: 6) {
-                                    LiveIndicator()
-                                    Text("LIVE")
-                                        .font(.caption)
-                                    Spacer()
-                                    Text(exercise.durationDescription).font(.caption)
-                                    Spacer()
-                                    Text("\(exercise.peopleLimit) People Max").font(.caption)
+                                } else {
+                                    HStack(spacing: 6) {
+                                        LiveIndicator()
+                                        Text("LIVE")
+                                            .font(.caption)
+                                        Spacer()
+                                        Text(exercise.durationDescription).font(.caption)
+                                        Spacer()
+                                        Text("\(exercise.peopleLimit) People Max").font(.caption)
+                                    }
                                 }
                             }
                         }
@@ -78,7 +79,7 @@ struct ExerciseDetail: View {
                     }
                     
                     if exercise.playbackType == .live {
-                        Link("Join Live Stream", destination: URL(string: "https://google.com")!).font(.headline)
+                        Link("Join Live Stream", destination: URL(string: exercise.contentLink)!).font(.headline)
                             .foregroundColor(Color.systemBackground)
                             .frame(minWidth: 100, maxWidth: 150)
                             .frame(minWidth: 0, maxWidth: .infinity)
