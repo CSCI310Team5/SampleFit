@@ -20,19 +20,7 @@ struct ExerciseDetail: View {
             VStack {
                 if exercise.playbackType == .recordedVideo {
                     
-                    VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!)){
-                        
-                        Group {
-                            if exercise.image != nil {
-                                Image(uiImage:exercise.image!)
-                                    .resizable()
-                                    .scaledToFit()
-                            }
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .edgesIgnoringSafeArea(.all)
-                        
-                    }
+                    VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!))
                     .frame(height: 250)
                     
                 }else{
@@ -63,8 +51,6 @@ struct ExerciseDetail: View {
                                 }
                             }
                         }
-                        
-                        Text(exercise.description)
                         
                         Spacer()
                         
@@ -99,6 +85,8 @@ struct ExerciseDetail: View {
                                     .fill(Color.accentColor)
                             )
                     }
+                    
+                  
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)

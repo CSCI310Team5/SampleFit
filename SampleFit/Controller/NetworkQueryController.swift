@@ -530,6 +530,31 @@ class NetworkQueryController {
     }
     
     
+    func deleteLivestream(zoomLink: String, token: String)-> AnyPublisher<Bool, Never>{
+        
+        let dataThing = "zoomlink=\(zoomLink)".data(using: .utf8)
+        
+        let url = URL(string: "http://127.0.0.1:8000/user/deleteLiveStream")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=dataThing
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    
     func getWorkoutHistory(token: String, email: String)->AnyPublisher<[WorkoutHistory],Never>{
         
         struct EncodeData: Codable{
