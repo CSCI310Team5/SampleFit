@@ -16,11 +16,12 @@ struct BrowseView: View {
             ScrollView {
                 VStack {
                     FeaturedExercisesView(privateInformation: privateInformation)
-                                
+                    
                     // iterating category instead of the actual items to prevent ForEach from making a copy of the items array which could fail in rerendering
                     ForEach(Exercise.Category.allCases, id: \.self) { category in
-                        ExerciseCategoryRow(categoryName: category.description, items: privateInformation.exerciseInCategory[category]!)
-                    }
+                        if privateInformation.exerciseInCategory[category] != nil{
+                            ExerciseCategoryRow(categoryName: category.description, items: privateInformation.exerciseInCategory[category]!)
+                        }}
                     
                 }
             }
@@ -49,12 +50,12 @@ struct FeaturedExercisesView: View {
                     }
                 } else {
                     PlaceholderImage()
-                        
+                    
                 }
             }
             .frame(height: 200, alignment: .bottom)
             .frame(width: UIScreen.main.bounds.width)
-
+            
             .listRowInsets(EdgeInsets())
             .overlay(
                 ZStack(alignment: .bottomLeading) {
@@ -82,10 +83,10 @@ struct FeaturedExercisesView: View {
                     .padding()
                 }
                 .frame(width: UIScreen.main.bounds.width)
-            ,alignment: .bottomLeading)
+                ,alignment: .bottomLeading)
         }
         .buttonStyle(PlainButtonStyle())
-//        .edgesIgnoringSafeArea(.all)
+        //        .edgesIgnoringSafeArea(.all)
     }
 }
 

@@ -12,7 +12,7 @@ import Combine
 class PrivateInformation: ObservableObject {
     
     /// Flat array of exercises that should provide to the user as the browse exercise feeds.
-    @PublishedCollection var exerciseFeeds: [Exercise] = Exercise.exampleExercisesSmall
+    @PublishedCollection var exerciseFeeds: [Exercise] = []
     @Published var favoriteExercises: [Exercise] = []
     @Published var followedUsers: [PublicProfile] = []
     @Published var workoutHistory: [Workout] = []

@@ -142,16 +142,7 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         
-        //        print(String(data: encode, encoding: .utf8)!)
-        
         return URLSession.shared.dataTaskPublisher(for: request)
-            //            .handleEvents(receiveOutput: { outputValue in
-            //
-            //                print("This is the OutPUT!!!: \( outputValue)")
-            //                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-            //                let decode = try! JSONDecoder().decode(SignUpData.self, from: outputValue.data)
-            //                print(decode.OK)
-            //            })
             .map {
                 $0.data
             }
@@ -164,9 +155,6 @@ class NetworkQueryController {
                 
             }
             .replaceError(with: "")
-            //            .handleEvents(receiveOutput: {
-            //                print("This is the final output: \($0)")
-            //            })
             .eraseToAnyPublisher()
     }
     
@@ -332,12 +320,17 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: { outputValue in
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                print(String(data: outputValue.data, encoding: .utf8))
+                let decode = try! JSONDecoder().decode([OtherUserProfile].self, from: outputValue.data)
+                print("\(decode)")
+            })
             .map{
                 $0.data
             }
             .decode(type: [OtherUserProfile].self, decoder: JSONDecoder())
-            .handleEvents(
-            )
             .map{result in
                 var profileList : [PublicProfile] = []
                 for r in result{
@@ -346,7 +339,7 @@ class NetworkQueryController {
                     profile.uploadedExercises = []
                     if r.avatar != nil && !r.avatar!.isEmpty {
                         self._imageLoadingCancellable =
-                            NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(r.avatar)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
+                            NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(r.avatar!)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
                             }}
                     profileList.append(profile)
                     
@@ -477,7 +470,6 @@ class NetworkQueryController {
             .decode(type: OtherUserProfile.self, decoder: JSONDecoder())
             .map{result in
                 if result.avatar != nil && !result.avatar!.isEmpty {
-                    print(URL(string: "http://127.0.0.1:8000\(result.avatar!)"))
                     self._imageLoadingCancellable =
                         NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(result.avatar!)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
                             /* http:/sdfsdfsdfd8000/media/users/avatars/zihanqiusc.edu.png */
@@ -831,29 +823,27 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never> {
+    
+    func getAllLivestream(token: String) -> AnyPublisher<[Exercise],Never> {
         
-        let dataThing = "category=\(category.networkCall)".data(using: .utf8)
-        let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
+        let url = URL(string: "http:127.0.0.1:8000/search/getAllLivestreams")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
-        request.httpBody=dataThing
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                print(String(data: outputValue.data, encoding: .utf8))
-                let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
-            })
+//            .handleEvents(receiveOutput: { outputValue in
+//                print("This is the OutPUT!!!: \( outputValue)")
+//                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+//                print(String(data: outputValue.data, encoding: .utf8))
+//                let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
+//            })
             .map{
                 $0.data
             }.decode(type: [Livestream].self, decoder: JSONDecoder())
             .map{result in
                 var livestreams: [Exercise]=[]
-                
                 for live in result{
+                    let category = Exercise.Category.identify(networkCall: live.category)
                     let tmp = self.livestreamToExercise(live: live, category: category)
                     livestreams.append(tmp)
                 }
@@ -863,28 +853,21 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func getVideoByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never>{
+    func getAllVideo( token: String) -> AnyPublisher<[Exercise],Never>{
         
-        let dataThing = "videoCategory=\(category.networkCall)".data(using: .utf8)
-        let url = URL(string: "http://127.0.0.1:8000/categories/getVideo")!
+      
+        let url = URL(string: "http://127.0.0.1:8000/search/getAllVideos")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
-        request.httpBody=dataThing
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                let decode = try! JSONDecoder().decode([VideoFormat].self, from: outputValue.data)
-                print("\(decode)")
-            })
             .map{
                 $0.data
             }.decode(type: [VideoFormat].self, decoder: JSONDecoder())
             .map{result in
                 var videos: [Exercise]=[]
                 for video in result{
+                    var category = Exercise.Category.identify(networkCall: video.videoCategory)
                     let tmp = self.videoToExercise(upload:video, uploadCategory: category)
                     videos.append(tmp)
                 }
@@ -936,11 +919,11 @@ class NetworkQueryController {
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
         struct SearchData: Codable {
-            var searchText: String = ""
-            var searchType: String = ""
+            var title: String = ""
+            var category: String = ""
         }
         
-        let encodeData = SearchData(searchText: searchText, searchType: category?.networkCall ?? "")
+        let encodeData = SearchData(title: searchText, category: category?.networkCall ?? "")
         let encode = try! JSONEncoder().encode(encodeData)
         
         let url = URL(string: "http://127.0.0.1:8000/search/videoAndLivestream")!
@@ -953,12 +936,13 @@ class NetworkQueryController {
             var livestreams: [Livestream]
         }
         return URLSession.shared.dataTaskPublisher(for: request)
-            .handleEvents(receiveOutput: { outputValue in
-                print("This is the OutPUT!!!: \( outputValue)")
-                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                let decode = try! JSONDecoder().decode(Returned.self, from: outputValue.data)
-                print("\(decode)")
-            })
+//            .handleEvents(receiveOutput: { outputValue in
+//                print("This is the OutPUT!!!: \( outputValue)")
+//                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+//                print(String(data: outputValue.data, encoding: .utf8))
+//                let decode = try! JSONDecoder().decode(Returned.self, from: outputValue.data)
+//                print("\(decode)")
+//            })
             .map{
                 $0.data
             }.decode(type: Returned.self, decoder: JSONDecoder())
@@ -997,46 +981,10 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    /*
-     func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never> {
-     
-     let dataThing = "category=\(category.networkCall)".data(using: .utf8)
-     let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
-     var request = URLRequest(url: url)
-     request.httpMethod="POST"
-     request.httpBody=dataThing
-     request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-     return URLSession.shared.dataTaskPublisher(for: request)
-     .handleEvents(receiveOutput: { outputValue in
-     
-     print("This is the OutPUT!!!: \( outputValue)")
-     print( (outputValue.response as! HTTPURLResponse ).statusCode)
-     print(String(data: outputValue.data, encoding: .utf8))
-     let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
-     })
-     .map{
-     $0.data
-     }.decode(type: [Livestream].self, decoder: JSONDecoder())
-     .map{result in
-     var livestreams: [Exercise]=[]
-     
-     for live in result{
-     let tmp = self.livestreamToExercise(live: live, category: category)
-     livestreams.append(tmp)
-     }
-     return livestreams
-     }
-     .replaceError(with: [])
-     .eraseToAnyPublisher()
-     }
-     */
-    
     
     /// Quries the network for user results and returns a publisher that emits either relevant user credentials on success or an error on failure.
     func searchUserResults(searchText: String) -> AnyPublisher<[PublicProfile], Error> {
-        // FIXME: Search for user results for user over network
-        // assuming success now
-        // faking networking delay of 2 seconds
+
         return Future { promise in
             promise(.success(PublicProfile.exampleProfiles.filter { $0.shouldAppearOnSearchText(searchText) }))
         }
