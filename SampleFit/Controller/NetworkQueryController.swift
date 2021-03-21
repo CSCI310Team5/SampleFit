@@ -876,10 +876,34 @@ class NetworkQueryController {
     
     
     /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
-    func exerciseFeedsForUser(withProfile profile: PublicProfile) -> AnyPublisher<[Exercise], Never> {
-        // FIXME: Search for exercise feeds for user over network
-        // assuming success now
-        // faking networking delay of 2 seconds
+    func exerciseFeedsForUser(token: String) -> AnyPublisher<[Exercise], Never> {
+        
+        var exercises: [Exercise] = []
+        
+        
+        /*
+         func fetchLiveFeeds(category: Exercise.Category, token: String) -> [Exercise]{
+             var output:[Exercise]=[]
+             _fetchLivestreamCancellable=networkQueryController.getLivestreamByCategory(category: category, token: token)
+                 .receive(on: DispatchQueue.main)
+                 .sink{[unowned self] exercises in
+                     output=exercises
+                 }
+             return output
+         }
+         func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise]{
+             var output:[Exercise]=[]
+             _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
+                 .receive(on: DispatchQueue.main)
+                 .sink{[unowned self] exercises in
+                     output=exercises
+                 }
+             return output
+         }
+         */
+        
+        
+        
         return Future<[Exercise], Error> { promise in
             promise(.success(Exercise.exampleExercisesFull))
         }
@@ -964,11 +988,12 @@ class NetworkQueryController {
             exportSession!.exportAsynchronously {
                 switch exportSession!.status{
                 case .failed:
+                    print("encoding failed")
                     promise(.failure(exportSession!.error!))
                 case .cancelled:
                     print("Export cancelled")
                 case .completed:
-                    print("Successful")
+                    print("encoding Successful")
                     promise(.success(exportSession!.outputURL!))
                 default:
                     break
@@ -1002,9 +1027,9 @@ class NetworkQueryController {
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        return Future<Bool, Never> { [unowned self] promise in
+        return Future<Exercise, Never> { [unowned self] promise in
             _videoEncodingCancellable = _encodeVideoAsMP4(videoURL: videoURL)
-                .assertNoFailure()
+                .replaceError(with: videoURL)
                 .sink { mp4VideoURL in
                     // video is now converted to MP4
                     
@@ -1047,12 +1072,29 @@ class NetworkQueryController {
                     request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
                     
                     _videoUploadCancellable = URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+                            
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            print(String(data: outputValue.data, encoding: .utf8))
+                            let decode = try! JSONDecoder().decode(VideoFormat.self, from: outputValue.data)
+                            print("\(decode)")
+                        })
                         .map { $0.data }
+                        
                         .decode(type: VideoFormat.self, decoder: JSONDecoder())
-                        .assertNoFailure()
-                        .sink {
-//                            self.convert
+                        .mapError {
+//                            print("Error: \(($0 as! URLError).localizedDescription)")
+                            return MessagedError(message: ($0 as! URLError).localizedDescription)
+                            
                         }
+                        .replaceError(with: VideoFormat())
+                        .map {
+                            let exercise = self.videoToExercise(upload: $0, uploadCategory: exercise.category)
+                            print(exercise)
+                            promise(.success(exercise))
+                        }
+                        .sink { _ in }
                 }
         }
         .eraseToAnyPublisher()

@@ -152,7 +152,7 @@ class UserData: ObservableObject {
             // change sign in status
             manageSignInStatusAfterSignIn(true)
             // fetch social information
-            _fetchExerciseFeeds(usingProfile: publicProfile)
+            _fetchExerciseFeeds()
         }
         
         private func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
@@ -195,39 +195,42 @@ class UserData: ObservableObject {
             }
         }
         
-        private func _fetchExerciseFeeds(usingProfile profile: PublicProfile) {
-            // fetch social information
-            _fetchExerciseFeedCancellable = networkQueryController.exerciseFeedsForUser(withProfile: profile)
-                .receive(on: DispatchQueue.main)
-                .assign(to: \.privateInformation.exerciseFeeds, on: self)
-
-
+        private func _fetchExerciseFeeds() {
+            for category in Exercise.Category.allCases {
+                _fetchLivestreamCancellable = networkQueryController.getLivestreamByCategory(category: category, token: token)
+                    .receive(on: DispatchQueue.main)
+                    .sink {
+                        print("fetching!!!!")
+                        self.privateInformation.exerciseFeeds.append(contentsOf: $0)
+                    }
+            }
         }
     
-    func fetchLiveFeeds(category: Exercise.Category, token: String) -> [Exercise]{
-        var output:[Exercise]=[]
-        _fetchLivestreamCancellable=networkQueryController.getLivestreamByCategory(category: category, token: token)
-            .receive(on: DispatchQueue.main)
-            .sink{[unowned self] exercises in
-                output=exercises
-            }
-        return output
+    func fetchLiveFeeds(category: Exercise.Category, token: String) {
+        for category in Exercise.Category.allCases {
+            _fetchLivestreamCancellable = networkQueryController.getLivestreamByCategory(category: category, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink {
+                    self.privateInformation.exerciseFeeds.append(contentsOf: $0)
+                }
+        }
     }
-    func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise]{
-        var output:[Exercise]=[]
-        _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
-            .receive(on: DispatchQueue.main)
-            .sink{[unowned self] exercises in
-                output=exercises
-            }
-        return output
-    }
+//    func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise] {
+//        var output:[Exercise]=[]
+//        _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
+//            .receive(on: DispatchQueue.main)
+//            .sink{[unowned self] exercises in
+//                output=exercises
+//            }
+//        return output
+//    }
     
     
         
         static var signedInUserData: UserData {
             let userData = UserData()
-            userData._storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: "signedInUser")
+            userData._storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: "zihanqi@usc.edu")
+            userData.token = "ddf6ca319829358b221d5d18c751f3b10940d4fc"
             userData.privateInformation = PrivateInformation.examplePrivateInformation
             return userData
         }
