@@ -12,7 +12,7 @@ import AVFoundation
 
 /// You can use VideoPicker to select a single video from the user's photo library.
 struct VideoPicker: UIViewControllerRepresentable {
-    @Binding var videoPlayer: AVPlayer?
+    @Binding var videoURL: URL?
     @Binding var isLoading: Bool
     @Binding var isPresented: Bool
     
@@ -61,7 +61,7 @@ struct VideoPicker: UIViewControllerRepresentable {
                     }
                     
                     try? FileManager.default.copyItem(at: url, to: targetURL)
-                    self.parent.videoPlayer = AVPlayer(url: targetURL)
+                    self.parent.videoURL = targetURL
                     self.parent.isLoading = false
                 }
             }
@@ -71,7 +71,7 @@ struct VideoPicker: UIViewControllerRepresentable {
 }
 
 struct VideoPicker_Preview: View {
-    @State private var player: AVPlayer?
+    @State private var url: URL?
     @State private var isLoading = false
     @State private var isPresented = false
     var body: some View {
@@ -81,7 +81,9 @@ struct VideoPicker_Preview: View {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                 } else {
-                    VideoPlayer(player: player)
+                    if url != nil {
+                        VideoPlayer(player: AVPlayer(url: url!))
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -91,7 +93,7 @@ struct VideoPicker_Preview: View {
             Button("Choose Video", action: { isPresented = true })
         }
         .sheet(isPresented: $isPresented) {
-            VideoPicker(videoPlayer: $player, isLoading: $isLoading, isPresented: $isPresented)
+            VideoPicker(videoURL: $url, isLoading: $isLoading, isPresented: $isPresented)
         }
     }
 }

@@ -29,7 +29,7 @@
 		F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932B025DE13A8000D9442 /* PrivateInformation.swift */; };
 		F66932B625DE147F000D9442 /* NetworkQueryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932B525DE147F000D9442 /* NetworkQueryController.swift */; };
 		F66932BE25DE18B1000D9442 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932BD25DE18B1000D9442 /* Exercise.swift */; };
-		F66932C625DE1A09000D9442 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932C525DE1A09000D9442 /* ImageLoader.swift */; };
+		F66932C625DE1A09000D9442 /* MediaLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932C525DE1A09000D9442 /* MediaLoader.swift */; };
 		F66932D725DF6B9C000D9442 /* PublicProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932D625DF6B9C000D9442 /* PublicProfile.swift */; };
 		F66932F425DF749B000D9442 /* PropertyWrapper+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932F325DF749B000D9442 /* PropertyWrapper+Helpers.swift */; };
 		F669331625DFAF29000D9442 /* PlaceholderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F669331525DFAF29000D9442 /* PlaceholderImage.swift */; };
@@ -130,7 +130,7 @@
 		F66932B025DE13A8000D9442 /* PrivateInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateInformation.swift; sourceTree = "<group>"; };
 		F66932B525DE147F000D9442 /* NetworkQueryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkQueryController.swift; sourceTree = "<group>"; };
 		F66932BD25DE18B1000D9442 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
-		F66932C525DE1A09000D9442 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		F66932C525DE1A09000D9442 /* MediaLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLoader.swift; sourceTree = "<group>"; };
 		F66932D625DF6B9C000D9442 /* PublicProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicProfile.swift; sourceTree = "<group>"; };
 		F66932F325DF749B000D9442 /* PropertyWrapper+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PropertyWrapper+Helpers.swift"; sourceTree = "<group>"; };
 		F669331525DFAF29000D9442 /* PlaceholderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderImage.swift; sourceTree = "<group>"; };
@@ -260,7 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				F66932B525DE147F000D9442 /* NetworkQueryController.swift */,
-				F66932C525DE1A09000D9442 /* ImageLoader.swift */,
+				F66932C525DE1A09000D9442 /* MediaLoader.swift */,
 				F669332425E087F8000D9442 /* TokenEventController.swift */,
 			);
 			path = Controller;
@@ -636,7 +636,7 @@
 				F688EBBD25F8A800005F959A /* AuthenticationVerifiers.swift in Sources */,
 				F669331B25DFB3E5000D9442 /* ExerciseDetail.swift in Sources */,
 				F669338A25E10070000D9442 /* SearchState.swift in Sources */,
-				F66932C625DE1A09000D9442 /* ImageLoader.swift in Sources */,
+				F66932C625DE1A09000D9442 /* MediaLoader.swift in Sources */,
 				F66932BE25DE18B1000D9442 /* Exercise.swift in Sources */,
 				F6E3095425E4DBE400F4B7A6 /* LoadingSearch.swift in Sources */,
 				F6E8AF1325F839AF00EF4BE4 /* PasswordTextField.swift in Sources */,

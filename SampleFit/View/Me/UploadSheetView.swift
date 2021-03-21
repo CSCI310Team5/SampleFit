@@ -11,7 +11,7 @@ import Combine
 import Foundation
 
 
-    
+
 struct UploadSheetView: View  {
     
     @ObservedObject var publicProfile: PublicProfile
@@ -21,17 +21,19 @@ struct UploadSheetView: View  {
     @State private var name=""
     @State private var description=""
     @State private var category = Exercise.Category.hiit
-    @State private var playbackType = true
+    @State private var isLivestream = false
     @State private var isImagePickerPresented = false
     @State private var image = PublicProfile.exampleProfile.image
     @State private var duration = 2
     @State private var peopleLimit = 2
     @State private var contentLink = ""
     @State private var isVideoPickerPresented = false
+    @State private var isVideoLoading = false
+    @State private var videoURL: URL?
     @ObservedObject var newUpload: Exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: "", description: "", category: .pushup, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 2, unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: 0, contentlink: "")
     
     let pickerController = UIImagePickerController()
-        
+    
     var body: some View {
         VStack {
             HStack {
@@ -43,7 +45,7 @@ struct UploadSheetView: View  {
                     newUpload.category=category
                     newUpload.description=description
                     newUpload.duration=Measurement(value: Double(duration), unit: UnitDuration.minutes)
-                    if playbackType{
+                    if isLivestream{
                         newUpload.playbackType =  Exercise.PlaybackType.live
                         newUpload.contentLink=contentLink
                         newUpload.peopleLimit=peopleLimit
@@ -64,43 +66,72 @@ struct UploadSheetView: View  {
             
             NavigationView{
                 Form{
-                    if !playbackType{
                     HStack {
-                        Text("Profile Image Preview")
+                        Text("Media Type")
+                        
+                        Spacer()
+                        Text("Video")
+                        Toggle("", isOn: $isLivestream)
+                            .labelsHidden()
+                        Text("Livestream")
+                    }
+                    
+                    
+                    HStack {
+                        Text("Preview Image")
+                        Spacer()
                         Image(uiImage: image!)
                             .resizable().scaledToFit()
                     }.frame(height: 100)
-                    }
                     
-                        Toggle(isOn: $playbackType) {
-                            Text("LiveStream")
-                        }
-                    if !playbackType{
-                        Button("Add Profile Image"){
-                            isImagePickerPresented.toggle()
-                        }
-                        .sheet(isPresented: $isImagePickerPresented) {
-                            ImagePicker(image: $image, isPresented: $isImagePickerPresented)
-                        }
+                    Button("Add Preview Image") {
+                        isImagePickerPresented.toggle()
                     }
-                        
-                        TextField("Name",text:$name)
-                        
-                        TextField("Description",text:$description)
-                        
-                        Picker(selection: $category, label: Text("Exercise Category")) {
-                            ForEach(Exercise.Category.allCases, id: \.self) {
-                                Text($0.description)
+                    .sheet(isPresented: $isImagePickerPresented) {
+                        ImagePicker(image: $image, isPresented: $isImagePickerPresented)
+                    }
+                    if !isLivestream {
+                        Group {
+                            HStack {
+                                Button("Upload Video") {
+                                    isVideoPickerPresented = true
+                                }
+                                
+                                Spacer()
+                                
+                                if isVideoLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                } else {
+                                    if videoURL != nil {
+                                        Text(videoURL!.lastPathComponent)
+                                    }
+                                }
                             }
                         }
-                        
-                        Picker(selection: $duration, label: Text("Time Length")){
-                            ForEach(1...40, id: \.self) {
-                                Text("\($0) Min")
-                            }
+                        .sheet(isPresented: $isVideoPickerPresented) {
+                            VideoPicker(videoURL: $videoURL, isLoading: $isVideoLoading, isPresented: $isVideoPickerPresented)
                         }
+                    }
                     
-                    if playbackType{
+                    
+                    TextField("Name",text:$name)
+                    
+                    TextField("Description",text:$description)
+                    
+                    Picker(selection: $category, label: Text("Exercise Category")) {
+                        ForEach(Exercise.Category.allCases, id: \.self) {
+                            Text($0.description)
+                        }
+                    }
+                    
+                    Picker(selection: $duration, label: Text("Time Length")){
+                        ForEach(1...40, id: \.self) {
+                            Text("\($0) Min")
+                        }
+                    }
+                    
+                    if isLivestream{
                         Picker(selection: $peopleLimit, label: Text("People Limit")){
                             ForEach(1...50, id: \.self) {
                                 Text("\($0) People")
@@ -110,23 +141,23 @@ struct UploadSheetView: View  {
                         TextField("LiveStream Link",text:$contentLink)
                     }
                     else{
-//                        Button("Add Video"){
-//                            isVideoPickerPresented.toggle()
-//                        }
-//                        .sheet(isPresented: $isVideoPickerPresented) {
-//                            let picker = UIImagePickerController()
-//                            picker
-//                        }
+                        //                        Button("Add Video"){
+                        //                            isVideoPickerPresented.toggle()
+                        //                        }
+                        //                        .sheet(isPresented: $isVideoPickerPresented) {
+                        //                            let picker = UIImagePickerController()
+                        //                            picker
+                        //                        }
                     }
                 }
             }
             Spacer()
         }
-//        .onDisappear(
-//            perform: {
-//                print("hahahaha")
-//            }
-//        )
+        //        .onDisappear(
+        //            perform: {
+        //                print("hahahaha")
+        //            }
+        //        )
     }
 }
 
@@ -134,7 +165,9 @@ struct UploadSheetView_Previews: PreviewProvider {
     
     
     static var previews: some View {
-        UploadSheetView(publicProfile: PublicProfile.exampleProfile , isPresented: .constant(false))
+        MultiplePreview(embedInNavigationView: false) {
+            UploadSheetView(publicProfile: PublicProfile.exampleProfile , isPresented: .constant(false))
+        }
     }
     
 }

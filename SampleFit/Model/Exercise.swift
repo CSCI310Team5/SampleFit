@@ -96,7 +96,7 @@ class Exercise: Identifiable, ObservableObject {
         self.peopleLimit = peoplelimt
         self.contentLink = contentlink
         self.previewImageIdentifier = previewImageIdentifier
-        self.imageLoadingCancellable = ImageLoader.shared.image(withIdentifier: previewImageIdentifier)
+        self.imageLoadingCancellable = MediaLoader.shared.image(withIdentifier: previewImageIdentifier)
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
     }
