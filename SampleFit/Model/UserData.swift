@@ -154,7 +154,7 @@ class UserData: ObservableObject {
         // change sign in status
         manageSignInStatusAfterSignIn(true)
         // fetch social information
-        _fetchExerciseFeeds(token: token)
+        fetchExerciseFeeds()
     }
     
     private func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
@@ -177,6 +177,7 @@ class UserData: ObservableObject {
                         .sink{[unowned self] avatar in
                             self.publicProfile.image=avatar}
                 }
+                publicProfile.authenticationToken = self.token
             }
         
         privateInformation.getFollowList(token: token, email: identifier)
@@ -198,7 +199,10 @@ class UserData: ObservableObject {
         }
     }
     
-    private func _fetchExerciseFeeds(token: String) {
+    func fetchExerciseFeeds() {
+        DispatchQueue.main.async {
+            self.privateInformation.exerciseFeeds = []
+        }
         self.fetchLiveFeeds(token: token)
         self.fetchVideoFeeds(token: token)
     }
@@ -206,23 +210,27 @@ class UserData: ObservableObject {
     func fetchLiveFeeds( token: String) {
         _fetchLivestreamCancellable = networkQueryController.getAllLivestream(token: token)
             .receive(on: DispatchQueue.main)
-            .sink {
-                self.privateInformation.exerciseFeeds.append(contentsOf: $0)
+            .sink { newExercises in
+                DispatchQueue.main.async {
+                    self.privateInformation.exerciseFeeds.append(contentsOf: newExercises)
+                }
             }
     }
     func fetchVideoFeeds(token: String){
         _fetchVideoCancellable = networkQueryController.getAllVideo(token: token)
             .receive(on: DispatchQueue.main)
-            .sink {
-                self.privateInformation.exerciseFeeds.append(contentsOf: $0)
+            .sink { newExercises in
+                DispatchQueue.main.async {
+                    self.privateInformation.exerciseFeeds.append(contentsOf: newExercises)
+                }
             }
     }
     
     static var signedInUserData: UserData {
         let userData = UserData()
-        userData._storeProfileAndManageSignInStatusAfterSignInSuccess(identifier: "zihanqi@usc.edu")
-        userData.token = "ddf6ca319829358b221d5d18c751f3b10940d4fc"
-        userData.privateInformation = PrivateInformation.examplePrivateInformation
+        userData.signInAuthenticationState.username = "zihanqi@usc.edu"
+        userData.signInAuthenticationState.password = "AAA111333"
+
         return userData
     }
     
