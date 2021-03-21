@@ -508,6 +508,12 @@ class NetworkQueryController {
         encodeData.timeLimit=Int((exercise.duration?.converted(to: .minutes).value)!)
         encodeData.peopleLimit=exercise.peopleLimit
         
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        encodeData.createTime=formatter.string(from: Date())
+    
         let encode = try! JSONEncoder().encode(encodeData)
         let url = URL(string: "http://127.0.0.1:8000/user/createLivestream")!
         var request = URLRequest(url: url)
@@ -803,6 +809,11 @@ class NetworkQueryController {
             .map{result in
                 var livestreams: [Exercise]=[]
                 for live in result{
+                    let formatter = DateFormatter()
+                    formatter.timeStyle = .short
+                    formatter.dateStyle = .short
+                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    encodeData.createTime=formatter.string(from: Date())
                     let category = Exercise.Category.identify(networkCall: live.category)
                     let tmp = self.livestreamToExercise(live: live, category: category)
                     livestreams.append(tmp)

@@ -42,6 +42,7 @@ struct Livestream: Codable{
     var description: String = ""
     var timeLimit: Int = 0
     var peopleLimit: Int = 0
+    var createTime: String=""
 }
 
 
