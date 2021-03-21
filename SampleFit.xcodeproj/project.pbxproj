@@ -29,7 +29,7 @@
 		F66932B125DE13A8000D9442 /* PrivateInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932B025DE13A8000D9442 /* PrivateInformation.swift */; };
 		F66932B625DE147F000D9442 /* NetworkQueryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932B525DE147F000D9442 /* NetworkQueryController.swift */; };
 		F66932BE25DE18B1000D9442 /* Exercise.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932BD25DE18B1000D9442 /* Exercise.swift */; };
-		F66932C625DE1A09000D9442 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932C525DE1A09000D9442 /* ImageLoader.swift */; };
+		F66932C625DE1A09000D9442 /* MediaLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932C525DE1A09000D9442 /* MediaLoader.swift */; };
 		F66932D725DF6B9C000D9442 /* PublicProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932D625DF6B9C000D9442 /* PublicProfile.swift */; };
 		F66932F425DF749B000D9442 /* PropertyWrapper+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66932F325DF749B000D9442 /* PropertyWrapper+Helpers.swift */; };
 		F669331625DFAF29000D9442 /* PlaceholderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F669331525DFAF29000D9442 /* PlaceholderImage.swift */; };
@@ -55,6 +55,7 @@
 		F691AFEA25F6FFE600283CE5 /* BirthdayEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */; };
 		F691AFEF25F7007000283CE5 /* HeightEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFEE25F7007000283CE5 /* HeightEditor.swift */; };
 		F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F691AFF325F7008F00283CE5 /* MassEditor.swift */; };
+		F6A5B1182606D53300559ED8 /* VideoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A5B1172606D53300559ED8 /* VideoPicker.swift */; };
 		F6B1224F25F86FF600EC8AEE /* FractionalWidthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B1224E25F86FF600EC8AEE /* FractionalWidthView.swift */; };
 		F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3BA25D5F9630023D250 /* TestView.swift */; };
 		F6C7A3C825D60FE30023D250 /* InputVerificationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6C7A3C725D60FE30023D250 /* InputVerificationStatus.swift */; };
@@ -129,7 +130,7 @@
 		F66932B025DE13A8000D9442 /* PrivateInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateInformation.swift; sourceTree = "<group>"; };
 		F66932B525DE147F000D9442 /* NetworkQueryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkQueryController.swift; sourceTree = "<group>"; };
 		F66932BD25DE18B1000D9442 /* Exercise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exercise.swift; sourceTree = "<group>"; };
-		F66932C525DE1A09000D9442 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		F66932C525DE1A09000D9442 /* MediaLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLoader.swift; sourceTree = "<group>"; };
 		F66932D625DF6B9C000D9442 /* PublicProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicProfile.swift; sourceTree = "<group>"; };
 		F66932F325DF749B000D9442 /* PropertyWrapper+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PropertyWrapper+Helpers.swift"; sourceTree = "<group>"; };
 		F669331525DFAF29000D9442 /* PlaceholderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderImage.swift; sourceTree = "<group>"; };
@@ -155,6 +156,7 @@
 		F691AFE925F6FFE600283CE5 /* BirthdayEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayEditor.swift; sourceTree = "<group>"; };
 		F691AFEE25F7007000283CE5 /* HeightEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeightEditor.swift; sourceTree = "<group>"; };
 		F691AFF325F7008F00283CE5 /* MassEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MassEditor.swift; sourceTree = "<group>"; };
+		F6A5B1172606D53300559ED8 /* VideoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPicker.swift; sourceTree = "<group>"; };
 		F6B1224E25F86FF600EC8AEE /* FractionalWidthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FractionalWidthView.swift; sourceTree = "<group>"; };
 		F6C7A3BA25D5F9630023D250 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		F6C7A3C725D60FE30023D250 /* InputVerificationStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputVerificationStatus.swift; sourceTree = "<group>"; };
@@ -258,7 +260,7 @@
 			isa = PBXGroup;
 			children = (
 				F66932B525DE147F000D9442 /* NetworkQueryController.swift */,
-				F66932C525DE1A09000D9442 /* ImageLoader.swift */,
+				F66932C525DE1A09000D9442 /* MediaLoader.swift */,
 				F669332425E087F8000D9442 /* TokenEventController.swift */,
 			);
 			path = Controller;
@@ -442,6 +444,7 @@
 				F66E6C2825F5EB6400F36D9D /* DisclosureIndicator.swift */,
 				F691AFC225F6095200283CE5 /* NotSetView.swift */,
 				F6E8AEF125F74E3C00EF4BE4 /* ImagePicker.swift */,
+				F6A5B1172606D53300559ED8 /* VideoPicker.swift */,
 				F6E8AEFB25F75E3100EF4BE4 /* CircleImage.swift */,
 				F6B1224E25F86FF600EC8AEE /* FractionalWidthView.swift */,
 			);
@@ -603,6 +606,7 @@
 				F6E8AF0625F82D6C00EF4BE4 /* ChangePasswordView.swift in Sources */,
 				F6DC3FFB25E87EB200A1CD00 /* ExerciseSearchResultList.swift in Sources */,
 				F61BA6B825D75D5E00249ED1 /* SearchView.swift in Sources */,
+				F6A5B1182606D53300559ED8 /* VideoPicker.swift in Sources */,
 				F669339525E100D8000D9442 /* UserListDisplayItem.swift in Sources */,
 				F669332025DFB75C000D9442 /* LiveIndicator.swift in Sources */,
 				F66E6C2925F5EB6400F36D9D /* DisclosureIndicator.swift in Sources */,
@@ -632,7 +636,7 @@
 				F688EBBD25F8A800005F959A /* AuthenticationVerifiers.swift in Sources */,
 				F669331B25DFB3E5000D9442 /* ExerciseDetail.swift in Sources */,
 				F669338A25E10070000D9442 /* SearchState.swift in Sources */,
-				F66932C625DE1A09000D9442 /* ImageLoader.swift in Sources */,
+				F66932C625DE1A09000D9442 /* MediaLoader.swift in Sources */,
 				F66932BE25DE18B1000D9442 /* Exercise.swift in Sources */,
 				F6E3095425E4DBE400F4B7A6 /* LoadingSearch.swift in Sources */,
 				F6E8AF1325F839AF00EF4BE4 /* PasswordTextField.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  ImageLoader.swift
+//  MediaLoader.swift
 //  SampleFit
 //
 //  Created by Zihan Qi on 2/17/21.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-class ImageLoader {
+class MediaLoader {
     /// Returns an image with the specified identifier (either local or network URL), or returns a nil if image not found.
     func image(withIdentifier identifier: String) -> AnyPublisher<UIImage?, Never> {
         if _isImageIdentifierLocallyLodable(identifier) {
@@ -20,6 +20,8 @@ class ImageLoader {
             return NetworkQueryController.shared.loadImage(fromURL: URL(string:identifier)!)
         }
     }
+    
+//    func video(withURL url: URL) -> AnyPublisher<>
     
     private func _isImageIdentifierLocallyLodable(_ identifier: String) -> Bool {
         let localIdentifiers =
@@ -33,5 +35,5 @@ class ImageLoader {
         return localIdentifiers.contains(identifier)
     }
     
-    static let shared = ImageLoader()
+    static let shared = MediaLoader()
 }

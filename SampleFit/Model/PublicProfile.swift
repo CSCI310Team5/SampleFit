@@ -136,7 +136,8 @@ class PublicProfile: Identifiable, ObservableObject {
                 }
         }
         else{
-            //To be written for upload video
+            // video uploads
+            networkQueryController.uploadVideo(atURL: URL(string: newExercise.contentLink)!, exercise: newExercise, token: token)
         }
     }
     
