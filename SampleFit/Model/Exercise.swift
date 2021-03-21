@@ -27,7 +27,7 @@ class Exercise: Identifiable, ObservableObject {
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }
-        return startTime.advanced(by: duration.converted(to: .minutes).value)
+        return startTime.advanced(by: duration.converted(to: .seconds).value)
     }
     
     private var _imageLoadingCancellable: AnyCancellable?
