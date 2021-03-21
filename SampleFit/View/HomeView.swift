@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomeView: View {
     @EnvironmentObject var userData: UserData
@@ -51,6 +52,13 @@ struct HomeView: View {
                 .tag(Tab.search)
         }
         .environmentObject(userData)
+        // fetch new exercise feeds when selection changed to browsing
+        .onReceive(Just(selection), perform: { newSelection in
+            if newSelection == .browse {
+                userData.fetchExerciseFeeds()
+                print("on Receive: fetching new exercise feedsd")
+            }
+        })
     }
 }
 

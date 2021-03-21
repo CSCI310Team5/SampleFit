@@ -158,17 +158,8 @@ class Exercise: Identifiable, ObservableObject {
         if playbackType == .live {
             self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
                 .autoconnect()
-                .handleEvents(receiveOutput: {
-                    print($0)
-                })
                 .map { Int($0.timeIntervalSinceReferenceDate) }
-                .handleEvents(receiveOutput: {
-                    print($0)
-                })
                 .map { $0 >= Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
-                .handleEvents(receiveOutput: {
-                    print($0)
-                })
                 .assign(to: \.isExpired, on: self)
         }
     }
