@@ -49,6 +49,7 @@ struct UploadSheetView: View  {
                         newUpload.playbackType =  Exercise.PlaybackType.live
                         newUpload.contentLink=contentLink
                         newUpload.peopleLimit=peopleLimit
+                        newUpload.startLivestreamTimer()
                     }else{
                         newUpload.playbackType = Exercise.PlaybackType.recordedVideo
                         newUpload.image=image
@@ -58,7 +59,7 @@ struct UploadSheetView: View  {
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
-                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || image == PublicProfile.exampleProfile.image || contentLink.isEmpty)
+                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || (image == PublicProfile.exampleProfile.image && !isLivestream) || contentLink.isEmpty)
             }
             .padding(.horizontal)
             .padding(.vertical, 20)

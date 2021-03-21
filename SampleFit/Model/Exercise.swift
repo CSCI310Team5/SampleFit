@@ -117,14 +117,6 @@ class Exercise: Identifiable, ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
         
-        // checking locally if the event expired
-        if playbackType == .live {
-            self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
-                .autoconnect()
-                .map { Int($0.timeIntervalSinceReferenceDate) / 60 }
-                .map { $0 == Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
-                .assign(to: \.isExpired, on: self)
-        }
     }
     
     
@@ -152,6 +144,22 @@ class Exercise: Identifiable, ObservableObject {
         // if the search text is empty, the user may want to see all exercises available
         guard !text.isEmpty else { return true }
         return self.name.lowercased().contains(text.lowercased())
+    }
+    
+    func startLivestreamTimer() {
+        _startTime = Date()
+        
+        // checking locally if the event expired
+        if playbackType == .live {
+            self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
+                .autoconnect()
+                .handleEvents(receiveOutput: {
+                    print($0)
+                })
+                .map { Int($0.timeIntervalSinceReferenceDate) / 60 }
+                .map { $0 == Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
+                .assign(to: \.isExpired, on: self)
+        }
     }
     
     

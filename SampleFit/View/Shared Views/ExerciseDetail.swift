@@ -40,6 +40,9 @@ struct ExerciseDetail: View {
                                 .padding(.bottom, 8)
                             
                             if exercise.playbackType != .recordedVideo{
+                                if exercise.isExpired {
+                                    Text("This livestream has ended.")
+                                }
                                 HStack(spacing: 6) {
                                     LiveIndicator()
                                     Text("LIVE")
@@ -75,7 +78,7 @@ struct ExerciseDetail: View {
                     }
                     
                     if exercise.playbackType == .live {
-                        Link("Join Live Stream", destination: URL(string: "google.com")!).font(.headline)
+                        Link("Join Live Stream", destination: URL(string: "https://google.com")!).font(.headline)
                             .foregroundColor(Color.systemBackground)
                             .frame(minWidth: 100, maxWidth: 150)
                             .frame(minWidth: 0, maxWidth: .infinity)
@@ -84,6 +87,7 @@ struct ExerciseDetail: View {
                                 RoundedRectangle(cornerRadius: 7.5)
                                     .fill(Color.accentColor)
                             )
+                            .disabled(exercise.isExpired)
                     }
                     
                   
