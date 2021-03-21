@@ -161,7 +161,7 @@ class Exercise: Identifiable, ObservableObject {
                 .handleEvents(receiveOutput: {
                     print($0)
                 })
-                .map { Int($0.timeIntervalSinceReferenceDate) / 60 }
+                .map { Int($0.timeIntervalSinceReferenceDate) }
                 .handleEvents(receiveOutput: {
                     print($0)
                 })
