@@ -24,7 +24,7 @@ struct MessagedError: Error {
 
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
- 
+    
     
     private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
         
@@ -91,22 +91,22 @@ class NetworkQueryController {
     }
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
-        func validatePassword(_ password: String) -> AnyPublisher<Bool, Never> {
-            // FIXME: validate password over network
-            // faking validation logic now
-            // faking networking delay of 2 seconds
-            return Future<Bool, Error> { promise in
-                if password.count < 8 {
-                    promise(.failure(MessagedError(message: "Too short")))
-                } else {
-                    promise(.success(true))
-                }
+    func validatePassword(_ password: String) -> AnyPublisher<Bool, Never> {
+        // FIXME: validate password over network
+        // faking validation logic now
+        // faking networking delay of 2 seconds
+        return Future<Bool, Error> { promise in
+            if password.count < 8 {
+                promise(.failure(MessagedError(message: "Too short")))
+            } else {
+                promise(.success(true))
             }
-            .replaceError(with: false)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-            .eraseToAnyPublisher()
         }
-
+        .replaceError(with: false)
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
+    }
+    
     
     func retrievePassword(_ username: String) -> AnyPublisher<Bool, Never> {
         struct EncodeData: Codable{
@@ -216,9 +216,9 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-
+        
         return URLSession.shared.dataTaskPublisher(for: request)
-
+            
             .map{
                 $0.data
             }
@@ -513,7 +513,7 @@ class NetworkQueryController {
         formatter.dateStyle = .short
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         encodeData.createTime=formatter.string(from: Date())
-    
+        
         let encode = try! JSONEncoder().encode(encodeData)
         let url = URL(string: "http://127.0.0.1:8000/user/createLivestream")!
         var request = URLRequest(url: url)
@@ -545,7 +545,7 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=dataThing
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-
+        
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
                 $0.data
@@ -662,7 +662,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
- 
+    
     func changeAvatar(email: String, avatar: UIImage, token:String)-> AnyPublisher<Bool, Never>{
         
         
@@ -813,10 +813,14 @@ class NetworkQueryController {
                     formatter.timeStyle = .short
                     formatter.dateStyle = .short
                     formatter.dateFormat = "yyyy-MM-dd HH:mm"
-                    encodeData.createTime=formatter.string(from: Date())
-                    let category = Exercise.Category.identify(networkCall: live.category)
-                    let tmp = self.livestreamToExercise(live: live, category: category)
-                    livestreams.append(tmp)
+                    let date = formatter.date(from: live.createTime)!
+                    let endDate = date.advanced(by: Double(live.timeLimit))
+                    let currentDate = Date()
+                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
+                        let category = Exercise.Category.identify(networkCall: live.category)
+                        let tmp = self.livestreamToExercise(live: live, category: category)
+                        livestreams.append(tmp)
+                    }
                 }
                 return livestreams
             }
@@ -826,7 +830,7 @@ class NetworkQueryController {
     
     func getAllVideo( token: String) -> AnyPublisher<[Exercise],Never>{
         
-      
+        
         let url = URL(string: "http://127.0.0.1:8000/search/getAllVideos")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
@@ -870,13 +874,13 @@ class NetworkQueryController {
             var livestreams: [Livestream]
         }
         return URLSession.shared.dataTaskPublisher(for: request)
-//            .handleEvents(receiveOutput: { outputValue in
-//                print("This is the OutPUT!!!: \( outputValue)")
-//                print( (outputValue.response as! HTTPURLResponse ).statusCode)
-//                print(String(data: outputValue.data, encoding: .utf8))
-//                let decode = try! JSONDecoder().decode(Returned.self, from: outputValue.data)
-//                print("\(decode)")
-//            })
+            //            .handleEvents(receiveOutput: { outputValue in
+            //                print("This is the OutPUT!!!: \( outputValue)")
+            //                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+            //                print(String(data: outputValue.data, encoding: .utf8))
+            //                let decode = try! JSONDecoder().decode(Returned.self, from: outputValue.data)
+            //                print("\(decode)")
+            //            })
             .map{
                 $0.data
             }.decode(type: Returned.self, decoder: JSONDecoder())
@@ -898,15 +902,25 @@ class NetworkQueryController {
                 
                 for video in result.livestreams{
                     
-                    var uploadCategory = Exercise.Category.hiit
-                    
-                    for category in Exercise.Category.allCases{
-                        if category.networkCall == video.category{
-                            uploadCategory=category
-                        }}
-                    
-                    let tmp = self.livestreamToExercise(live: video, category: uploadCategory)
-                    exercises.append(tmp)
+                    let formatter = DateFormatter()
+                    formatter.timeStyle = .short
+                    formatter.dateStyle = .short
+                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    let date = formatter.date(from: video.createTime)!
+                    let endDate = date.advanced(by: Double(video.timeLimit))
+                    let currentDate = Date()
+                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
+                        var uploadCategory = Exercise.Category.hiit
+                        
+                        for category in Exercise.Category.allCases{
+                            if category.networkCall == video.category{
+                                uploadCategory=category
+                            }}
+                        
+                        let tmp = self.livestreamToExercise(live: video, category: uploadCategory)
+                        exercises.append(tmp)
+                        
+                    }
                 }
                 
                 return exercises
@@ -948,7 +962,7 @@ class NetworkQueryController {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map{
                 
-                 UIImage(data: $0.data)
+                UIImage(data: $0.data)
                 
             }
             .replaceError(with: nil)

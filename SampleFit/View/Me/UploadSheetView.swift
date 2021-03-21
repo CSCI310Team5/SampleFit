@@ -58,7 +58,7 @@ struct UploadSheetView: View  {
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
-                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || image == PublicProfile.exampleProfile.image || contentLink.isEmpty)
+                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || (image == PublicProfile.exampleProfile.image && !isLivestream) || contentLink.isEmpty)
             }
             .padding(.horizontal)
             .padding(.vertical, 20)
