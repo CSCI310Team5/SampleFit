@@ -26,6 +26,9 @@ struct BrowseView: View {
                 }
             }
             .navigationTitle("Videos & Live")
+            .onAppear {
+                userData.fetchExerciseFeeds()
+            }
             
         }
         .environmentObject(privateInformation)

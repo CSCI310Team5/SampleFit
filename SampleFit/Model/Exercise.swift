@@ -17,14 +17,22 @@ class Exercise: Identifiable, ObservableObject {
     @Published var category: Category
     @Published var playbackType: PlaybackType
     @Published var owningUser: PublicProfile
+    private var _startTime: Date?
+    @Published var isExpired = false
     @Published var duration: Measurement<UnitDuration>?
     @Published var image: UIImage?
     @Published var peopleLimit: Int
     @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
-    private var imageLoadingCancellable: AnyCancellable?
     
+    var _endTime: Date? {
+        guard let startTime = _startTime, let duration = duration else { return nil }
+        return startTime.advanced(by: duration.converted(to: .seconds).value)
+    }
     
+    private var _imageLoadingCancellable: AnyCancellable?
+    private var _livestreamExpirationCheckCancellable: AnyCancellable?
+    var livestreamDeleteOnExpirationCancellable: AnyCancellable?
     
     enum PlaybackType: Int, CaseIterable {
         case live = 1
@@ -105,9 +113,11 @@ class Exercise: Identifiable, ObservableObject {
         self.peopleLimit = peoplelimt
         self.contentLink = contentlink
         self.previewImageIdentifier = previewImageIdentifier
-        self.imageLoadingCancellable = MediaLoader.shared.image(withIdentifier: previewImageIdentifier)
+        self._imageLoadingCancellable = MediaLoader.shared.image(withIdentifier: previewImageIdentifier)
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
+        
+        checkExpiration()
     }
     
     
@@ -135,6 +145,32 @@ class Exercise: Identifiable, ObservableObject {
         // if the search text is empty, the user may want to see all exercises available
         guard !text.isEmpty else { return true }
         return self.name.lowercased().contains(text.lowercased())
+    }
+    
+    func startLivestreamTimer() {
+        _startTime = Date()
+        
+       checkExpiration()
+    }
+    
+    func checkExpiration() {
+        // checking locally if the event expired
+        if playbackType == .live {
+            self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
+                .autoconnect()
+                .handleEvents(receiveOutput: {
+                    print($0)
+                })
+                .map { Int($0.timeIntervalSinceReferenceDate) }
+                .handleEvents(receiveOutput: {
+                    print($0)
+                })
+                .map { $0 >= Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
+                .handleEvents(receiveOutput: {
+                    print($0)
+                })
+                .assign(to: \.isExpired, on: self)
+        }
     }
     
     

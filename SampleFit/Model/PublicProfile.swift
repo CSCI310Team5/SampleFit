@@ -11,6 +11,7 @@ import SwiftUI
 
 /// User's information that is publicly available to other users. You should use PublicProfile to uniquely identify a user's information.
 class PublicProfile: Identifiable, ObservableObject {
+    var authenticationToken: String = ""
     @Published var identifier: String = ""
     private var _nickname: String?
     /// user's profile image. Defaults to person.fill.
@@ -81,6 +82,22 @@ class PublicProfile: Identifiable, ObservableObject {
             massRange = Array(stride(from: 50, to: 650, by: 1)).map { Measurement(value: $0, unit: UnitMass.pounds) }
         }
         
+        // check each minute for deleting expired livestreams that I created
+        self._livestreamDeletionCancellable = $uploadedExercises
+            .sink { _ in
+                for exercise in self.uploadedExercises {
+                    exercise.livestreamDeleteOnExpirationCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
+                        .autoconnect()
+                        .map { Int($0.timeIntervalSinceReferenceDate) / 60 }
+                        .map { $0 == Int(exercise._endTime?.timeIntervalSinceReferenceDate ?? 0) }
+                        .filter { $0 }
+                        .sink { _ in
+                            exercise.livestreamDeleteOnExpirationCancellable = NetworkQueryController.shared.deleteLivestream(zoomLink: exercise.contentLink, token: self.authenticationToken).sink { returnValue in
+                                print("Delete livestream ok?: \(returnValue)")
+                            }
+                        }
+                }
+            }
     }
     
     func setProfile(weight: Double?, height: Double?, nickname: String?, birthday: Date?){
@@ -103,6 +120,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _getUploadedExercisesCancellable: AnyCancellable?
     private var _otherUserInfoLoadingCancellable: AnyCancellable?
     private var _imageLoadingCancellable: AnyCancellable?
+    private var _livestreamDeletionCancellable: AnyCancellable?
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {

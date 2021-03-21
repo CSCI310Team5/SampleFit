@@ -49,6 +49,7 @@ struct UploadSheetView: View  {
                         newUpload.playbackType =  Exercise.PlaybackType.live
                         newUpload.contentLink=contentLink
                         newUpload.peopleLimit=peopleLimit
+                        newUpload.startLivestreamTimer()
                     }else{
                         newUpload.playbackType = Exercise.PlaybackType.recordedVideo
                         newUpload.image=image
