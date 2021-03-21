@@ -58,7 +58,7 @@ struct UploadSheetView: View  {
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
-                }
+                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || image == PublicProfile.exampleProfile.image || contentLink.isEmpty)
             }
             .padding(.horizontal)
             .padding(.vertical, 20)
@@ -66,10 +66,11 @@ struct UploadSheetView: View  {
             Text("Create Livestream Or Upload Video").bold()
             
             NavigationView{
+                
                 Form{
+                  
                     HStack {
                         Text("Media Type")
-                        
                         Spacer()
                         Text("Video")
                         Toggle("", isOn: $isLivestream)
@@ -78,20 +79,20 @@ struct UploadSheetView: View  {
                     }
                     
                     
-                    HStack {
-                        Text("Preview Image")
-                        Spacer()
-                        Image(uiImage: image!)
-                            .resizable().scaledToFit()
-                    }.frame(height: 100)
-                    
-                    Button("Add Preview Image") {
-                        isImagePickerPresented.toggle()
-                    }
-                    .sheet(isPresented: $isImagePickerPresented) {
-                        ImagePicker(image: $image, isPresented: $isImagePickerPresented)
-                    }
                     if !isLivestream {
+                        HStack {
+                            Text("Preview Image")
+                            Spacer()
+                            Image(uiImage: image!)
+                                .resizable().scaledToFit()
+                        }.frame(height: 100)
+                        
+                        Button("Add Preview Image") {
+                            isImagePickerPresented.toggle()
+                        }
+                        .sheet(isPresented: $isImagePickerPresented) {
+                            ImagePicker(image: $image, isPresented: $isImagePickerPresented)
+                        }
                         Group {
                             HStack {
                                 Button("Upload Video") {
@@ -141,15 +142,7 @@ struct UploadSheetView: View  {
                         
                         TextField("LiveStream Link",text:$contentLink)
                     }
-                    else{
-                        //                        Button("Add Video"){
-                        //                            isVideoPickerPresented.toggle()
-                        //                        }
-                        //                        .sheet(isPresented: $isVideoPickerPresented) {
-                        //                            let picker = UIImagePickerController()
-                        //                            picker
-                        //                        }
-                    }
+                    if(name.count>25){Text("Name is too long").foregroundColor(.red)}
                 }
             }
             Spacer()
