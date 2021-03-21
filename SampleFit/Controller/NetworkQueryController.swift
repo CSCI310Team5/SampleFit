@@ -28,7 +28,7 @@ class NetworkQueryController {
     
     private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
         
-        let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
+        let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "\(category.rawValue)-\(Int.random(in: 1...3))", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
         return exercise
     }
     
@@ -89,6 +89,24 @@ class NetworkQueryController {
             .replaceError(with: false)
             .eraseToAnyPublisher()
     }
+    
+    /// Returns a publisher that publishes true value if success and false values if an error occured.
+        func validatePassword(_ password: String) -> AnyPublisher<Bool, Never> {
+            // FIXME: validate password over network
+            // faking validation logic now
+            // faking networking delay of 2 seconds
+            return Future<Bool, Error> { promise in
+                if password.count < 8 {
+                    promise(.failure(MessagedError(message: "Too short")))
+                } else {
+                    promise(.success(true))
+                }
+            }
+            .replaceError(with: false)
+            .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+            .eraseToAnyPublisher()
+        }
+
     
     func retrievePassword(_ username: String) -> AnyPublisher<Bool, Never> {
         struct EncodeData: Codable{
@@ -866,6 +884,8 @@ class NetworkQueryController {
     func searchUserResults(searchText: String) -> AnyPublisher<[OtherUserProfile], Never> {
         struct EncodeData: Codable{
             var search: String
+            var by_nickname: Int = 1
+            var by_email: Int = 1
         }
         let encodeData = EncodeData(search: searchText)
         let encode = try! JSONEncoder().encode(encodeData)

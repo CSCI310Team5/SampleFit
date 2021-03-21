@@ -12,26 +12,29 @@ struct ExerciseDetail: View {
     @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
     @State var exercise: Exercise
-    @State private var isWorkingout = false
+    @State private var hideThumbnail = false
     
     var body: some View {
-        // FIXME: Fake player now
+        // FIXME: need to deal with the overlaying image
         ScrollView {
             VStack {
                 if exercise.playbackType == .recordedVideo {
-                    VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!)) {
-                    Group {
-                        if exercise.image != nil {
-                            Image(uiImage:exercise.image!)
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .edgesIgnoringSafeArea(.all)
                     
-                }
-                .frame(height: 250)
+                    VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!)){
+                        
+                        Group {
+                            if exercise.image != nil {
+                                Image(uiImage:exercise.image!)
+                                    .resizable()
+                                    .scaledToFit()
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.all)
+                        
+                    }
+                    .frame(height: 250)
+                    
                 }else{
                     if exercise.image != nil {
                         Image(uiImage: exercise.image!) .resizable().scaledToFit()
@@ -48,9 +51,7 @@ struct ExerciseDetail: View {
                                 .bold()
                                 .padding(.bottom, 8)
                             
-                            if exercise.playbackType == .recordedVideo {
-                                Text(exercise.durationDescription)
-                            } else {
+                            if exercise.playbackType != .recordedVideo{
                                 HStack(spacing: 6) {
                                     LiveIndicator()
                                     Text("LIVE")
@@ -63,59 +64,31 @@ struct ExerciseDetail: View {
                             }
                         }
                         
+                        Text(exercise.description)
+                        
                         Spacer()
                         
                         if exercise.playbackType == .recordedVideo{
-                        // favorite button
+                            // favorite button
                             Button(action: { privateInformation.toggleExerciseInFavorites(exercise, email: userData.publicProfile.identifier, token: userData.token) }) {
-                            if privateInformation.hasFavorited(exercise) {
-                                Image(systemName: "star.fill")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .padding(20)
-                                    .foregroundColor(.yellow)
-                            } else {
-                                Image(systemName: "star")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .padding(20)
-                            }
-                        }
-                        .offset(x: 20, y: -15)
-                        .padding(.trailing, 6)}
-                    }
-                    
-                    if exercise.playbackType == .recordedVideo {
-                        // Start/stop workout button
-                        Button(action: { withAnimation {isWorkingout.toggle()} }) {
-                            Group {
-                                if isWorkingout {
-                                    HStack {
-                                        Image(systemName: "pause.circle.fill")
-                                            .font(.title3)
-                                        Text("End Workout")
-                                    }
-                                    
+                                if privateInformation.hasFavorited(exercise) {
+                                    Image(systemName: "star.fill")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                        .padding(20)
+                                        .foregroundColor(.yellow)
                                 } else {
-                                    HStack {
-                                        Image(systemName: "play.circle.fill")
-                                            .font(.title3)
-                                        Text("Start Workout")
-                                    }
+                                    Image(systemName: "star")
+                                        .resizable()
+                                        .frame(width: 24, height: 24)
+                                        .padding(20)
                                 }
                             }
-                            .font(.headline)
-                            .foregroundColor(Color.systemBackground)
-                            .frame(minWidth: 100, maxWidth: 150)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 7.5)
-                                    .fill(Color.accentColor)
-                            )
-                        }
-                        .padding(.vertical)
-                    }else{
+                            .offset(x: 20, y: -15)
+                            .padding(.trailing, 6)}
+                    }
+                    
+                    if exercise.playbackType == .live {
                         Link("Join Live Stream", destination: URL(string: "google.com")!).font(.headline)
                             .foregroundColor(Color.systemBackground)
                             .frame(minWidth: 100, maxWidth: 150)

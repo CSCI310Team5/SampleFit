@@ -136,6 +136,8 @@ class UserData: ObservableObject {
         
         signInStatus = .signedOut
         signInAuthenticationState = AuthenticationState(for: .signIn)
+        privateInformation.exerciseFeeds=[]
+        privateInformation.followedUsers=[]
     }
     
     func changePassword(to newPassword: String) {
@@ -197,7 +199,7 @@ class UserData: ObservableObject {
     }
     
     private func _fetchExerciseFeeds(token: String) {
-        self.fetchLiveFeeds( token: token)
+        self.fetchLiveFeeds(token: token)
         self.fetchVideoFeeds(token: token)
     }
     
