@@ -831,7 +831,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never>{
+    func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never> {
         
         let dataThing = "category=\(category.networkCall)".data(using: .utf8)
         let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
@@ -840,6 +840,13 @@ class NetworkQueryController {
         request.httpBody=dataThing
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: { outputValue in
+                
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                print(String(data: outputValue.data, encoding: .utf8))
+                let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
+            })
             .map{
                 $0.data
             }.decode(type: [Livestream].self, decoder: JSONDecoder())
@@ -928,23 +935,69 @@ class NetworkQueryController {
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
-//         FIXME: Search for exercise results for user over network
-//         assuming success now
-//         faking networking delay of 2 seconds
-                return Future { promise in
-                    promise(.success(Exercise.exampleExercisesFull.filter {
-                        if let category = category {
-                            return $0.category == category && $0.shouldAppearOnSearchText(searchText)
-                        } else {
-                            return $0.shouldAppearOnSearchText(searchText)
-                        }
-                    }))
+        struct SearchData: Codable {
+            var serachText: String = ""
+            var searchType: String = ""
+        }
+        
+        let encodeData = SearchData(serachText: searchText, searchType: category?.networkCall ?? "")
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/search/videoAndLivestream")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody = encode
+        
+        
+        
+        return Future { promise in
+            promise(.success(Exercise.exampleExercisesFull.filter {
+                if let category = category {
+                    return $0.category == category && $0.shouldAppearOnSearchText(searchText)
+                } else {
+                    return $0.shouldAppearOnSearchText(searchText)
                 }
-                .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-                .eraseToAnyPublisher()
+            }))
+        }
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
         
 
     }
+    
+    /*
+     func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never> {
+         
+         let dataThing = "category=\(category.networkCall)".data(using: .utf8)
+         let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
+         var request = URLRequest(url: url)
+         request.httpMethod="POST"
+         request.httpBody=dataThing
+         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+         return URLSession.shared.dataTaskPublisher(for: request)
+             .handleEvents(receiveOutput: { outputValue in
+                 
+                 print("This is the OutPUT!!!: \( outputValue)")
+                 print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                 print(String(data: outputValue.data, encoding: .utf8))
+                 let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
+             })
+             .map{
+                 $0.data
+             }.decode(type: [Livestream].self, decoder: JSONDecoder())
+             .map{result in
+                 var livestreams: [Exercise]=[]
+                 
+                 for live in result{
+                     let tmp = self.livestreamToExercise(live: live, category: category)
+                     livestreams.append(tmp)
+                 }
+                 return livestreams
+             }
+             .replaceError(with: [])
+             .eraseToAnyPublisher()
+     }
+     */
     
     
     /// Quries the network for user results and returns a publisher that emits either relevant user credentials on success or an error on failure.
