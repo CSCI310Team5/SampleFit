@@ -25,6 +25,7 @@ struct MessagedError: Error {
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
  
+    
     private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
         
         let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
@@ -41,6 +42,28 @@ class NetworkQueryController {
         
         return excercise
     }
+    
+    func convertFormField(named name: String, value: String, using boundary: String) -> String {
+        var fieldString = "--\(boundary)\r\n"
+        fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
+        fieldString += "\r\n"
+        fieldString += "\(value)\r\n"
+        
+        return fieldString
+    }
+    
+    func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
+        let data = NSMutableData()
+        
+        data.appendString("--\(boundary)\r\n")
+        data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
+        data.appendString("Content-Type: \(mimeType)\r\n\r\n")
+        data.append(fileData)
+        data.appendString("\r\n")
+        
+        return data as Data
+    }
+    
     
     /// Returns a publisher that publishes true value if success and false values if an error occured.
     func validateUsername(_ username: String) -> AnyPublisher<Bool, Never> {
@@ -89,23 +112,6 @@ class NetworkQueryController {
             }
             .replaceError(with: false)
             .eraseToAnyPublisher()
-    }
-    
-    /// Returns a publisher that publishes true value if success and false values if an error occured.
-    func validatePassword(_ password: String) -> AnyPublisher<Bool, Never> {
-        // FIXME: validate password over network
-        // faking validation logic now
-        // faking networking delay of 2 seconds
-        return Future<Bool, Error> { promise in
-            if password.count < 8 {
-                promise(.failure(MessagedError(message: "Too short")))
-            } else {
-                promise(.success(true))
-            }
-        }
-        .replaceError(with: false)
-        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-        .eraseToAnyPublisher()
     }
     
     
@@ -607,27 +613,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func convertFormField(named name: String, value: String, using boundary: String) -> String {
-        var fieldString = "--\(boundary)\r\n"
-        fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
-        fieldString += "\r\n"
-        fieldString += "\(value)\r\n"
-        
-        return fieldString
-    }
-    
-    func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
-        let data = NSMutableData()
-        
-        data.appendString("--\(boundary)\r\n")
-        data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
-        data.appendString("Content-Type: \(mimeType)\r\n\r\n")
-        data.append(fileData)
-        data.appendString("\r\n")
-        
-        return data as Data
-    }
-    
+ 
     func changeAvatar(email: String, avatar: UIImage, token:String)-> AnyPublisher<Bool, Never>{
         
         
@@ -809,19 +795,6 @@ class NetworkQueryController {
     }
     
     
-    
-//    /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.
-//    func exerciseFeedsForUser(token: String) -> AnyPublisher<[Exercise], Never> {
-//
-//        var exercises: [Exercise] = []
-//
-//        return Future<[Exercise], Error> { promise in
-//            promise(.success(Exercise.exampleExercisesFull))
-//        }
-//        .replaceError(with: Exercise.exampleExercisesSmall)
-//        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-//        .eraseToAnyPublisher()
-//    }
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
