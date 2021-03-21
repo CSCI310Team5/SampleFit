@@ -137,7 +137,11 @@ class PublicProfile: Identifiable, ObservableObject {
         }
         else{
             // video uploads
-            networkQueryController.uploadVideo(atURL: URL(string: newExercise.contentLink)!, exercise: newExercise, token: token)
+            _createExerciseCancellable = networkQueryController.uploadVideo(atURL: URL(string: newExercise.contentLink)!, exercise: newExercise, token: token)
+                .receive(on: DispatchQueue.main)
+                .sink {
+                    self.uploadedExercises.append($0)
+                }
         }
     }
     
