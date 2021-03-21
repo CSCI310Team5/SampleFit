@@ -38,6 +38,7 @@ struct UploadedExercisesList: View {
                 }
             }
         }
+        
         .sheet(isPresented: $isNewUploadSheetPresented) {
             UploadSheetView(publicProfile: publicProfile, isPresented: $isNewUploadSheetPresented)
         }
@@ -47,6 +48,10 @@ struct UploadedExercisesList: View {
             }
         )
         .navigationBarTitle("Uploads", displayMode: .inline)
+        .onAppear{
+            //before the opening of this view, all publicprofile of other users don't have [exercise] for uploadedvideo， thus calling the function to get this specific user's uploaded list just now -- memory saving
+            publicProfile.getExerciseUploads(userEmail: publicProfile.identifier)
+        }
 
     }
 }

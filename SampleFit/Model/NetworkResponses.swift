@@ -20,11 +20,11 @@ struct ProfileData: Codable{
 }
 
 //possible JSON format for publicprofile response
-struct OtherUserProfile: Codable{
+struct OtherUserProfile: Codable {
     var email: String
     var nickname: String = ""
-    var avatar: String
-//    var uploadedVideos: [Exercise]
+    var avatar: String?
+    var uploadedVideos: [VideoFormat]
 }
 
 struct WorkoutHistory: Codable{

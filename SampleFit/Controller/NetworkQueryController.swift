@@ -344,7 +344,7 @@ class NetworkQueryController {
                     let profile = PublicProfile(identifier: r.email, fullName: nil)
                     profile.nickname = r.nickname
                     profile.uploadedExercises = []
-                    if !r.avatar.isEmpty{
+                    if r.avatar != nil && !r.avatar!.isEmpty {
                     self._imageLoadingCancellable =
                         NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(r.avatar)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
                         }}
@@ -463,18 +463,32 @@ class NetworkQueryController {
         let profile: PublicProfile = PublicProfile(identifier: email, fullName: nil)
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            .map{
+            .handleEvents(receiveOutput: { outputValue in
+                
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                print(String(data: outputValue.data, encoding: .utf8))
+                let decode = try! JSONDecoder().decode(OtherUserProfile.self, from: outputValue.data)
+                print("\(decode)")
+            })
+            .map {
                 $0.data
-            }.decode(type: OtherUserProfile.self, decoder: JSONDecoder())
+            }
+            .decode(type: OtherUserProfile.self, decoder: JSONDecoder())
             .map{result in
-                if !result.avatar.isEmpty{
+                    if result.avatar != nil && !result.avatar!.isEmpty {
+                        print(URL(string: "http://127.0.0.1:8000\(result.avatar!)"))
                 self._imageLoadingCancellable =
-                    NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(result.avatar)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
+                    NetworkQueryController.shared.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(result.avatar!)")!).receive(on: DispatchQueue.main).sink{[unowned self] returned in profile.image = returned!
+                        /* http:/sdfsdfsdfd8000/media/users/avatars/zihanqiusc.edu.png */
                     }}
                 profile.nickname=result.nickname
                 return profile
             }
-            .assertNoFailure()
+            .handleEvents(receiveOutput: {
+                print($0)
+            })
+            .replaceError(with: PublicProfile(identifier: "errorprofileEmail@usc.edu", fullName: nil))
             .eraseToAnyPublisher()
     }
     
@@ -817,7 +831,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never>{
+    func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never> {
         
         let dataThing = "category=\(category.networkCall)".data(using: .utf8)
         let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
@@ -826,6 +840,13 @@ class NetworkQueryController {
         request.httpBody=dataThing
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: { outputValue in
+                
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                print(String(data: outputValue.data, encoding: .utf8))
+                let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
+            })
             .map{
                 $0.data
             }.decode(type: [Livestream].self, decoder: JSONDecoder())
@@ -914,23 +935,69 @@ class NetworkQueryController {
     
     /// Queries the network for exercise results and returns a publisher that emits either relevant exercises on success or an error on failure.
     func searchExerciseResults(searchText: String, category: Exercise.Category?) -> AnyPublisher<[Exercise], Never> {
-//         FIXME: Search for exercise results for user over network
-//         assuming success now
-//         faking networking delay of 2 seconds
-                return Future { promise in
-                    promise(.success(Exercise.exampleExercisesFull.filter {
-                        if let category = category {
-                            return $0.category == category && $0.shouldAppearOnSearchText(searchText)
-                        } else {
-                            return $0.shouldAppearOnSearchText(searchText)
-                        }
-                    }))
+        struct SearchData: Codable {
+            var serachText: String = ""
+            var searchType: String = ""
+        }
+        
+        let encodeData = SearchData(serachText: searchText, searchType: category?.networkCall ?? "")
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/search/videoAndLivestream")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody = encode
+        
+        
+        
+        return Future { promise in
+            promise(.success(Exercise.exampleExercisesFull.filter {
+                if let category = category {
+                    return $0.category == category && $0.shouldAppearOnSearchText(searchText)
+                } else {
+                    return $0.shouldAppearOnSearchText(searchText)
                 }
-                .delay(for: .seconds(2), scheduler: DispatchQueue.global())
-                .eraseToAnyPublisher()
+            }))
+        }
+        .delay(for: .seconds(2), scheduler: DispatchQueue.global())
+        .eraseToAnyPublisher()
         
 
     }
+    
+    /*
+     func getLivestreamByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never> {
+         
+         let dataThing = "category=\(category.networkCall)".data(using: .utf8)
+         let url = URL(string: "http://127.0.0.1:8000/categories/getLiveStream")!
+         var request = URLRequest(url: url)
+         request.httpMethod="POST"
+         request.httpBody=dataThing
+         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+         return URLSession.shared.dataTaskPublisher(for: request)
+             .handleEvents(receiveOutput: { outputValue in
+                 
+                 print("This is the OutPUT!!!: \( outputValue)")
+                 print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                 print(String(data: outputValue.data, encoding: .utf8))
+                 let decode = try! JSONDecoder().decode([Livestream].self, from: outputValue.data)
+             })
+             .map{
+                 $0.data
+             }.decode(type: [Livestream].self, decoder: JSONDecoder())
+             .map{result in
+                 var livestreams: [Exercise]=[]
+                 
+                 for live in result{
+                     let tmp = self.livestreamToExercise(live: live, category: category)
+                     livestreams.append(tmp)
+                 }
+                 return livestreams
+             }
+             .replaceError(with: [])
+             .eraseToAnyPublisher()
+     }
+     */
     
     
     /// Quries the network for user results and returns a publisher that emits either relevant user credentials on success or an error on failure.
@@ -1019,7 +1086,7 @@ class NetworkQueryController {
     private var _videoUploadCancellable: AnyCancellable?
     
     /// Uploads video at URL. Returns a publisehr that publishes true values if success and false value if an error occured.
-    func uploadVideo(atURL videoURL: URL, exercise: Exercise, token: String) -> AnyPublisher<Exercise, Never> {
+    func uploadVideo(atURL videoURL: URL, exercise: Exercise, token: String,  completion: @escaping (Exercise) -> ()) {
         
         let networkURL = URL(string: "http://127.0.0.1:8000/user/uploadVideo")!
         var request = URLRequest(url: networkURL)
@@ -1027,77 +1094,72 @@ class NetworkQueryController {
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
         
-        return Future<Exercise, Never> { [unowned self] promise in
-            _videoEncodingCancellable = _encodeVideoAsMP4(videoURL: videoURL)
-                .replaceError(with: videoURL)
-                .sink { mp4VideoURL in
-                    // video is now converted to MP4
-                    
-                    let filename = videoURL.lastPathComponent
-                    let imgMimeType = "image/png"
-                    let videoMimeType = "video/mp4"
-                    let mp4VideoData = try! Data(contentsOf: mp4VideoURL, options: .alwaysMapped)
-                    let previewImageData = exercise.image!.pngData()!
-                    let httpBody = NSMutableData()
-                    
-                    /*
-                     Use form data
-                     { "email":string,
-                     "videoName":string,
-                     "description":string,
-                     "videoCategory":string,
-                     "videoFile":mp4 file,
-                     "videoImage":img file,
-                     }
-                     */
-                    httpBody.appendString(convertFormField(named: "email", value: exercise.owningUser.identifier, using: boundary))
-                    httpBody.appendString(convertFormField(named: "videoName", value: exercise.name, using: boundary))
-                    httpBody.appendString(convertFormField(named: "description", value: exercise.description, using: boundary))
-                    httpBody.appendString(convertFormField(named: "videoCategory", value: exercise.category.networkCall, using: boundary))
-                    httpBody.append(convertFileData(fieldName: "videoFile",
-                                                    fileName: filename,
-                                                    mimeType: videoMimeType,
-                                                    fileData: mp4VideoData,
-                                                    using: boundary))
-                    httpBody.append(convertFileData(fieldName: "videoImage",
-                                                    fileName: filename,
-                                                    mimeType: imgMimeType,
-                                                    fileData: previewImageData,
-                                                    using: boundary))
-                    
-                    httpBody.appendString("--\(boundary)--")
-                    request.httpBody = httpBody as Data
-                    
-                    // FIXME: Do I need this line?
-                    request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-                    
-                    _videoUploadCancellable = URLSession.shared.dataTaskPublisher(for: request)
-                        .handleEvents(receiveOutput: { outputValue in
-                            
-                            print("This is the OutPUT!!!: \( outputValue)")
-                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                            print(String(data: outputValue.data, encoding: .utf8))
-                            let decode = try! JSONDecoder().decode(VideoFormat.self, from: outputValue.data)
-                            print("\(decode)")
-                        })
-                        .map { $0.data }
-                        
-                        .decode(type: VideoFormat.self, decoder: JSONDecoder())
-                        .mapError {
-//                            print("Error: \(($0 as! URLError).localizedDescription)")
-                            return MessagedError(message: ($0 as! URLError).localizedDescription)
-                            
-                        }
-                        .replaceError(with: VideoFormat())
-                        .map {
-                            let exercise = self.videoToExercise(upload: $0, uploadCategory: exercise.category)
-                            print(exercise)
-                            promise(.success(exercise))
-                        }
-                        .sink { _ in }
-                }
-        }
-        .eraseToAnyPublisher()
+        _videoEncodingCancellable = _encodeVideoAsMP4(videoURL: videoURL)
+            .replaceError(with: videoURL)
+            .sink { [unowned self] mp4VideoURL in
+                // video is now converted to MP4
+                
+                let filename = videoURL.lastPathComponent
+                let imgMimeType = "image/png"
+                let videoMimeType = "video/mp4"
+                let mp4VideoData = try! Data(contentsOf: mp4VideoURL, options: .alwaysMapped)
+                let previewImageData = exercise.image!.pngData()!
+                let httpBody = NSMutableData()
+                
+                httpBody.appendString(convertFormField(named: "email", value: exercise.owningUser.identifier, using: boundary))
+                httpBody.appendString(convertFormField(named: "videoName", value: exercise.name, using: boundary))
+                httpBody.appendString(convertFormField(named: "description", value: exercise.description, using: boundary))
+                httpBody.appendString(convertFormField(named: "videoCategory", value: exercise.category.networkCall, using: boundary))
+                httpBody.append(convertFileData(fieldName: "videoFile",
+                                                fileName: filename,
+                                                mimeType: videoMimeType,
+                                                fileData: mp4VideoData,
+                                                using: boundary))
+                httpBody.append(convertFileData(fieldName: "videoImage",
+                                                fileName: filename,
+                                                mimeType: imgMimeType,
+                                                fileData: previewImageData,
+                                                using: boundary))
+                
+                httpBody.appendString("--\(boundary)--")
+                request.httpBody = httpBody as Data
+                
+                request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+                
+                let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                    if let data = data {
+                        let videoFormat = try! JSONDecoder().decode(VideoFormat.self, from: data)
+                        let outputExercise = self.videoToExercise(upload: videoFormat, uploadCategory: exercise.category)
+                        completion(outputExercise)
+                    } else {
+                        print("No Data returned!")
+                    }
+                }.resume()
+//                _videoUploadCancellable = URLSession.shared.dataTaskPublisher(for: request)
+//                    .handleEvents(receiveOutput: { outputValue in
+//
+//                        print("This is the OutPUT!!!: \( outputValue)")
+//                        print( (outputValue.response as! HTTPURLResponse ).statusCode)
+//                        print(String(data: outputValue.data, encoding: .utf8))
+//                        let decode = try! JSONDecoder().decode(VideoFormat.self, from: outputValue.data)
+//                        print("\(decode)")
+//                    })
+//                    .map { $0.data }
+//
+//                    .decode(type: VideoFormat.self, decoder: JSONDecoder())
+//                    .mapError {
+////                            print("Error: \(($0 as! URLError).localizedDescription)")
+//                        return MessagedError(message: ($0 as! URLError).localizedDescription)
+//
+//                    }
+//                    .replaceError(with: VideoFormat())
+//                    .map {
+//                        let exercise = self.videoToExercise(upload: $0, uploadCategory: exercise.category)
+//                        print(exercise)
+//                        promise(.success(exercise))
+//                    }
+//                    .sink { _ in }
+            }
     }
     
     
