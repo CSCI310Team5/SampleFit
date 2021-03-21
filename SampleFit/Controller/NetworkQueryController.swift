@@ -842,6 +842,37 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func getVideoByCategory(category: Exercise.Category, token: String) -> AnyPublisher<[Exercise],Never>{
+        
+        let dataThing = "videoCategory=\(category.networkCall)".data(using: .utf8)
+        let url = URL(string: "http://127.0.0.1:8000/categories/getVideo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=dataThing
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+            
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            let decode = try! JSONDecoder().decode([VideoFormat].self, from: outputValue.data)
+                            print("\(decode)")
+                        })
+            .map{
+                $0.data
+            }.decode(type: [VideoFormat].self, decoder: JSONDecoder())
+            .map{result in
+                var videos: [Exercise]=[]
+                for video in result{
+                    let tmp = self.videoToExercise(upload:video, uploadCategory: category)
+                    videos.append(tmp)
+                }
+                return videos
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+    
     
     
     /// Queries the network and returns the exercise feeds or a the default example exercise array on failure.

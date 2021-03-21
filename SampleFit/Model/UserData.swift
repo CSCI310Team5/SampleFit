@@ -44,6 +44,7 @@ class UserData: ObservableObject {
     private var _emailCheckCancellable: AnyCancellable?
     private var _avatarCancellable: AnyCancellable?
     private var _fetchLivestreamCancellable : AnyCancellable?
+    private var _fetchVideoCancellable : AnyCancellable?
     
     @Published var changeDone: Int = 0
     
@@ -212,6 +213,17 @@ class UserData: ObservableObject {
             }
         return output
     }
+    func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise]{
+        var output:[Exercise]=[]
+        _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] exercises in
+                output=exercises
+            }
+        return output
+    }
+    
+    
         
         static var signedInUserData: UserData {
             let userData = UserData()

@@ -19,6 +19,7 @@ struct ExerciseSearchResultList: View {
             }
         }
         .listStyle(PlainListStyle())
+        
     }
 }
 
