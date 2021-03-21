@@ -52,6 +52,7 @@ struct UploadSheetView: View  {
                     }else{
                         newUpload.playbackType = Exercise.PlaybackType.recordedVideo
                         newUpload.image=image
+                        newUpload.contentLink = videoURL!.absoluteString
                     }
                     publicProfile.createExercise(newExercise: newUpload, token: userData.token)
                     isPresented = false

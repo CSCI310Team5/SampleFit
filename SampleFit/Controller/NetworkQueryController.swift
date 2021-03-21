@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import AVFoundation
 
 extension NSMutableData {
     func appendString(_ string: String) {
@@ -653,6 +654,27 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func convertFormField(named name: String, value: String, using boundary: String) -> String {
+        var fieldString = "--\(boundary)\r\n"
+        fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
+        fieldString += "\r\n"
+        fieldString += "\(value)\r\n"
+        
+        return fieldString
+    }
+    
+    func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
+        let data = NSMutableData()
+        
+        data.appendString("--\(boundary)\r\n")
+        data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
+        data.appendString("Content-Type: \(mimeType)\r\n\r\n")
+        data.append(fileData)
+        data.appendString("\r\n")
+        
+        return data as Data
+    }
+    
     func changeAvatar(email: String, avatar: UIImage, token:String)-> AnyPublisher<Bool, Never>{
         
         
@@ -663,28 +685,6 @@ class NetworkQueryController {
         
         let boundary = UUID().uuidString
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
-        func convertFormField(named name: String, value: String, using boundary: String) -> String {
-            var fieldString = "--\(boundary)\r\n"
-            fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
-            fieldString += "\r\n"
-            fieldString += "\(value)\r\n"
-            
-            return fieldString
-        }
-        
-        func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
-            let data = NSMutableData()
-            
-            data.appendString("--\(boundary)\r\n")
-            data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
-            data.appendString("Content-Type: \(mimeType)\r\n\r\n")
-            data.append(fileData)
-            data.appendString("\r\n")
-            
-            return data as Data
-        }
-        
         
         let httpBody = NSMutableData()
         
@@ -890,6 +890,132 @@ class NetworkQueryController {
             }
             .replaceError(with: nil)
             .eraseToAnyPublisher()
+    }
+    
+    private func _encodeVideoAsMP4(videoURL: URL) -> AnyPublisher<URL, Error> {
+        let avAsset = AVURLAsset(url: videoURL)
+        let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetPassthrough)
+
+        let docDir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let myDocPath = NSURL(fileURLWithPath: docDir).appendingPathComponent("temp.mp4")?.absoluteString
+
+        let docDir2 = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL
+
+        let filePath = docDir2.appendingPathComponent("rendered-Video.mp4")
+        deleteFile(filePath!)
+
+        if FileManager.default.fileExists(atPath: myDocPath!){
+            do{
+                try FileManager.default.removeItem(atPath: myDocPath!)
+            }catch let error{
+                print(error)
+            }
+        }
+
+        exportSession?.outputURL = filePath
+        exportSession?.outputFileType = AVFileType.mp4
+        exportSession?.shouldOptimizeForNetworkUse = true
+
+        let start = CMTimeMakeWithSeconds(0.0, preferredTimescale: 0)
+        let range = CMTimeRange(start: start, duration: avAsset.duration)
+        exportSession?.timeRange = range
+        
+        return Future<URL, Error> { promise in
+            exportSession!.exportAsynchronously {
+                switch exportSession!.status{
+                case .failed:
+                    promise(.failure(exportSession!.error!))
+                case .cancelled:
+                    print("Export cancelled")
+                case .completed:
+                    print("Successful")
+                    promise(.success(exportSession!.outputURL!))
+                default:
+                    break
+                }
+            }
+        }
+        .eraseToAnyPublisher()
+
+    }
+    
+    func deleteFile(_ filePath:URL) {
+        guard FileManager.default.fileExists(atPath: filePath.path) else{
+            return
+        }
+        do {
+            try FileManager.default.removeItem(atPath: filePath.path)
+        }catch{
+            fatalError("Unable to delete file: \(error) : \(#function).")
+        }
+    }
+    
+    private var _videoEncodingCancellable: AnyCancellable?
+    private var _videoUploadCancellable: AnyCancellable?
+    
+    /// Uploads video at URL. Returns a publisehr that publishes true values if success and false value if an error occured.
+    func uploadVideo(atURL videoURL: URL, exercise: Exercise, token: String) -> AnyPublisher<Exercise, Never> {
+        
+        let networkURL = URL(string: "http://127.0.0.1:8000/user/uploadVideo")!
+        var request = URLRequest(url: networkURL)
+        request.httpMethod = "POST"
+        let boundary = UUID().uuidString
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        return Future<Bool, Never> { [unowned self] promise in
+            _videoEncodingCancellable = _encodeVideoAsMP4(videoURL: videoURL)
+                .assertNoFailure()
+                .sink { mp4VideoURL in
+                    // video is now converted to MP4
+                    
+                    let filename = videoURL.lastPathComponent
+                    let imgMimeType = "image/png"
+                    let videoMimeType = "video/mp4"
+                    let mp4VideoData = try! Data(contentsOf: mp4VideoURL, options: .alwaysMapped)
+                    let previewImageData = exercise.image!.pngData()!
+                    let httpBody = NSMutableData()
+                    
+                    /*
+                     Use form data
+                     { "email":string,
+                     "videoName":string,
+                     "description":string,
+                     "videoCategory":string,
+                     "videoFile":mp4 file,
+                     "videoImage":img file,
+                     }
+                     */
+                    httpBody.appendString(convertFormField(named: "email", value: exercise.owningUser.identifier, using: boundary))
+                    httpBody.appendString(convertFormField(named: "videoName", value: exercise.name, using: boundary))
+                    httpBody.appendString(convertFormField(named: "description", value: exercise.description, using: boundary))
+                    httpBody.appendString(convertFormField(named: "videoCategory", value: exercise.category.networkCall, using: boundary))
+                    httpBody.append(convertFileData(fieldName: "videoFile",
+                                                    fileName: filename,
+                                                    mimeType: videoMimeType,
+                                                    fileData: mp4VideoData,
+                                                    using: boundary))
+                    httpBody.append(convertFileData(fieldName: "videoImage",
+                                                    fileName: filename,
+                                                    mimeType: imgMimeType,
+                                                    fileData: previewImageData,
+                                                    using: boundary))
+                    
+                    httpBody.appendString("--\(boundary)--")
+                    request.httpBody = httpBody as Data
+                    
+                    // FIXME: Do I need this line?
+                    request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+                    
+                    _videoUploadCancellable = URLSession.shared.dataTaskPublisher(for: request)
+                        .map { $0.data }
+                        .decode(type: VideoFormat.self, decoder: JSONDecoder())
+                        .assertNoFailure()
+                        .sink {
+//                            self.convert
+                        }
+                }
+        }
+        .eraseToAnyPublisher()
     }
     
     
