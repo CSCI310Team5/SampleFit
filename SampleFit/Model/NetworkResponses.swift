@@ -36,7 +36,7 @@ struct WorkoutHistory: Codable{
 
 struct Livestream: Codable{
     var email: String=""
-    var zoom_link: URL?
+    var zoom_link: String=""
     var title: String=""
     var category: String=""
     var description: String = ""

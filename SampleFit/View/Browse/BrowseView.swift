@@ -21,6 +21,7 @@ struct BrowseView: View {
                     ForEach(Exercise.Category.allCases, id: \.self) { category in
                         ExerciseCategoryRow(categoryName: category.description, items: privateInformation.exerciseInCategory[category]!)
                     }
+                    
                 }
             }
             .navigationTitle("Videos & Live")

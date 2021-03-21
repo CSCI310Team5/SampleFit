@@ -44,6 +44,7 @@ class UserData: ObservableObject {
     private var _emailCheckCancellable: AnyCancellable?
     private var _avatarCancellable: AnyCancellable?
     private var _fetchLivestreamCancellable : AnyCancellable?
+    private var _fetchVideoCancellable : AnyCancellable?
     
     @Published var changeDone: Int = 0
     
@@ -200,23 +201,29 @@ class UserData: ObservableObject {
                 .receive(on: DispatchQueue.main)
                 .assign(to: \.privateInformation.exerciseFeeds, on: self)
 
-//                        privateInformation.exerciseFeeds=[]
-//                        for category in Exercise.Category.allCases{
-//                            _fetchLiveFeeds(category: category.networkCall)
-//                        }
-//            print(privateInformation.exerciseFeeds)
 
         }
     
-//    private func _fetchLiveFeeds(category:String){
-//        _fetchLivestreamCancellable=networkQueryController.getLivestreamByCategory(category: category)
-//            .receive(on: DispatchQueue.main)
-//            .sink{[unowned self] exercises in
-//                for exercise in exercises{
-//                    privateInformation.exerciseFeeds.append(exercise)
-//                }
-//            }
-//    }
+    func fetchLiveFeeds(category: Exercise.Category, token: String) -> [Exercise]{
+        var output:[Exercise]=[]
+        _fetchLivestreamCancellable=networkQueryController.getLivestreamByCategory(category: category, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] exercises in
+                output=exercises
+            }
+        return output
+    }
+    func fetchVideoFeeds(category: Exercise.Category, token: String) -> [Exercise]{
+        var output:[Exercise]=[]
+        _fetchLivestreamCancellable=networkQueryController.getVideoByCategory(category: category, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] exercises in
+                output=exercises
+            }
+        return output
+    }
+    
+    
         
         static var signedInUserData: UserData {
             let userData = UserData()
