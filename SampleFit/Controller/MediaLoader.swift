@@ -17,7 +17,7 @@ class MediaLoader {
                 return Just(UIImage(systemName: "person.fill"))
                     .eraseToAnyPublisher()
             } else {
-                return Just(UIImage(named: "chevron.right"))
+                return Just(UIImage(named: identifier))
                     .eraseToAnyPublisher()
             }
         } else {
