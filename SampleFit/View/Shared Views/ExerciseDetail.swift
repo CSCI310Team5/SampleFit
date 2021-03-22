@@ -79,7 +79,19 @@ struct ExerciseDetail: View {
                     }
                     
                     if exercise.playbackType == .live {
-                        Link("Join Live Stream", destination: URL(string: exercise.contentLink)!).font(.headline)
+                        if URL(string: exercise.contentLink) != nil {
+                            Link("Join Live Stream", destination: URL(string: exercise.contentLink)!).font(.headline)
+                                .foregroundColor(Color.systemBackground)
+                                .frame(minWidth: 100, maxWidth: 150)
+                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 7.5)
+                                        .fill(Color.accentColor)
+                                )
+                                .disabled(exercise.isExpired)
+                        } else {
+                            Button("Invalid zoom link", action: {})
                             .foregroundColor(Color.systemBackground)
                             .frame(minWidth: 100, maxWidth: 150)
                             .frame(minWidth: 0, maxWidth: .infinity)
@@ -88,7 +100,8 @@ struct ExerciseDetail: View {
                                 RoundedRectangle(cornerRadius: 7.5)
                                     .fill(Color.accentColor)
                             )
-                            .disabled(exercise.isExpired)
+                            .disabled(true)
+                        }
                     }
                     
                   
