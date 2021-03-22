@@ -61,7 +61,7 @@ struct WorkoutView: View {
                 if publicInformation.massDescription != nil {
                     Text("Calories Burned So Far: \((String(format: "%.2f", timer.calories)) ) Cal")
                 }else{
-                    Text("Set your weight in your profile page to start recording calorie burned").foregroundColor(.red)
+                    Text("Set your weight in your profile page to start recording your workout time and calorie burned").foregroundColor(.red)
                 }
             }.padding(.vertical,100)
             Button(action: {
@@ -94,8 +94,9 @@ struct WorkoutView: View {
                     RoundedRectangle(cornerRadius: 7.5)
                         .fill(Color.accentColor)
                 )
-            }
+            }.disabled(publicInformation.massDescription == nil)
             .padding()
+        
             Spacer()
             
         }.padding()
