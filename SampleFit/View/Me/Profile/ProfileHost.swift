@@ -21,7 +21,7 @@ struct ProfileHost: View {
             DetailedProfileSummary(publicProfile: publicProfile)
         }
         .sheet(isPresented: $isEditing) {
-            ProfileEditor(publicProfile: publicProfile, isPresented: $isEditing)
+            ProfileEditor(publicProfile: publicProfile, isPresented: $isEditing).environmentObject(userData)
         }
         .toolbar {
             Button(action: { self.isEditing.toggle() }) {
@@ -29,6 +29,9 @@ struct ProfileHost: View {
             }
         }
         .navigationBarTitle("Profile Details", displayMode: .inline)
+        .onAppear{
+            publicProfile.fetchProfile()
+        }
     }
 }
 

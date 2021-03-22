@@ -16,7 +16,7 @@ class UserData: ObservableObject {
     // MARK: - Instance properties
     var createAccountAuthenticationState = AuthenticationState(for: .createAccount)
     var signInAuthenticationState = AuthenticationState(for: .signIn)
-    var publicProfile = PublicProfile.exampleProfile
+    var publicProfile = PublicProfile(identifier: "", fullName: nil)
     var privateInformation = PrivateInformation()
     var searchCategoryTokenController = SearchCategoryTokenEventController()
     
@@ -157,7 +157,7 @@ class UserData: ObservableObject {
         fetchExerciseFeeds()
     }
     
-    private func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
+    func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
         
         privateInformation.storeWorkoutHistory(token: token, email: identifier)
         
@@ -165,18 +165,20 @@ class UserData: ObservableObject {
             .receive(on: DispatchQueue.main)
             .sink{[unowned self] token in
 
-                publicProfile = PublicProfile(identifier: identifier, fullName: fullName)
-                let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd"
-                var date: Date?
-                if token.birthday != nil { date = formatter.date(from: token.birthday!)}
-                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
-                
-                if token.avatar != nil {
-                    _avatarCancellable=networkQueryController.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(token.avatar!)")!).receive(on: DispatchQueue.main)
-                        .sink{[unowned self] avatar in
-                            self.publicProfile.image=avatar}
-                }
+                self.publicProfile.identifier = identifier
+//
+//                let formatter = DateFormatter()
+//
+//                formatter.dateFormat = "yyyy-MM-dd"
+//                var date: Date?
+//                if token.birthday != nil { date = formatter.date(from: token.birthday!)}
+//                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
+//
+//                if token.avatar != nil {
+//                    _avatarCancellable=networkQueryController.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(token.avatar!)")!).receive(on: DispatchQueue.main)
+//                        .sink{[unowned self] avatar in
+//                            self.publicProfile.image=avatar}
+//                }
                 publicProfile.authenticationToken = self.token
             }
         

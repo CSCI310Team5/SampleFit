@@ -35,11 +35,12 @@ class NetworkQueryController {
     private func videoToExercise(upload: VideoFormat, uploadCategory: Exercise.Category)->Exercise{
         
         
-        let excercise = Exercise(id: upload.videoID, name: upload.videoName, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: PublicProfile(identifier: upload.email, fullName: nil), duration: nil, previewImageIdentifier: upload.videoImage)
+        let excercise = Exercise(id: upload.videoID, name: upload.videoName, description: upload.description, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: PublicProfile(identifier: upload.email, fullName: nil), duration: nil, previewImageIdentifier: upload.videoImage)
         
         excercise.peopleLimit=0
         excercise.contentLink=upload.videoURL
         excercise.description=upload.description
+        
         
         return excercise
     }
@@ -219,7 +220,13 @@ class NetworkQueryController {
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
-            
+                        .handleEvents(receiveOutput: { outputValue in
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            print(String(data: outputValue.data, encoding: .utf8))
+                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
+                            print("\(decode)")
+                        })
             .map{
                 $0.data
             }
@@ -228,6 +235,10 @@ class NetworkQueryController {
                 return result
             }
             .replaceError(with: ProfileData())
+            .handleEvents(receiveOutput:{
+                print($0.birthday)
+            }
+            )
             .eraseToAnyPublisher()
     }
     
@@ -749,7 +760,8 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
-        
+        print("Birthday!")
+                        print(String(data: encode, encoding: .utf8)!)
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
@@ -778,6 +790,9 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        print("Weight!")
+                        print(String(data: encode, encoding: .utf8)!)
+        
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
                 $0.data
@@ -805,6 +820,8 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        print("Height!")
+                        print(String(data: encode, encoding: .utf8)!)
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
                 $0.data
@@ -839,7 +856,7 @@ class NetworkQueryController {
                     formatter.dateFormat = "yyyy-MM-dd HH:mm"
                     print(live.createTime)
                     let date = formatter.date(from: live.createTime)!
-                    let endDate = date.advanced(by: Double(live.timeLimit))
+                    let endDate = date.advanced(by: Double(live.timeLimit*60))
                     let currentDate = Date()
                     if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
                         let category = Exercise.Category.identify(networkCall: live.category)
