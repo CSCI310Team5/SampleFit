@@ -159,7 +159,8 @@ class Exercise: Identifiable, ObservableObject {
             self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
                 .autoconnect()
                 .map { Int($0.timeIntervalSinceReferenceDate) }
-                .map { $0 >= Int(self._endTime?.timeIntervalSinceReferenceDate ?? 0) }
+                .map { $0 >= Int(self._endTime?.timeIntervalSinceReferenceDate ?? 900000000) }
+                .filter { $0 == true && self.isExpired == false }
                 .assign(to: \.isExpired, on: self)
         }
     }

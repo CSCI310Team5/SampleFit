@@ -171,7 +171,7 @@ extension PrivateInformation {
     var featuredExercises: [Exercise] {
         let liveExercises = Array(exerciseFeeds.filter { $0.playbackType == .live }.prefix(3))
         if liveExercises.isEmpty {
-            return [exerciseFeeds.first!]
+            return exerciseFeeds.first != nil ? [exerciseFeeds.first!] : [Exercise.exampleExercisesSmall[0]]
         } else {
             return liveExercises
         }

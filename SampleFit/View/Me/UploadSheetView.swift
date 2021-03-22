@@ -59,7 +59,7 @@ struct UploadSheetView: View  {
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
-                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || (image == PublicProfile.exampleProfile.image && !isLivestream) || contentLink.isEmpty)
+                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || (image == PublicProfile.exampleProfile.image && !isLivestream) || (isLivestream && contentLink.isEmpty))
             }
             .padding(.horizontal)
             .padding(.vertical, 20)
@@ -84,15 +84,18 @@ struct UploadSheetView: View  {
                         HStack {
                             Text("Preview Image")
                             Spacer()
-                            Image(uiImage: image!)
-                                .resizable().scaledToFit()
+                            if image != nil {
+                                Image(uiImage: image!)
+                                    .resizable().scaledToFit()
+                            } else {
+                                Image(systemName: "person.fill")
+                                    .resizable().scaledToFit()
+                            }
+
                         }.frame(height: 100)
                         
                         Button("Add Preview Image") {
                             isImagePickerPresented.toggle()
-                        }
-                        .sheet(isPresented: $isImagePickerPresented) {
-                            ImagePicker(image: $image, isPresented: $isImagePickerPresented)
                         }
                         Group {
                             HStack {
@@ -111,9 +114,6 @@ struct UploadSheetView: View  {
                                     }
                                 }
                             }
-                        }
-                        .sheet(isPresented: $isVideoPickerPresented) {
-                            VideoPicker(videoURL: $videoURL, isLoading: $isVideoLoading, isPresented: $isVideoPickerPresented)
                         }
                     }
                     
@@ -145,8 +145,15 @@ struct UploadSheetView: View  {
                     }
                     if(name.count>25){Text("Name is too long").foregroundColor(.red)}
                 }
+
+                .sheet(isPresented: $isVideoPickerPresented) {
+                    VideoPicker(videoURL: $videoURL, isLoading: $isVideoLoading, isPresented: $isVideoPickerPresented)
+                }
             }
             Spacer()
+        }
+        .sheet(isPresented: $isImagePickerPresented) {
+            ImagePicker(image: $image, isPresented: $isImagePickerPresented)
         }
         //        .onDisappear(
         //            perform: {
