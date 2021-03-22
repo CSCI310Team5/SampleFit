@@ -23,6 +23,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var imageLoadingCancellable: AnyCancellable?
     
     @Published var uploadedExercises: [Exercise] = []
+    @Published var isUploadedVideoListLoading = false
     
     private var _usesMetricSystem: Bool
     
@@ -166,9 +167,11 @@ class PublicProfile: Identifiable, ObservableObject {
     
     //retrieves exercise uploads of a user, given that person's email
     func getExerciseUploads(userEmail: String){
+        isUploadedVideoListLoading = true
         _getUploadedExercisesCancellable=networkQueryController.getUserUploads(email: userEmail, nickname: nickname, avatar: image!).receive(on: DispatchQueue.main)
             .sink { [unowned self] output in
                 self.uploadedExercises=output
+                self.isUploadedVideoListLoading = false
             }
     }
     

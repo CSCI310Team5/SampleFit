@@ -24,9 +24,7 @@ class MediaLoader {
             return NetworkQueryController.shared.loadImage(fromURL: URL(string:identifier)!)
         }
     }
-    
-//    func video(withURL url: URL) -> AnyPublisher<>
-    
+        
     private func _isImageIdentifierLocallyLodable(_ identifier: String) -> Bool {
         let localIdentifiers =
         [
