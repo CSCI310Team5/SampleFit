@@ -17,6 +17,21 @@ struct ProfileData: Codable{
     var weight : Double?
     var height: Double?
     var avatar: String?
+    
+    var birthdayDate: Date? {
+        let formatter = DateFormatter()
+        
+        formatter.dateFormat = "yyyy-MM-dd"
+        var date: Date?
+        if birthday != nil {
+            date = formatter.date(from: birthday!)
+            return date
+        }
+        else{
+            return nil
+        }
+        
+    }
 }
 
 //possible JSON format for publicprofile response
