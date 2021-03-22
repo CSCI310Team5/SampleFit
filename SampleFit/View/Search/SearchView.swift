@@ -53,7 +53,7 @@ struct SearchContent: View {
             case .userIsTyping:
                 EmptyView()
             case .loading:
-                LoadingSearch()
+                LoadingView()
             case .noResults:
                 NoSearchResult(searchText: searchState.searchText)
             case .hasResults:

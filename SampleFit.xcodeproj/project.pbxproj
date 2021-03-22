@@ -65,7 +65,7 @@
 		F6DC3FFB25E87EB200A1CD00 /* ExerciseSearchResultList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */; };
 		F6DC400025E87EC200A1CD00 /* UserSearchResultList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC3FFF25E87EC200A1CD00 /* UserSearchResultList.swift */; };
 		F6DC400525E87F6200A1CD00 /* FavoriteExercisesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */; };
-		F6E3095425E4DBE400F4B7A6 /* LoadingSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3095325E4DBE400F4B7A6 /* LoadingSearch.swift */; };
+		F6E3095425E4DBE400F4B7A6 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3095325E4DBE400F4B7A6 /* LoadingView.swift */; };
 		F6E3095F25E4E1C600F4B7A6 /* NoResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3095E25E4E1C600F4B7A6 /* NoResults.swift */; };
 		F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3096625E4F50300F4B7A6 /* BlurView.swift */; };
 		F6E3096C25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */; };
@@ -167,7 +167,7 @@
 		F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSearchResultList.swift; sourceTree = "<group>"; };
 		F6DC3FFF25E87EC200A1CD00 /* UserSearchResultList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchResultList.swift; sourceTree = "<group>"; };
 		F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteExercisesList.swift; sourceTree = "<group>"; };
-		F6E3095325E4DBE400F4B7A6 /* LoadingSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSearch.swift; sourceTree = "<group>"; };
+		F6E3095325E4DBE400F4B7A6 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		F6E3095E25E4E1C600F4B7A6 /* NoResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResults.swift; sourceTree = "<group>"; };
 		F6E3096625E4F50300F4B7A6 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		F6E3096B25E4F5FD00F4B7A6 /* LiveBlurOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveBlurOverlay.swift; sourceTree = "<group>"; };
@@ -333,7 +333,7 @@
 			children = (
 				F61BA6B725D75D5E00249ED1 /* SearchView.swift */,
 				F669335025E0DAB4000D9442 /* SearchRecommendation.swift */,
-				F6E3095325E4DBE400F4B7A6 /* LoadingSearch.swift */,
+				F6E3095325E4DBE400F4B7A6 /* LoadingView.swift */,
 				F669335525E0DB7E000D9442 /* SearchResult.swift */,
 				F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */,
 				F6DC3FFF25E87EC200A1CD00 /* UserSearchResultList.swift */,
@@ -641,7 +641,7 @@
 				F669338A25E10070000D9442 /* SearchState.swift in Sources */,
 				F66932C625DE1A09000D9442 /* MediaLoader.swift in Sources */,
 				F66932BE25DE18B1000D9442 /* Exercise.swift in Sources */,
-				F6E3095425E4DBE400F4B7A6 /* LoadingSearch.swift in Sources */,
+				F6E3095425E4DBE400F4B7A6 /* LoadingView.swift in Sources */,
 				F664175C26081671002C78C0 /* LivestreamStatusView.swift in Sources */,
 				F6E8AF1325F839AF00EF4BE4 /* PasswordTextField.swift in Sources */,
 				F6DC400025E87EC200A1CD00 /* UserSearchResultList.swift in Sources */,

@@ -15,26 +15,30 @@ struct UploadedExercisesList: View {
     @State private var isNewUploadSheetPresented = false
     var body: some View {
         Group {
-            if publicProfile.uploadedExercises.isEmpty {
-                NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.")
-                    .animation(.easeInOut)
-                    .transition(.opacity)
+            if publicProfile.isUploadedVideoListLoading {
+                LoadingView(text: "Loading")
             } else {
-                List {
-                    ForEach(publicProfile.uploadedExercises) { exercise in
-                        NavigationLink(destination: ExerciseDetail(privateInformation: privateProfile, exercise: exercise)) {
-                            // hide detail and shrink row item on edit
-                            ExerciseListDisplayItem(exercise: exercise, hideDetails: editMode?.wrappedValue == .active)
-                                .scaleEffect(editMode?.wrappedValue == .active ? 0.9 : 1)
+                if publicProfile.uploadedExercises.isEmpty {
+                    NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.")
+                        .animation(.easeInOut)
+                        .transition(.opacity)
+                } else {
+                    List {
+                        ForEach(publicProfile.uploadedExercises) { exercise in
+                            NavigationLink(destination: ExerciseDetail(privateInformation: privateProfile, exercise: exercise)) {
+                                // hide detail and shrink row item on edit
+                                ExerciseListDisplayItem(exercise: exercise, hideDetails: editMode?.wrappedValue == .active)
+                                    .scaleEffect(editMode?.wrappedValue == .active ? 0.9 : 1)
+                            }
+                        }
+                        .onDelete {
+                            self.publicProfile.removeExerciseFromUploads(at: $0)
                         }
                     }
-                    .onDelete {
-                        self.publicProfile.removeExerciseFromUploads(at: $0)
+                    .listStyle(PlainListStyle())
+                    .toolbar {
+                        EditButton()
                     }
-                }
-                .listStyle(PlainListStyle())
-                .toolbar {
-                    EditButton()
                 }
             }
         }

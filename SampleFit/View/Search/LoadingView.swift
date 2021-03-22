@@ -1,5 +1,5 @@
 //
-//  LoadingSearch.swift
+//  LoadingView.swift
 //  SampleFit
 //
 //  Created by Zihan Qi on 2/22/21.
@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct LoadingSearch: View {
+struct LoadingView: View {
+    var text = "Searching"
     var body: some View {
         VStack(spacing: 8) {
             ProgressView()
                 .progressViewStyle(CircularProgressViewStyle())
-            Text("Searching")
+            Text(text)
                 .foregroundColor(.secondary)
         }
     }
@@ -21,7 +22,7 @@ struct LoadingSearch: View {
 struct LoadingSearch_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            LoadingSearch()
+            LoadingView()
         }
     }
 }
