@@ -167,15 +167,16 @@ class PublicProfile: Identifiable, ObservableObject {
     
     //retrieves exercise uploads of a user, given that person's email
     func getExerciseUploads(userEmail: String){
-        isUploadedVideoListLoading = true
         _getUploadedExercisesCancellable=networkQueryController.getUserUploads(email: userEmail, nickname: nickname, avatar: image!).receive(on: DispatchQueue.main)
             .sink { [unowned self] output in
                 self.uploadedExercises=output
-                self.isUploadedVideoListLoading = false
             }
     }
     
     func createExercise(newExercise: Exercise, token: String){
+        isUploadedVideoListLoading = true
+        print("setting loading to true!")
+
         if newExercise.playbackType == .live{
             _createExerciseCancellable=networkQueryController.createLive(exercise: newExercise, token: token)
                 .receive(on: DispatchQueue.main)
@@ -183,12 +184,20 @@ class PublicProfile: Identifiable, ObservableObject {
                     DispatchQueue.main.async {
                         self.uploadedExercises.append(newExercise)
                     }
+                    DispatchQueue.main.async {
+                        self.isUploadedVideoListLoading = false
+                    }
+                    print("setting loading to false!")
                 }
         }
         else{
             // video uploads
             networkQueryController.uploadVideo(atURL: URL(string: newExercise.contentLink)!, exercise: newExercise, token: token) {
                 self.uploadedExercises.append($0)
+                DispatchQueue.main.async {
+                    self.isUploadedVideoListLoading = false
+                }
+                print("setting loading to false!")
             }
         }
     }

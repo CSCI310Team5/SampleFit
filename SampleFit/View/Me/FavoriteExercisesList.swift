@@ -31,9 +31,9 @@ struct FavoriteExercisesList: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-                .toolbar {
-                    EditButton()
-                }
+//                .toolbar {
+//                    EditButton()
+//                }
             }
         }
         .navigationBarTitle("Favorites", displayMode: .inline)

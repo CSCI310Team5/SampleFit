@@ -128,13 +128,13 @@ struct UploadSheetView: View  {
                         }
                     }
                     
-                    Picker(selection: $duration, label: Text("Time Length")){
-                        ForEach(1...40, id: \.self) {
-                            Text("\($0) Min")
-                        }
-                    }
-                    
                     if isLivestream{
+                        Picker(selection: $duration, label: Text("Time Length")){
+                            ForEach(1...40, id: \.self) {
+                                Text("\($0) Min")
+                            }
+                        }
+                        
                         Picker(selection: $peopleLimit, label: Text("People Limit")){
                             ForEach(1...50, id: \.self) {
                                 Text("\($0) People")
@@ -142,6 +142,8 @@ struct UploadSheetView: View  {
                         }
                         
                         TextField("LiveStream Link",text:$contentLink)
+                            .autocapitalization(.none)
+                            .disableAutocorrection(true)
                     }
                     if(name.count>25){Text("Name is too long").foregroundColor(.red)}
                 }
