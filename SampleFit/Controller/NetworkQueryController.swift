@@ -363,13 +363,13 @@ class NetworkQueryController {
         }
         
         struct DecodeData: Codable{
-            var videos: [VideoFormat]
+            var uploadedVideos: [VideoFormat]
             var livestreams: [Livestream]
         }
         
         let encodeData = EncodeData(email: email)
         let encode = try! JSONEncoder().encode(encodeData)
-        let url = URL(string: "http://127.0.0.1:8000/user/uploadedVidsAndLivestreams")!
+        let url = URL(string: "http://127.0.0.1:8000/user/getOtherUserInfo")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
         request.httpBody=encode
@@ -382,7 +382,7 @@ class NetworkQueryController {
             .map{result in
                 var exercises: [Exercise]=[]
                 
-                for video in result.videos{
+                for video in result.uploadedVideos{
                     
                     var uploadCategory = Exercise.Category.hiit
                     

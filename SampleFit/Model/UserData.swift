@@ -228,8 +228,8 @@ class UserData: ObservableObject {
     
     static var signedInUserData: UserData {
         let userData = UserData()
-        userData.signInAuthenticationState.username = "zihanqi@usc.edu"
-        userData.signInAuthenticationState.password = "AAA111333"
+        userData.signInAuthenticationState.username = "shuyaoxi@usc.edu"
+        userData.signInAuthenticationState.password = "aaa666999"
 
         return userData
     }
