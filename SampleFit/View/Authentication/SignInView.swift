@@ -35,7 +35,7 @@ struct SignInView: View {
                 HStack{
                     Spacer()
                     Button(action: {retrivePassword.toggle()} , label: {
-                        Text("Forgot Password").foregroundColor(.red)
+                        Text("Forgot Password").foregroundColor(.blue)
                     }).padding(.vertical,10).scaledToFit()
                     
                     .sheet(isPresented: $retrivePassword, content: {
@@ -67,20 +67,20 @@ struct SignInView: View {
             .padding(.top, 40)
             
             
-            Divider()
-                .padding(.vertical, 8)
-            
-            
-            // Sign up with Apple
-            SignInWithAppleButton(.signIn, onRequest: { (request: ASAuthorizationAppleIDRequest) in
-                request.requestedScopes = [.fullName]
-            }, onCompletion: { (result: Result<ASAuthorization, Error>) in
-                userData.signInwithAppleDidComplete(with: result)
-            })
-            .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
-            .frame(height: 44)
-            .id(currentColorScheme.hashValue)
-            .disabled(userData.signInStatus == .validating)
+//            Divider()
+//                .padding(.vertical, 8)
+//            
+//            
+//            // Sign up with Apple
+//            SignInWithAppleButton(.signIn, onRequest: { (request: ASAuthorizationAppleIDRequest) in
+//                request.requestedScopes = [.fullName]
+//            }, onCompletion: { (result: Result<ASAuthorization, Error>) in
+//                userData.signInwithAppleDidComplete(with: result)
+//            })
+//            .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
+//            .frame(height: 44)
+//            .id(currentColorScheme.hashValue)
+//            .disabled(userData.signInStatus == .validating)
             
             Spacer()
         }

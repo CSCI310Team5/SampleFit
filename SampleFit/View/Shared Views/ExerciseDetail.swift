@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import AVKit
 
 struct ExerciseDetail: View {
@@ -13,6 +14,8 @@ struct ExerciseDetail: View {
     @ObservedObject var privateInformation: PrivateInformation
     @State var exercise: Exercise
     @State private var hideThumbnail = false
+    @Environment(\.openURL) var openURL
+    @State private var livestreamOverlayIsPresented = false
     
     var body: some View {
         // FIXME: need to deal with the overlaying image
@@ -80,16 +83,30 @@ struct ExerciseDetail: View {
                     
                     if exercise.playbackType == .live {
                         if URL(string: exercise.contentLink) != nil {
-                            Link("Join Live Stream", destination: URL(string: exercise.contentLink)!).font(.headline)
-                                .foregroundColor(Color.systemBackground)
-                                .frame(minWidth: 100, maxWidth: 150)
-                                .frame(minWidth: 0, maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 7.5)
-                                        .fill(Color.accentColor)
-                                )
-                                .disabled(exercise.isExpired)
+                            Button("Join Live Stream") {
+                                openURL(URL(string: exercise.contentLink)!)
+                                livestreamOverlayIsPresented = true
+                            }
+                            .font(.headline)
+                            .foregroundColor(Color.systemBackground)
+                            .frame(minWidth: 100, maxWidth: 150)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .frame(height: 50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 7.5)
+                                    .fill(Color.accentColor)
+                            )
+                            .disabled(exercise.isExpired)
+
+//                            Link("Join Live Stream", destination: URL(string: exercise.contentLink)!)
+//                                .foregroundColor(Color.systemBackground)
+//                                .frame(minWidth: 100, maxWidth: 150)
+//                                .frame(minWidth: 0, maxWidth: .infinity)
+//                                .frame(height: 50)
+//                                .background(
+//                                    RoundedRectangle(cornerRadius: 7.5)
+//                                        .fill(Color.accentColor)
+//                                )
                         } else {
                             Button("Invalid zoom link", action: {})
                             .foregroundColor(Color.systemBackground)
@@ -138,12 +155,26 @@ struct ExerciseDetail: View {
             }
             .padding(20)
             
+            .sheet(isPresented: $livestreamOverlayIsPresented, onDismiss: {}) {
+                LivestreamStatusView(isPresented: $livestreamOverlayIsPresented, exercise: exercise)
+            }
+            
         }
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
             exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
         }
+        // when live stream overlay changes to not presented, we are leaving the livestream
+        .onReceive(Just(livestreamOverlayIsPresented)) {
+            if $0 == false {
+                self.leaveLivestream()
+            }
+        }
+    }
+    
+    func leaveLivestream() {
+        // FIXME: Implement this
     }
 }
 

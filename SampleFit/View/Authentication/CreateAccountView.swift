@@ -60,20 +60,20 @@ struct CreateAccountView: View {
             .padding(.top, 60)
 
             
-            Divider()
-                .padding(.vertical, 8)
-            
-            
-            // Sign up with Apple
-            SignInWithAppleButton(.signUp, onRequest: { (request: ASAuthorizationAppleIDRequest) in
-                request.requestedScopes = [.fullName]
-            }, onCompletion: { (result: Result<ASAuthorization, Error>) in
-                userData.signInwithAppleDidComplete(with: result)
-            })
-            .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
-            .frame(height: 44)
-            .id(currentColorScheme.hashValue)
-            .disabled(!createAccountState.allowsAuthentication || userData.signInStatus == .validating)
+//            Divider()
+//                .padding(.vertical, 8)
+//            
+//            
+//            // Sign up with Apple
+//            SignInWithAppleButton(.signUp, onRequest: { (request: ASAuthorizationAppleIDRequest) in
+//                request.requestedScopes = [.fullName]
+//            }, onCompletion: { (result: Result<ASAuthorization, Error>) in
+//                userData.signInwithAppleDidComplete(with: result)
+//            })
+//            .signInWithAppleButtonStyle(currentColorScheme == .dark ? .white : .black)
+//            .frame(height: 44)
+//            .id(currentColorScheme.hashValue)
+//            .disabled(!createAccountState.allowsAuthentication || userData.signInStatus == .validating)
 
             Spacer()
         }

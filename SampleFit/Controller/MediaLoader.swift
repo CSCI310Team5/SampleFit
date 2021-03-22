@@ -13,8 +13,13 @@ class MediaLoader {
     /// Returns an image with the specified identifier (either local or network URL), or returns a nil if image not found.
     func image(withIdentifier identifier: String) -> AnyPublisher<UIImage?, Never> {
         if _isImageIdentifierLocallyLodable(identifier) {
-            return Just(UIImage(named: identifier))
-                .eraseToAnyPublisher()
+            if identifier == "" {
+                return Just(UIImage(systemName: "person.fill"))
+                    .eraseToAnyPublisher()
+            } else {
+                return Just(UIImage(named: "chevron.right"))
+                    .eraseToAnyPublisher()
+            }
         } else {
             return NetworkQueryController.shared.loadImage(fromURL: URL(string:identifier)!)
         }
