@@ -39,6 +39,7 @@ class NetworkQueryController {
         
         excercise.peopleLimit=0
         excercise.contentLink=upload.videoURL
+        excercise.description=upload.description
         
         return excercise
     }

@@ -18,13 +18,13 @@ struct ExerciseDetail: View {
     @State private var livestreamOverlayIsPresented = false
     
     var body: some View {
-        // FIXME: need to deal with the overlaying image
+
         ScrollView {
             VStack {
                 if exercise.playbackType == .recordedVideo {
                     
                     VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!))
-                    .frame(height: 250)
+                        .frame(height: 250)
                     
                 }else{
                     if exercise.image != nil {
@@ -97,42 +97,28 @@ struct ExerciseDetail: View {
                                     .fill(Color.accentColor)
                             )
                             .disabled(exercise.isExpired)
-
-//                            Link("Join Live Stream", destination: URL(string: exercise.contentLink)!)
-//                                .foregroundColor(Color.systemBackground)
-//                                .frame(minWidth: 100, maxWidth: 150)
-//                                .frame(minWidth: 0, maxWidth: .infinity)
-//                                .frame(height: 50)
-//                                .background(
-//                                    RoundedRectangle(cornerRadius: 7.5)
-//                                        .fill(Color.accentColor)
-//                                )
+                            
                         } else {
                             Button("Invalid zoom link", action: {})
-                            .foregroundColor(Color.systemBackground)
-                            .frame(minWidth: 100, maxWidth: 150)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 7.5)
-                                    .fill(Color.accentColor)
-                            )
-                            .disabled(true)
+                                .foregroundColor(Color.systemBackground)
+                                .frame(minWidth: 100, maxWidth: 150)
+                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 7.5)
+                                        .fill(Color.accentColor)
+                                )
+                                .disabled(true)
                         }
                     }
                     
-                  
+                    
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
                 
                 Divider()
                     .padding(.horizontal, 20)
-                
-                // description
-                Text(exercise.description)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
                 
             }
             .listRowInsets(EdgeInsets())
@@ -159,6 +145,11 @@ struct ExerciseDetail: View {
                 LivestreamStatusView(isPresented: $livestreamOverlayIsPresented, exercise: exercise)
             }
             
+            // description
+            Text(exercise.description)
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
+            
         }
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -179,7 +170,7 @@ struct ExerciseDetail: View {
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
-    @ObservedObject static var exercise: Exercise = Exercise.exampleExercisesFull[2]
+    @ObservedObject static var exercise: Exercise = Exercise.exampleExercisesFull[0]
     
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
