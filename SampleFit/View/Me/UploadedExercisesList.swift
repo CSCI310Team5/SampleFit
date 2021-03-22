@@ -16,7 +16,7 @@ struct UploadedExercisesList: View {
     var body: some View {
         Group {
             if publicProfile.isUploadedVideoListLoading {
-                LoadingView(text: "Loading")
+                LoadingView(text: "Uploading your new video...")
             } else {
                 if publicProfile.uploadedExercises.isEmpty {
                     NoResults(title: "No Uploads", description: "You haven't uploaded anything yet.")

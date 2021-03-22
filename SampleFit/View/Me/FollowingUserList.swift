@@ -28,9 +28,9 @@ struct FollowingUserList: View {
                     .listRowInsets(.none)
                 }
                 .listStyle(PlainListStyle())
-                .toolbar {
-                    EditButton()
-                }
+//                .toolbar {
+//                    EditButton()
+//                }
             }
         }
         .navigationBarTitle("Following", displayMode: .inline)
