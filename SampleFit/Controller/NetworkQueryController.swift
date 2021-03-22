@@ -402,7 +402,7 @@ class NetworkQueryController {
                     formatter.dateStyle = .short
                     formatter.dateFormat = "yyyy-MM-dd HH:mm"
                     let date = formatter.date(from: video.createTime)!
-                    let endDate = date.advanced(by: Double(video.timeLimit))
+                    let endDate = date.advanced(by: Double(video.timeLimit*60))
                     let currentDate = Date()
                     if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
                         var uploadCategory = Exercise.Category.hiit
@@ -542,6 +542,7 @@ class NetworkQueryController {
         request.httpMethod="POST"
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        print(String(data: encode, encoding: .utf8)!)
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
@@ -930,7 +931,7 @@ class NetworkQueryController {
                     formatter.dateStyle = .short
                     formatter.dateFormat = "yyyy-MM-dd HH:mm"
                     let date = formatter.date(from: video.createTime)!
-                    let endDate = date.advanced(by: Double(video.timeLimit))
+                    let endDate = date.advanced(by: Double(video.timeLimit*60))
                     let currentDate = Date()
                     if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
                         var uploadCategory = Exercise.Category.hiit
