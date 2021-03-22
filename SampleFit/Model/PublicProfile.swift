@@ -176,11 +176,13 @@ class PublicProfile: Identifiable, ObservableObject {
     }
     
     func createExercise(newExercise: Exercise, token: String){
-        if newExercise.playbackType.rawValue==1{
+        if newExercise.playbackType == .live{
             _createExerciseCancellable=networkQueryController.createLive(exercise: newExercise, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
-                    self.uploadedExercises.append(newExercise)
+                    DispatchQueue.main.async {
+                        self.uploadedExercises.append(newExercise)
+                    }
                 }
         }
         else{

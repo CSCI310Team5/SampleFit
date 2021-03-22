@@ -24,7 +24,6 @@ struct OtherUserProfile: Codable {
     var email: String
     var nickname: String = ""
     var avatar: String?
-//    var uploadedVideos: [VideoFormat]
 }
 
 struct WorkoutHistory: Codable{
@@ -42,7 +41,7 @@ struct Livestream: Codable{
     var description: String = ""
     var timeLimit: Int = 0
     var peopleLimit: Int = 0
-//    var createTime: String=""
+    var createTime: String=""
 }
 
 
