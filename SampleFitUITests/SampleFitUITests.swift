@@ -22,13 +22,55 @@ class SampleFitUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
+    func testCreateAccount() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
 
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        let uniqueSeed = UUID().description.prefix(8)
+        emailTextField.typeText("\(uniqueSeed)@usc.edu")
+        
+        let password = "AAA111333"
+        let passwordSecureField = app.secureTextFields[.localIdentifier(for: .passwordSecureField)]
+        passwordSecureField.tap()
+        passwordSecureField.typeText(password)
+        
+        let repeatPasswordSecureField = app.secureTextFields[.localIdentifier(for: .repeatPasswordSecureField)]
+        repeatPasswordSecureField.tap()
+        repeatPasswordSecureField.typeText(password)
+        
+        sleep(3)
+        
+        let createAccountButton = app.buttons[.localIdentifier(for: .createAccountButton)]
+
+        XCTAssertTrue(createAccountButton.isEnabled, "Create Account Button should be enabled")
+    }
+    
+    func testSignIn() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+
+        XCUIApplication().navigationBars["Sign Up"].buttons["Log In"].tap()
+        
+
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        let uniqueSeed = UUID().description.prefix(8)
+        emailTextField.typeText("\(uniqueSeed)@usc.edu")
+        
+        let password = "AAA111333"
+        let passwordSecureField = app.secureTextFields[.localIdentifier(for: .passwordSecureField)]
+        passwordSecureField.tap()
+        passwordSecureField.typeText(password)
+        
+        sleep(3)
+        
+        let signInButton = app.buttons[.localIdentifier(for: .signInButton)]
+
+        XCTAssertTrue(signInButton.isEnabled, "Sign In Button should be enabled")
     }
 
     func testLaunchPerformance() throws {

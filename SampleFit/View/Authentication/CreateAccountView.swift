@@ -22,12 +22,16 @@ struct CreateAccountView: View {
             VStack(spacing: 8) {
                 // username field
                 UsernameTextField($createAccountState.username, inputStatus: createAccountState.usernameInputStatus, colorType: \.signUpColor)
+                    .accessibility(localIdentifier: .usernameTextField)
                
                 // password field
                 PasswordTextField(.password, text: $createAccountState.password, inputStatus: createAccountState.passwordInputStatus, colorType: \.signUpColor)
+                    .accessibility(localIdentifier: .passwordSecureField)
+
                 
                 // repeat password field
                 PasswordTextField(.verify, text: $createAccountState.repeatPassword, inputStatus: createAccountState.repeatPasswordInputStatus, colorType: \.signUpColor)
+                    .accessibility(localIdentifier: .repeatPasswordSecureField)
                     .padding(.bottom, 24)
                 
                 if userData.signInReturnsError {
@@ -46,6 +50,7 @@ struct CreateAccountView: View {
                                 .padding(.vertical)
                         }
                     }
+                    .accessibility(localIdentifier: .createAccountButton)
                     .font(.headline)
                     .foregroundColor(Color(UIColor.systemBackground))
                     .frame(minWidth: 0, maxWidth: .infinity)
@@ -87,6 +92,7 @@ struct CreateAccountView: View {
             Button(action: {userData.signInStatus = .signedOut} , label: {
                 Text("Log In")
             })
+            .accessibility(localIdentifier: .toggleToSignUpButton)
         }
     }
 }
