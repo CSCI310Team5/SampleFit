@@ -124,9 +124,16 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _livestreamDeletionCancellable: AnyCancellable?
     private var _fetchNewProfileCancellable: AnyCancellable?
     
+    func removeProfile(){
+        self.image=UIImage(systemName: "person.fill.questionmark")
+        self._height=nil
+        self._mass=nil
+        self.nickname=""
+        self._birthday=nil
+    }
+    
     func fetchProfile(){
         _fetchNewProfileCancellable=networkQueryController.getProfile(email: identifier, token: authenticationToken).receive(on: DispatchQueue.main).sink{[unowned self] newProfile in
-            print(newProfile.birthday)
             self.setProfile(weight: newProfile.weight, height: newProfile.height, nickname: newProfile.nickname, birthday: newProfile.birthdayDate)
         }
     }
