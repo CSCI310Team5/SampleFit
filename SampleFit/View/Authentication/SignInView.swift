@@ -31,6 +31,7 @@ struct SignInView: View {
                 
                 // password field
                 PasswordTextField(.password, text: $signInAuthenticationState.password, inputStatus: signInAuthenticationState.passwordInputStatus, colorType: \.signInColor)
+                    .accessibility(localIdentifier: .passwordSecureField)
                 
                 HStack{
                     Spacer()
@@ -62,6 +63,7 @@ struct SignInView: View {
                             .fill(signInAuthenticationState.allowsAuthentication ? signInAuthenticationState.passwordInputStatus.signInColor : Color.secondary)
                     )
                 }
+                .accessibility(localIdentifier: .signInButton)
                 .disabled(!signInAuthenticationState.allowsAuthentication || userData.signInStatus == .validating)
             }
             .padding(.top, 40)

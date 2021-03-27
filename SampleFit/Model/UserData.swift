@@ -189,7 +189,7 @@ class UserData: ObservableObject {
     }
     
     /// Manages sign in status after the user chooses to sign in.
-    private func manageSignInStatusAfterSignIn(_ success: Bool) {
+    func manageSignInStatusAfterSignIn(_ success: Bool) {
         if success {
             signInStatus = .signedIn
         } else {

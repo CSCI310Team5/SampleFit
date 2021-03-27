@@ -9,18 +9,44 @@ import XCTest
 @testable import SampleFit
 
 class SampleFitTests: XCTestCase {
+    
+    var userData: UserData!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        userData = UserData()
+        userData.signInStatus = .never
+
+        let usernames =  ["zihanqi@usc.edu", "shuyaoxi@usc.edu"]
+        let passwords = ["AAA111333", "aaa666999"]
+        
+        let currentUsername = usernames.randomElement()!
+        let currentPassword = passwords.randomElement()!
+        
+        userData.createAccountAuthenticationState.username = currentUsername
+        userData.createAccountAuthenticationState.password = currentPassword
+        userData.signInAuthenticationState.username = currentUsername
+        userData.signInAuthenticationState.password = currentPassword
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    override func tearDownWithError() throws {}
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testUserDataCreateAccount() throws {
+        userData.manageSignInStatusAfterSignIn(true)
+
+        XCTAssertEqual(userData.signInStatus, SignInStatus.signedIn, "UserData sign in status should become .signedIn.")
+    }
+    
+    func testUserDataSignOut() throws {
+        userData.signOut()
+        
+        XCTAssertEqual(userData.signInStatus, SignInStatus.signedOut, "UserData sign in status should become .signedOut.")
+    }
+    
+    func testUserDataSignIn() throws {
+        userData.signOut()
+        userData.manageSignInStatusAfterSignIn(true)
+        
+        XCTAssertEqual(userData.signInStatus, SignInStatus.signedIn, "UserData sign in status should become .signedIn.")
     }
 
     func testPerformanceExample() throws {
