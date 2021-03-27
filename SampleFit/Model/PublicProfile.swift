@@ -218,56 +218,62 @@ class PublicProfile: Identifiable, ObservableObject {
     }
     
     func update(using newProfile: PublicProfile, token: String) {
+        var delay:Double = 0.1
         
         if self._nickname != newProfile.nickname{
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.1){[unowned self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+delay){[unowned self] in
                 self._nicknameUpdateCancellable=self.networkQueryController.changeNickname(email: self.identifier, nickname: newProfile.nickname, token: token)
                     .receive(on: DispatchQueue.main)
                     .sink { [unowned self] success in
                         self.nickname = newProfile.nickname
                     }
             }
+            delay+=0.5
         }
         
         
         
         if self.image != newProfile.image{
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.3){[unowned self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+delay){[unowned self] in
                 _avatarUpadateCancellable = networkQueryController.changeAvatar(email: identifier, avatar: newProfile.image!, token: token).receive(on: DispatchQueue.main)
                     .sink{ [unowned self] success in
                         self.image = newProfile.image
                     }
             }
+            delay+=0.5
         }
         
         if self._birthday != newProfile._birthday{
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.7){[unowned self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+delay){[unowned self] in
             _birthdayUpdateCancellable=networkQueryController.changeBirthday(email: self.identifier, birthday: newProfile._birthday!, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
                     self.birthdayBinding = newProfile._birthday!
                 }
             }
+            delay+=0.5
         }
         
         if self._height != newProfile._height{
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.9){[unowned self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+delay){[unowned self] in
             _heightUpdateCancellable=networkQueryController.changeHeight(email: self.identifier, height: newProfile._height!.converted(to: .centimeters).value, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
                     self.heightBinding = newProfile._height!
                 }
             }
+            delay+=0.5
         }
         
         if self._mass != newProfile._mass{
-            DispatchQueue.main.asyncAfter(deadline: .now()+1.1){[unowned self] in
+            DispatchQueue.main.asyncAfter(deadline: .now()+delay){[unowned self] in
             _weightUpdateCancellable=networkQueryController.changeWeight(email: self.identifier, weight: (newProfile._mass?.converted(to: .kilograms).value)!, token: token)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
                     self.massBinding = newProfile._mass!
                 }
             }
+            delay+=0.5
         }
             
         objectWillChange.send()
