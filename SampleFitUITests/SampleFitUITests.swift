@@ -104,6 +104,66 @@ class SampleFitUITests: XCTestCase {
 
         XCTAssertTrue(signInButton.isEnabled, "Sign In Button should be enabled")
     }
+    
+    func testFailureSignIn() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+
+        XCUIApplication().navigationBars["Sign Up"].buttons["Log In"].tap()
+        
+
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        let uniqueSeed = UUID().description.prefix(8)
+        emailTextField.typeText("\(uniqueSeed)@usc.edu")
+        
+        let password = "AAA111333"
+        let passwordSecureField = app.secureTextFields[.localIdentifier(for: .passwordSecureField)]
+        passwordSecureField.tap()
+        passwordSecureField.typeText(password)
+        
+        sleep(1)
+        
+        let signInButton = app.buttons[.localIdentifier(for: .signInButton)]
+
+        XCTAssertTrue(signInButton.isEnabled, "Sign In Button should be enabled")
+        
+        signInButton.tap()
+        
+        sleep(2)
+        
+        XCTAssertTrue(!app.staticTexts["Me"].exists)
+    }
+    
+    func testSuccessfulSignIn() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+
+        XCUIApplication().navigationBars["Sign Up"].buttons["Log In"].tap()
+
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        emailTextField.typeText("shuyaoxi@usc.edu")
+        
+        let password = "aaa666999"
+        let passwordSecureField = app.secureTextFields[.localIdentifier(for: .passwordSecureField)]
+        passwordSecureField.tap()
+        passwordSecureField.typeText(password)
+        
+        sleep(1)
+        
+        let signInButton = app.buttons[.localIdentifier(for: .signInButton)]
+
+        XCTAssertTrue(signInButton.isEnabled, "Sign In Button should be enabled")
+        
+        signInButton.tap()
+        
+        sleep(2)
+        
+        XCTAssertTrue(app.staticTexts["Me"].exists)
+    }
 
     func testLaunchPerformance() throws {
         if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
