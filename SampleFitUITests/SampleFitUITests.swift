@@ -48,6 +48,36 @@ class SampleFitUITests: XCTestCase {
         XCTAssertTrue(createAccountButton.isEnabled, "Create Account Button should be enabled")
     }
     
+    func testSuccessfulCreateAccount() throws {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        let uniqueSeed = UUID().description.prefix(8)
+        emailTextField.typeText("\(uniqueSeed)i@usc.edu")
+        
+        let password = "aaa666999"
+        let passwordSecureField = app.secureTextFields[.localIdentifier(for: .passwordSecureField)]
+        passwordSecureField.tap()
+        passwordSecureField.typeText(password)
+        
+        let repeatPasswordSecureField = app.secureTextFields[.localIdentifier(for: .repeatPasswordSecureField)]
+        repeatPasswordSecureField.tap()
+        repeatPasswordSecureField.typeText(password)
+        
+   
+        
+        let createAccountButton = app.buttons[.localIdentifier(for: .createAccountButton)]
+        
+        createAccountButton.tap()
+        
+        sleep(3)
+        
+        XCTAssert(app.staticTexts["Me"].exists)
+        
+    }
+    
     func testSignIn() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
