@@ -15,6 +15,7 @@ enum AccessibilityIdentifiers: String {
     case repeatPasswordSecureField
     case createAccountButton
     case signInButton
+    case profileAvatar
 }
 
 extension String {

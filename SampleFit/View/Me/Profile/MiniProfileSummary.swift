@@ -15,7 +15,7 @@ struct MiniProfileSummary: View {
                 Spacer()
                 VStack(spacing: 16) {
                     
-                    CircleImage(image: publicProfile.image)
+                    CircleImage(image: publicProfile.image).accessibility(localIdentifier: .profileAvatar)
                     
                     // top portion
                     VStack {
