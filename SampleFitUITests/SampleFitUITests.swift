@@ -66,9 +66,11 @@ class SampleFitUITests: XCTestCase {
         repeatPasswordSecureField.tap()
         repeatPasswordSecureField.typeText(password)
         
-   
+        sleep(3)
         
         let createAccountButton = app.buttons[.localIdentifier(for: .createAccountButton)]
+        
+        XCTAssertTrue(createAccountButton.isEnabled, "Create Account Button should be enabled")
         
         createAccountButton.tap()
         
