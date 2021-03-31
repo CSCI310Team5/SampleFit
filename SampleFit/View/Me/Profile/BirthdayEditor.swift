@@ -34,6 +34,7 @@ struct BirthdayEditor: View {
         }
         .padding(.horizontal)
         .frame(height: 44)
+        .accessibility(identifier: "birthdayEditor")
     }
 }
 

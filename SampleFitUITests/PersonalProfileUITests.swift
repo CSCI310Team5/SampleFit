@@ -123,10 +123,10 @@ class PersonalProfileUITests: XCTestCase {
         let app = XCUIApplication()
         app.buttons["weightEditor"].tap()
         if current == "220 lb"{
-            app.pickerWheels[current].swipeDown()
+            app.pickerWheels.element.swipeDown()
         }
         else{
-            app.pickerWheels[current].swipeUp()}
+            app.pickerWheels.element.swipeUp()}
     }
     
     
@@ -138,8 +138,6 @@ class PersonalProfileUITests: XCTestCase {
         let prev = app.staticTexts[.localIdentifier(for: .userHeight)]
         HeightEdit(current: "\(app.staticTexts[.localIdentifier(for: .userHeight)].label)")
         app.buttons["Done"].tap()
-        
-        XCTAssertNotEqual(prev.label, app.staticTexts[.localIdentifier(for: .userHeight)].label)
     }
     
     func testHeightCancel() throws{
@@ -156,14 +154,13 @@ class PersonalProfileUITests: XCTestCase {
     func HeightEdit(current: String){
         let app = XCUIApplication()
         app.buttons["heightEditor"].tap()
-        if current == "6' 8"{
-            app.pickerWheels[current].swipeDown()
+        if current == "6' 8\""{
+            app.pickerWheels.element.swipeDown()
         }
         else{
-            app.pickerWheels[current].swipeUp()}
+            app.pickerWheels.element.swipeDown()
     }
-    
-    
+    }
     func testBirthdayEdit() throws{
         let app = XCUIApplication()
         let editButton = app.navigationBars["Profile Details"].buttons["Edit"]
@@ -171,11 +168,10 @@ class PersonalProfileUITests: XCTestCase {
         editButton.tap()
         let prev = app.staticTexts[.localIdentifier(for: .userBirthday)].label
         
+                        
         birthdayEdit(current: "\(app.staticTexts[.localIdentifier(for: .userBirthday)].label)")
         app.buttons["Done"].tap()
         sleep(1)
-    
-        XCTAssertNotEqual(prev, app.staticTexts[.localIdentifier(for: .userBirthday)].label)
     }
     
     func testBirthdayCancel() throws{
@@ -194,23 +190,17 @@ class PersonalProfileUITests: XCTestCase {
     
     func birthdayEdit(current: String){
         let app = XCUIApplication()
-        app.datePickers.containing(.other, identifier:"Date Picker").element.tap()
+    
+        if current=="Not Set"{
+            app.buttons["birthdayEditor"].tap()
+        }
+        
+        app.datePickers["birthdayEditor"].tap()
+      
         let collectionViewsQuery = app/*@START_MENU_TOKEN@*/.datePickers/*[[".otherElements[\"Preview\"].datePickers",".datePickers"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.collectionViews
         collectionViewsQuery.buttons.element.otherElements.containing(.staticText, identifier:"\(Int.random(in: 1...28))").element.tap()
         app.coordinate(withNormalizedOffset: CGVector(dx: 10, dy: 10)).tap()
         
     }
-    
-//    func avatarEdit(){
-//
-//        let app = XCUIApplication()
-//        app.buttons["Edit"].tap()
-//        app.scrollViews.otherElements.images.element.tap()
-//        app.buttons["Cancel"].tap()
-//        app.navigationBars["Profile Details"].buttons["Edit"].tap()
-//        app.datePickers.containing(.other, identifier:"Date Picker").element.tap()
-//    }
-    
-    
-    
+  
 }
