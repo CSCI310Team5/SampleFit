@@ -147,6 +147,9 @@ struct NavigationViewWithSearchBar<Content, TokenController>: UIViewControllerRe
                 }
             }
         
+        // setting accessibility
+        context.coordinator.searchController.searchBar.searchTextField.accessibilityIdentifier = .localIdentifier(for: .searchBarTextField)
+        
         return navigationController
     }
     

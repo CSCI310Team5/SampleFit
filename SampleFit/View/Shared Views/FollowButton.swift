@@ -35,6 +35,7 @@ struct FollowButton: View {
             .fixedSize(horizontal: true, vertical: false)
             .scaleEffect(0.85)
             .frame(minWidth: 44, minHeight: 44)
+            .accessibility(localIdentifier: .followUnfollowButton)
         }
     }
 }

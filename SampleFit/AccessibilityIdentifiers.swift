@@ -28,6 +28,8 @@ enum AccessibilityIdentifiers: String {
     case uploadNewButton
     case uploadsList
     case exerciseName
+    case followUnfollowButton
+    case searchBarTextField
 }
 
 extension String {
