@@ -16,6 +16,10 @@ enum AccessibilityIdentifiers: String {
     case createAccountButton
     case signInButton
     case profileAvatar
+    case userNickname
+    case userHeight
+    case userWeight
+    case userBirthday
 }
 
 extension String {

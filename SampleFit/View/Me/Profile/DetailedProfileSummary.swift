@@ -38,7 +38,7 @@ struct DetailedProfileSummary: View {
                     Text("Nickname")
                     Spacer()
                     if publicProfile.isNicknameSet && !publicProfile.nickname.isEmpty {
-                        Text(publicProfile.nickname)
+                        Text(publicProfile.nickname).accessibility(localIdentifier: .userNickname)
                     } else {
                         NotSetView()
                     }
@@ -53,7 +53,7 @@ struct DetailedProfileSummary: View {
                     Text("Date of Birth")
                     Spacer()
                     if publicProfile.birthdayDescription != nil {
-                        Text(publicProfile.birthdayDescription!)
+                        Text(publicProfile.birthdayDescription!).accessibility(localIdentifier: .userBirthday)
                     } else {
                         NotSetView()
                     }
@@ -68,7 +68,7 @@ struct DetailedProfileSummary: View {
                     Text("Height")
                     Spacer()
                     if publicProfile.heightDescription != nil {
-                        Text(publicProfile.heightDescription!)
+                        Text(publicProfile.heightDescription!).accessibility(localIdentifier: .userHeight)
                     } else {
                         NotSetView()
                     }
@@ -83,7 +83,7 @@ struct DetailedProfileSummary: View {
                     Text("Weight")
                     Spacer()
                     if publicProfile.massDescription != nil {
-                        Text(publicProfile.massDescription!)
+                        Text(publicProfile.massDescription!).accessibility(localIdentifier: .userWeight)
                     } else {
                         NotSetView()
                     }

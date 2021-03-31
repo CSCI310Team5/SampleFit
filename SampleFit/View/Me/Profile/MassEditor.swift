@@ -40,6 +40,7 @@ struct MassEditor: View {
             }
             .padding(.horizontal)
             .frame(height: 44)
+            .accessibility(identifier: "weightEditor")
                         
             if pickerVisibility == .massPicker {
                 Divider()
