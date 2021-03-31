@@ -7,7 +7,7 @@
 
 import XCTest
 
-class WorkoutInterface: XCTestCase {
+class WorkoutInterfaceUITests: XCTestCase {
 
     
     func signin(){
