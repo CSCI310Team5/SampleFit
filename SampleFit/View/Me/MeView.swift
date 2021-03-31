@@ -51,6 +51,7 @@ struct MeView: View {
                             .font(Font.body.bold())
                     }
                 }
+                .accessibility(localIdentifier: .uploadsSection)
                 
                 NavigationLink(destination: FollowingUserList(privateInformation: privateInformation)) {
                     Label {

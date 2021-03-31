@@ -20,6 +20,14 @@ enum AccessibilityIdentifiers: String {
     case userHeight
     case userWeight
     case userBirthday
+    case uploadMediaTypeToggle
+    case uploadNameTextField
+    case uploadDescriptionTextField
+    case uploadLinkTextfield
+    case uploadsSection
+    case uploadNewButton
+    case uploadsList
+    case exerciseName
 }
 
 extension String {
