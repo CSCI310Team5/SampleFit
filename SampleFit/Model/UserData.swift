@@ -138,6 +138,8 @@ class UserData: ObservableObject {
         signInAuthenticationState = AuthenticationState(for: .signIn)
         privateInformation.exerciseFeeds=[]
         privateInformation.followedUsers=[]
+        publicProfile.removeProfile()
+        
     }
     
     func changePassword(to newPassword: String) {
@@ -166,19 +168,18 @@ class UserData: ObservableObject {
             .sink{[unowned self] token in
 
                 self.publicProfile.identifier = identifier
-//
-//                let formatter = DateFormatter()
-//
-//                formatter.dateFormat = "yyyy-MM-dd"
-//                var date: Date?
-//                if token.birthday != nil { date = formatter.date(from: token.birthday!)}
-//                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
-//
-//                if token.avatar != nil {
-//                    _avatarCancellable=networkQueryController.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(token.avatar!)")!).receive(on: DispatchQueue.main)
-//                        .sink{[unowned self] avatar in
-//                            self.publicProfile.image=avatar}
-//                }
+
+                let formatter = DateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+                var date: Date?
+                if token.birthday != nil { date = formatter.date(from: token.birthday!)}
+                self.publicProfile.setProfile(weight: token.weight, height: token.height, nickname: token.nickname, birthday: date ?? nil)
+
+                if token.avatar != nil {
+                    _avatarCancellable=networkQueryController.loadImage(fromURL: URL(string: "http://127.0.0.1:8000\(token.avatar!)")!).receive(on: DispatchQueue.main)
+                        .sink{[unowned self] avatar in
+                            self.publicProfile.image=avatar}
+                }
                 publicProfile.authenticationToken = self.token
             }
         

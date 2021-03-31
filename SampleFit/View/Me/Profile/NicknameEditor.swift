@@ -32,6 +32,8 @@ struct NicknameEditor: View {
         }
         .padding(.horizontal)
         .frame(height: 44)
+        .accessibility(identifier: "nicknameEdit")
+        
     }
 }
 

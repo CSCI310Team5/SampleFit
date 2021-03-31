@@ -38,6 +38,7 @@ struct HeightEditor: View {
             }
             .padding(.horizontal)
             .frame(height: 44)
+            .accessibility(identifier: "heightEditor")
             
             if pickerVisibility == .heightPicker {
                 Divider()

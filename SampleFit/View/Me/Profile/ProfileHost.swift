@@ -29,9 +29,6 @@ struct ProfileHost: View {
             }
         }
         .navigationBarTitle("Profile Details", displayMode: .inline)
-        .onAppear{
-            publicProfile.fetchProfile()
-        }
     }
 }
 
