@@ -43,7 +43,7 @@ class SearchUITests: XCTestCase {
     override func tearDownWithError() throws {
     }
 
-    func testSearchExercise() throws {
+    func testSearchExerciseByCategory() throws {
         app.navigationBars["Search"].searchFields["Videos, Users"].tap()
         app.scrollViews.otherElements.buttons["HIIT"].tap()
         
@@ -51,9 +51,28 @@ class SearchUITests: XCTestCase {
         XCTAssert(app.tables.buttons["·, HIIT, HIIT with Jessie"].isHittable)
     }
     
+    func testSearchExerciseByKeyword() throws {
+        let searchNavigationBar = app.navigationBars["Search"]
+        searchNavigationBar.searchFields["Videos, Users"].tap()
+        
+        app.keyboards.keys["j"].tap()
+        app.keyboards.keys["e"].tap()
+        app.keyboards.keys["s"].tap()
+        app.keyboards.keys["s"].tap()
+        app.keyboards.keys["i"].tap()
+        app.keyboards.keys["e"].tap()
+
+        app/*@START_MENU_TOKEN@*/.buttons["search"]/*[[".keyboards",".buttons[\"search\"]",".buttons[\"Search\"]"],[[[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        
+        let tablesQuery = app.tables
+        XCTAssert(tablesQuery/*@START_MENU_TOKEN@*/.buttons["·, Push up, Pushup with Jessie"]/*[[".cells[\"·, Push up, Pushup with Jessie\"]",".buttons[\"·, Push up, Pushup with Jessie\"]",".buttons[\"exerciseName\"]"],[[[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.isHittable)
+        XCTAssert(tablesQuery/*@START_MENU_TOKEN@*/.buttons["·, HIIT, HIIT with Jessie"]/*[[".cells[\"·, HIIT, HIIT with Jessie\"]",".buttons[\"·, HIIT, HIIT with Jessie\"]",".buttons[\"exerciseName\"]"],[[[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.isHittable)
+        XCTAssert(tablesQuery/*@START_MENU_TOKEN@*/.buttons["·, Cycling, Cycling with Jessie"]/*[[".cells[\"·, Cycling, Cycling with Jessie\"]",".buttons[\"·, Cycling, Cycling with Jessie\"]",".buttons[\"exerciseName\"]"],[[[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.isHittable)
+    }
+    
     func testSearchUserAndToggleFollowUser() throws {
         
-        let app = XCUIApplication()
         let searchNavigationBar = app.navigationBars["Search"]
         searchNavigationBar.searchFields["Videos, Users"].tap()
         searchNavigationBar/*@START_MENU_TOKEN@*/.segmentedControls["scopeBar"].buttons["User"]/*[[".segmentedControls[\"scopeBar\"].buttons[\"User\"]",".buttons[\"User\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
