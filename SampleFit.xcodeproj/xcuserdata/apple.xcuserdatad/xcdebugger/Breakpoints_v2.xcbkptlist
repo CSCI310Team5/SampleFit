@@ -16,23 +16,39 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "90"
             endingLineNumber = "90"
-            landmarkName = "nameEdit(newName:)"
+            landmarkName = "PersonalProfileUITests"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6AF68248-E29F-4345-9797-F4EFD82486A7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SampleFitUITests/WorkoutInterface.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
+            landmarkName = "testExerciseClickRecord()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "239EF2E8-A1F7-4E72-A5B8-65353295139F"
-            shouldBeEnabled = "Yes"
+            uuid = "381D250B-7D19-4FFB-AA28-084DFDDA1A84"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SampleFitUITests/PersonalProfileUITests.swift"
+            filePath = "SampleFitUITests/PersonalInterfaceUITest.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "birthdayEdit(current:)"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "testChangePassword()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

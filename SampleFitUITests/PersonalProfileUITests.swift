@@ -158,7 +158,7 @@ class PersonalProfileUITests: XCTestCase {
             app.pickerWheels.element.swipeDown()
         }
         else{
-            app.pickerWheels.element.swipeDown()
+            app.pickerWheels.element.swipeUp()
     }
     }
     func testBirthdayEdit() throws{
@@ -202,5 +202,9 @@ class PersonalProfileUITests: XCTestCase {
         app.coordinate(withNormalizedOffset: CGVector(dx: 10, dy: 10)).tap()
         
     }
+    
+    
+    
+    
   
 }
