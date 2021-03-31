@@ -158,7 +158,7 @@ class PersonalProfileUITests: XCTestCase {
             app.pickerWheels.element.swipeDown()
         }
         else{
-            app.pickerWheels.element.swipeDown()
+            app.pickerWheels.element.swipeUp()
     }
     }
     func testBirthdayEdit() throws{
