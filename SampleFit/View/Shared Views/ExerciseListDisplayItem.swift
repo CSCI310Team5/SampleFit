@@ -50,6 +50,7 @@ struct ExerciseListDisplayItem: View {
                 }
                 
                 Text(exercise.name).font(.subheadline)
+                    .accessibility(localIdentifier: .exerciseName)
             }
             
             Spacer()

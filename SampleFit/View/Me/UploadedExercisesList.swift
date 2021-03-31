@@ -42,6 +42,7 @@ struct UploadedExercisesList: View {
                 }
             }
         }
+        .accessibility(localIdentifier: .uploadsList)
         
         .sheet(isPresented: $isNewUploadSheetPresented) {
             UploadSheetView(publicProfile: publicProfile, isPresented: $isNewUploadSheetPresented)
@@ -50,6 +51,7 @@ struct UploadedExercisesList: View {
             Button(action: { isNewUploadSheetPresented = true }) {
                 Image(systemName: "plus")
             }
+            .accessibility(localIdentifier: .uploadNewButton)
         )
         .navigationBarTitle("Uploads", displayMode: .inline)
         .onAppear{

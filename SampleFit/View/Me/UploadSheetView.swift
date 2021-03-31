@@ -76,6 +76,7 @@ struct UploadSheetView: View  {
                         Text("Video")
                         Toggle("", isOn: $isLivestream)
                             .labelsHidden()
+                            .accessibility(localIdentifier: .uploadMediaTypeToggle)
                         Text("Livestream")
                     }
                     
@@ -119,8 +120,11 @@ struct UploadSheetView: View  {
                     
                     
                     TextField("Name",text:$name)
+                        .accessibility(localIdentifier: .uploadNameTextField)
+
                     
                     TextField("Description",text:$description)
+                        .accessibility(localIdentifier: .uploadDescriptionTextField)
                     
                     Picker(selection: $category, label: Text("Exercise Category")) {
                         ForEach(Exercise.Category.allCases, id: \.self) {
@@ -144,6 +148,7 @@ struct UploadSheetView: View  {
                         TextField("LiveStream Link",text:$contentLink)
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
+                            .accessibility(localIdentifier: .uploadLinkTextfield)
                     }
                     if(name.count>25){Text("Name is too long").foregroundColor(.red)}
                 }
@@ -157,11 +162,6 @@ struct UploadSheetView: View  {
         .sheet(isPresented: $isImagePickerPresented) {
             ImagePicker(image: $image, isPresented: $isImagePickerPresented)
         }
-        //        .onDisappear(
-        //            perform: {
-        //                print("hahahaha")
-        //            }
-        //        )
     }
 }
 
