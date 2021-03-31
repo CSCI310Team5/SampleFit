@@ -167,7 +167,6 @@ class PersonalProfileUITests: XCTestCase {
         let editButton = app.navigationBars["Profile Details"].buttons["Edit"]
 
         editButton.tap()
-        let prev = app.staticTexts[.localIdentifier(for: .userBirthday)].label
         birthdayEdit(current: "\(app.staticTexts[.localIdentifier(for: .userBirthday)].label)")
         app.buttons["Done"].tap()
         sleep(1)
