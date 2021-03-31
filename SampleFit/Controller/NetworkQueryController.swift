@@ -482,12 +482,19 @@ class NetworkQueryController {
     
     func likeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
         
-        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+//        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+        }
+        
+        let encodeData = EncodeData(email: email, videoID: videoId)
+        let encode = try! JSONEncoder().encode(encodeData)
         
         let url = URL(string: "http://127.0.0.1:8000/user/likeVideo")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
-        request.httpBody=dataThing
+        request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         
@@ -509,12 +516,18 @@ class NetworkQueryController {
     
     func unlikeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
         
-        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+        }
+        
+        let encodeData = EncodeData(email: email, videoID: videoId)
+        let encode = try! JSONEncoder().encode(encodeData)
         
         let url = URL(string: "http://127.0.0.1:8000/user/unlikeVideo")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
-        request.httpBody=dataThing
+        request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
