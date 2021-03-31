@@ -8,7 +8,7 @@
 import XCTest
 
 class WorkoutInterfaceUITests: XCTestCase {
-
+    
     
     func signin(){
         let app = XCUIApplication()
@@ -37,20 +37,20 @@ class WorkoutInterfaceUITests: XCTestCase {
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-
+        
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
+        
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
         signin()
-
+        
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
-
+    
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
+    
     func testWorkoutInterfaceDisplay() throws {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -62,7 +62,7 @@ class WorkoutInterfaceUITests: XCTestCase {
         app.tabBars["Tab Bar"].buttons["Exercise"].tap()
         
         XCTAssertTrue(app.staticTexts["Click To Exercise"].exists)
-  
+        
         XCTAssertTrue(app.buttons.count==9)
         
     }
@@ -76,15 +76,5 @@ class WorkoutInterfaceUITests: XCTestCase {
         
         XCTAssertTrue(app.buttons["Start Workout"].exists)
         
-        if(app.buttons["Start Workout"].isEnabled){
-            app.buttons["Start Workout"].tap()
-            sleep(2)
-            XCTAssertTrue(!app.staticTexts["Time Exercised: 0s"].exists)
-            app.buttons["End Workout"].tap()
-            
-        }
-        
-        
     }
-
 }
