@@ -138,6 +138,7 @@ class PersonalProfileUITests: XCTestCase {
         let prev = app.staticTexts[.localIdentifier(for: .userHeight)]
         HeightEdit(current: "\(app.staticTexts[.localIdentifier(for: .userHeight)].label)")
         app.buttons["Done"].tap()
+        XCTAssertNotEqual(prev.label, app.staticTexts[.localIdentifier(for: .userHeight)].label)
     }
     
     func testHeightCancel() throws{
@@ -154,7 +155,7 @@ class PersonalProfileUITests: XCTestCase {
     func HeightEdit(current: String){
         let app = XCUIApplication()
         app.buttons["heightEditor"].tap()
-        if current == "6' 8\""{
+        if current == "6′ 8″"{
             app.pickerWheels.element.swipeDown()
         }
         else{
@@ -167,11 +168,10 @@ class PersonalProfileUITests: XCTestCase {
 
         editButton.tap()
         let prev = app.staticTexts[.localIdentifier(for: .userBirthday)].label
-        
-                        
         birthdayEdit(current: "\(app.staticTexts[.localIdentifier(for: .userBirthday)].label)")
         app.buttons["Done"].tap()
         sleep(1)
+        XCTAssertTrue(app.staticTexts[.localIdentifier(for: .userBirthday)].exists)
     }
     
     func testBirthdayCancel() throws{
