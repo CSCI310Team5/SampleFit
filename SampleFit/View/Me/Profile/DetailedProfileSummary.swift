@@ -40,7 +40,7 @@ struct DetailedProfileSummary: View {
                     if publicProfile.isNicknameSet && !publicProfile.nickname.isEmpty {
                         Text(publicProfile.nickname).accessibility(localIdentifier: .userNickname)
                     } else {
-                        NotSetView()
+                        NotSetView().accessibility(localIdentifier: .userNickname)
                     }
                 }
                 .padding(.horizontal)
@@ -55,7 +55,7 @@ struct DetailedProfileSummary: View {
                     if publicProfile.birthdayDescription != nil {
                         Text(publicProfile.birthdayDescription!).accessibility(localIdentifier: .userBirthday)
                     } else {
-                        NotSetView()
+                        NotSetView().accessibility(localIdentifier: .userBirthday)
                     }
                 }
                 .padding(.horizontal)
@@ -70,7 +70,7 @@ struct DetailedProfileSummary: View {
                     if publicProfile.heightDescription != nil {
                         Text(publicProfile.heightDescription!).accessibility(localIdentifier: .userHeight)
                     } else {
-                        NotSetView()
+                        NotSetView().accessibility(localIdentifier: .userHeight)
                     }
                 }
                 .padding(.horizontal)
@@ -85,7 +85,7 @@ struct DetailedProfileSummary: View {
                     if publicProfile.massDescription != nil {
                         Text(publicProfile.massDescription!).accessibility(localIdentifier: .userWeight)
                     } else {
-                        NotSetView()
+                        NotSetView().accessibility(localIdentifier: .userWeight)
                     }
                 }
                 .padding(.horizontal)
