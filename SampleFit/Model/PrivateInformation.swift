@@ -19,7 +19,6 @@ class PrivateInformation: ObservableObject {
     @Published var followedUsers: [PublicProfile] = []
     @Published var workoutHistory: [Workout] = []
     @Published var watchedExercises: [Exercise] = []
-    @Published var watchedExerciseIds = Set<String>()
     
     //MARK: - Asynchronous tasks
     private var networkQueryController = NetworkQueryController()
@@ -51,8 +50,17 @@ class PrivateInformation: ObservableObject {
     
     func addHistory(exercise: Exercise){
         //FIXME: API
-        self.watchedExercises.append(exercise)
-        watchedExerciseIds.insert(exercise.id)
+        
+        var i=0
+        
+        while i<watchedExercises.count{
+            if watchedExercises[i].id == exercise.id{
+                watchedExercises.remove(at: i)
+            }
+            i+=1
+        }
+        
+        watchedExercises.append(exercise)
     }
     
     func getFavoriteExercises(email: String, token: String){

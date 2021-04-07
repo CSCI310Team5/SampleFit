@@ -25,8 +25,7 @@ struct ExerciseDetail: View {
                     
                     VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!))
                         .frame(height: 250).onAppear(perform: {
-                            if(!privateInformation.watchedExerciseIds.contains(exercise.id)){
-                                privateInformation.addHistory(exercise: exercise)}
+                            privateInformation.addHistory(exercise: exercise)
                         })
                     
                 }else{

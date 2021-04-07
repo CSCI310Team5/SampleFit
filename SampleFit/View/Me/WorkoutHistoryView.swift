@@ -15,7 +15,7 @@ struct WorkoutHistoryView: View {
         VStack{
             if !privateInformation.workoutHistory.isEmpty {
                 VStack(){
-                    ForEach(privateInformation.workoutHistory) { workout in
+                    ForEach(privateInformation.workoutHistory.reversed()) { workout in
                         WorkoutDisplayItem(workout: workout)
                     }
                     Spacer()

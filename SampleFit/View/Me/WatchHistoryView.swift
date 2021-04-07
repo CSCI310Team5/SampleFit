@@ -20,7 +20,7 @@ struct WatchHistoryView: View {
                     .transition(.opacity)
             } else {
                 List {
-                    ForEach(privateInformation.watchedExercises) { exercise in
+                    ForEach(privateInformation.watchedExercises.reversed()) { exercise in
                         NavigationLink(destination: ExerciseDetail(privateInformation: privateInformation, exercise: exercise)) {
                             // hide detail and shrink row item on edit
                             ExerciseListDisplayItem(exercise: exercise, hideDetails: editMode?.wrappedValue == .active)
