@@ -11,6 +11,8 @@ struct MeView: View {
     @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
     @State private var isProfileSheetPresented = false
+    @State private var showingAlert = false
+    
     var body: some View {
         List {
             Section {
@@ -32,7 +34,7 @@ struct MeView: View {
                     }
                 }
             }
-
+            
             
             Section {
                 NavigationLink(destination: FavoriteExercisesList(privateInformation: privateInformation)) {
@@ -71,18 +73,37 @@ struct MeView: View {
                 }
             }else{
                 Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
-                        Text("No History Yet, Start Workout Today!")
-                    }
-                }
-            
-            // Sign out button
-            Section {
-                Button(action: { userData.signOut() }) {
-                    Text("Sign Out")
-                        .foregroundColor(.red)
+                    Text("No History Yet, Start Workout Today!")
                 }
             }
             
+            // Sign out button
+//            Section {
+//                Button(action: { userData.signOut() }) {
+//                    Text("Sign Out")
+//                        .foregroundColor(.red)
+//                }
+//            }
+            
+            Section{
+                Button(action: { userData.signOut() }) {
+                    Text("Sign Out")
+                }
+
+                Button(action: {showingAlert.toggle()}, label: {
+                    Text("Delete Account").foregroundColor(.red)
+                }).alert(isPresented:$showingAlert) {
+                    Alert(
+                        title: Text("Are you sure you want to delete your account?"),
+                        message: Text("There is no undo"),
+                        primaryButton: .destructive(Text("Delete")) {
+                            //FIXME: api to be connected
+                            userData.signOut()
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+            }
             
         }
         .listStyle(InsetGroupedListStyle())

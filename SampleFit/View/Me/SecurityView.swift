@@ -19,6 +19,8 @@ struct SecurityView: View {
         .sheet(isPresented: $isChangePasswordSheetPresented) {
             ChangePasswordView(isPresented: $isChangePasswordSheetPresented)
         }
+        
+        
         .navigationBarTitle("Password & Security", displayMode: .inline)
     }
 }
