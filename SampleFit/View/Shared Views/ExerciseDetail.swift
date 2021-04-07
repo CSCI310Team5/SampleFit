@@ -24,7 +24,10 @@ struct ExerciseDetail: View {
                 if exercise.playbackType == .recordedVideo {
                     
                     VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!))
-                        .frame(height: 250)
+                        .frame(height: 250).onAppear(perform: {
+                            if(!privateInformation.watchedExerciseIds.contains(exercise.id)){
+                                privateInformation.addHistory(exercise: exercise)}
+                        })
                     
                 }else{
                     if exercise.image != nil {
