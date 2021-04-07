@@ -64,26 +64,22 @@ struct MeView: View {
                 }
             }
             
-            // Workout History
-            if !privateInformation.workoutHistory.isEmpty {
-                Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
-                    ForEach(privateInformation.workoutHistory) { workout in
-                        WorkoutDisplayItem(workout: workout)
-                    }
-                }
-            }else{
-                Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
-                    Text("No History Yet, Start Workout Today!")
-                }
+            Section(header: Text("History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
+                NavigationLink(
+                    destination: WorkoutHistoryView(privateInformation: privateInformation),
+                    label: {
+                        Text("🔥Workout History🔥")
+                    })
+                
+                NavigationLink(
+                    destination: WatchHistoryView(privateInformation: privateInformation),
+                    label: {
+                        Text("Video Watching History")
+                    })
             }
             
-            // Sign out button
-//            Section {
-//                Button(action: { userData.signOut() }) {
-//                    Text("Sign Out")
-//                        .foregroundColor(.red)
-//                }
-//            }
+    
+            
             
             Section{
                 Button(action: { userData.signOut() }) {
