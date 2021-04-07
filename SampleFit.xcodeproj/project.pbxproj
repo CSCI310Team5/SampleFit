@@ -20,6 +20,8 @@
 		18DB4ECA25FAD7A8005BB894 /* CategorySquareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EC725FAD7A8005BB894 /* CategorySquareView.swift */; };
 		18DB4ECB25FAD7A8005BB894 /* WorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EC825FAD7A8005BB894 /* WorkoutView.swift */; };
 		18DB4EDC25FAD801005BB894 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB4EDB25FAD801005BB894 /* AuthenticationView.swift */; };
+		18E1D86B261D53F700614A26 /* WatchHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1D869261D53F700614A26 /* WatchHistoryView.swift */; };
+		18E1D86C261D53F700614A26 /* WorkoutHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1D86A261D53F700614A26 /* WorkoutHistoryView.swift */; };
 		F61719FD25E88CF600C09CE9 /* FollowingUserList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61719FC25E88CF600C09CE9 /* FollowingUserList.swift */; };
 		F6171A2025E8B4A300C09CE9 /* WorkoutDisplayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6171A1F25E8B4A300C09CE9 /* WorkoutDisplayItem.swift */; };
 		F6171A2525E8B4BE00C09CE9 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6171A2425E8B4BE00C09CE9 /* Workout.swift */; };
@@ -131,6 +133,8 @@
 		18DB4EC725FAD7A8005BB894 /* CategorySquareView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategorySquareView.swift; sourceTree = "<group>"; };
 		18DB4EC825FAD7A8005BB894 /* WorkoutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutView.swift; sourceTree = "<group>"; };
 		18DB4EDB25FAD801005BB894 /* AuthenticationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		18E1D869261D53F700614A26 /* WatchHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchHistoryView.swift; sourceTree = "<group>"; };
+		18E1D86A261D53F700614A26 /* WorkoutHistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryView.swift; sourceTree = "<group>"; };
 		F61719FC25E88CF600C09CE9 /* FollowingUserList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingUserList.swift; sourceTree = "<group>"; };
 		F6171A1F25E8B4A300C09CE9 /* WorkoutDisplayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutDisplayItem.swift; sourceTree = "<group>"; };
 		F6171A2425E8B4BE00C09CE9 /* Workout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
@@ -274,6 +278,8 @@
 				F66E6C1D25F5E7AC00F36D9D /* UploadedExercisesList.swift */,
 				F61719FC25E88CF600C09CE9 /* FollowingUserList.swift */,
 				F6171A1F25E8B4A300C09CE9 /* WorkoutDisplayItem.swift */,
+				18E1D869261D53F700614A26 /* WatchHistoryView.swift */,
+				18E1D86A261D53F700614A26 /* WorkoutHistoryView.swift */,
 				1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */,
 			);
 			path = Me;
@@ -660,6 +666,7 @@
 				1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */,
 				F669335625E0DB7E000D9442 /* SearchResult.swift in Sources */,
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
+				18E1D86B261D53F700614A26 /* WatchHistoryView.swift in Sources */,
 				F6E8AF3025F8415B00EF4BE4 /* InputVerifier.swift in Sources */,
 				F669332525E087F8000D9442 /* TokenEventController.swift in Sources */,
 				18DB4EB925FAD71B005BB894 /* ExerciseCategoryRow.swift in Sources */,
@@ -681,6 +688,7 @@
 				F6171A2525E8B4BE00C09CE9 /* Workout.swift in Sources */,
 				F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */,
 				F6E8AEF725F75A9000EF4BE4 /* ImageEditor.swift in Sources */,
+				18E1D86C261D53F700614A26 /* WorkoutHistoryView.swift in Sources */,
 				F6B1224F25F86FF600EC8AEE /* FractionalWidthView.swift in Sources */,
 				F6E3096725E4F50300F4B7A6 /* BlurView.swift in Sources */,
 				F669336425E0E110000D9442 /* ExerciseListDisplayItem.swift in Sources */,
