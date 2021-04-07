@@ -181,6 +181,7 @@ class UserData: ObservableObject {
                             self.publicProfile.image=avatar}
                 }
                 publicProfile.authenticationToken = self.token
+                privateInformation.authenticationToken = self.token
             }
         
         privateInformation.getFollowList(token: token, email: identifier)

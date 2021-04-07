@@ -11,11 +11,15 @@ import Combine
 /// User's information that is not public to other users.
 class PrivateInformation: ObservableObject {
     
+    var authenticationToken: String = ""
+    
     /// Flat array of exercises that should provide to the user as the browse exercise feeds.
     @PublishedCollection var exerciseFeeds: [Exercise] = []
     @Published var favoriteExercises: [Exercise] = []
     @Published var followedUsers: [PublicProfile] = []
     @Published var workoutHistory: [Workout] = []
+    @Published var watchedExercises: [Exercise] = []
+    @Published var watchedExerciseIds = Set<String>()
     
     //MARK: - Asynchronous tasks
     private var networkQueryController = NetworkQueryController()
@@ -33,6 +37,22 @@ class PrivateInformation: ObservableObject {
             self.objectWillChange.send()
         }
         
+    }
+    
+    func emptyWorkoutHistory(){
+        //FIXME: API
+        workoutHistory.removeAll()
+    }
+    
+    func emptyWatchHistory(){
+        //FIXME: API
+        watchedExercises.removeAll()
+    }
+    
+    func addHistory(exercise: Exercise){
+        //FIXME: API
+        self.watchedExercises.append(exercise)
+        watchedExerciseIds.insert(exercise.id)
     }
     
     func getFavoriteExercises(email: String, token: String){
