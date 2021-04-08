@@ -204,6 +204,32 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func deleteAccount(email:String, token:String)->AnyPublisher<Bool,Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        
+        let email = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(email)
+        let url = URL(string: "http://127.0.0.1:8000/user/deleteAccount")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                return true
+            }
+            .assertNoFailure()
+            .eraseToAnyPublisher()
+    }
+    
     //returns this user's height, weight, etc
     func getProfile(email:String, token:String) -> AnyPublisher<ProfileData,Never>{
         

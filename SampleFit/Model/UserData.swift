@@ -45,6 +45,7 @@ class UserData: ObservableObject {
     private var _avatarCancellable: AnyCancellable?
     private var _fetchLivestreamCancellable : AnyCancellable?
     private var _fetchVideoCancellable : AnyCancellable?
+    private var _deleteAccountCancellable : AnyCancellable?
     
     @Published var changeDone: Int = 0
     
@@ -59,6 +60,14 @@ class UserData: ObservableObject {
                 }else{
                     changeDone=3
                 }
+            }
+    }
+    
+    func deleteAccount(){
+        _deleteAccountCancellable = networkQueryController.deleteAccount(email: publicProfile.identifier, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{ [unowned self] done in
+                self.signOut()
             }
     }
     

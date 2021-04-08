@@ -93,8 +93,7 @@ struct MeView: View {
                         title: Text("Are you sure you want to delete your account?"),
                         message: Text("There is no undo"),
                         primaryButton: .destructive(Text("Delete")) {
-                            //FIXME: api to be connected
-                            userData.signOut()
+                            userData.deleteAccount()
                         },
                         secondaryButton: .cancel()
                     )
