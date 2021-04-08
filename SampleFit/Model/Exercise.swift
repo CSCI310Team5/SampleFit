@@ -233,6 +233,7 @@ extension Exercise: Equatable {
         return lhs.id == rhs.id
     }
     static func < (lhs: Exercise, rhs: Exercise) -> Bool {
-        return lhs.playbackType.rawValue < rhs.playbackType.rawValue
+        
+        return (lhs.playbackType.rawValue < rhs.playbackType.rawValue) || (true)    // FIXME: Change this true to the checking of like numbers
     }
 }
