@@ -1074,7 +1074,7 @@ class NetworkQueryController {
     private var _videoUploadCancellable: AnyCancellable?
     
     /// Uploads video at URL. Returns a publisehr that publishes true values if success and false value if an error occured.
-    func uploadVideo(atURL videoURL: URL, exercise: Exercise, token: String,  completion: @escaping (Exercise) -> ()) {
+    func uploadVideo(atURL videoURL: URL, exercise: Exercise, token: String, completion: @escaping (Exercise) -> ()) {
         
         let networkURL = URL(string: "http://127.0.0.1:8000/user/uploadVideo")!
         var request = URLRequest(url: networkURL)
@@ -1087,7 +1087,12 @@ class NetworkQueryController {
             .sink { [unowned self] mp4VideoURL in
                 // video is now converted to MP4
                 
-                let filename = videoURL.lastPathComponent
+                var videoFilename = videoURL.lastPathComponent
+                videoFilename.removeLast(4)
+                videoFilename.append(".mp4")
+                var imageFilename = videoURL.lastPathComponent
+                imageFilename.removeLast(4)
+                imageFilename.append(".png")
                 let imgMimeType = "image/png"
                 let videoMimeType = "video/mp4"
                 let mp4VideoData = try! Data(contentsOf: mp4VideoURL, options: .alwaysMapped)
@@ -1099,12 +1104,12 @@ class NetworkQueryController {
                 httpBody.appendString(convertFormField(named: "description", value: exercise.description, using: boundary))
                 httpBody.appendString(convertFormField(named: "videoCategory", value: exercise.category.networkCall, using: boundary))
                 httpBody.append(convertFileData(fieldName: "videoFile",
-                                                fileName: filename,
+                                                fileName: videoFilename,
                                                 mimeType: videoMimeType,
                                                 fileData: mp4VideoData,
                                                 using: boundary))
                 httpBody.append(convertFileData(fieldName: "videoImage",
-                                                fileName: filename,
+                                                fileName: imageFilename,
                                                 mimeType: imgMimeType,
                                                 fileData: previewImageData,
                                                 using: boundary))
@@ -1116,6 +1121,7 @@ class NetworkQueryController {
                 
                 let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                     if let data = data {
+                        print(String(data:data, encoding: .utf8))
                         let videoFormat = try! JSONDecoder().decode(VideoFormat.self, from: data)
                         let outputExercise = self.videoToExercise(upload: videoFormat, uploadCategory: exercise.category)
                         completion(outputExercise)
