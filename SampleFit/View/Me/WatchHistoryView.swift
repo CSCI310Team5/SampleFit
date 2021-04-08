@@ -32,9 +32,6 @@ struct WatchHistoryView: View {
                     }
                 }
                 .listStyle(PlainListStyle())
-//                .toolbar {
-//                    EditButton()
-//                }
             }
         }
         .toolbar(content: {
@@ -56,6 +53,9 @@ struct WatchHistoryView: View {
         }
 
         .navigationBarTitle("Watched Video History", displayMode: .inline)
+        .onAppear(perform: {
+            privateInformation.getWatchedHistory()
+        })
     }
 }
 

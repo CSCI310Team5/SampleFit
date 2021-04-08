@@ -145,8 +145,7 @@ class UserData: ObservableObject {
         
         signInStatus = .signedOut
         signInAuthenticationState = AuthenticationState(for: .signIn)
-        privateInformation.exerciseFeeds=[]
-        privateInformation.followedUsers=[]
+        privateInformation.removeProfile()
         publicProfile.removeProfile()
         
     }
@@ -191,6 +190,7 @@ class UserData: ObservableObject {
                 }
                 publicProfile.authenticationToken = self.token
                 privateInformation.authenticationToken = self.token
+                privateInformation.email = identifier
             }
         
         privateInformation.getFollowList(token: token, email: identifier)

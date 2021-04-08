@@ -353,7 +353,7 @@ class NetworkQueryController {
         }
         let encodeData = EncodeData(email: email, newPassword: newPassword)
         let encode = try! JSONEncoder().encode(encodeData)
-        let url = URL(string: "http://127.0.0.1:8000/user/profile/password")!
+        let url = URL(string: "http://127.0.0.1:8000/user/password")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
         request.httpBody=encode
@@ -462,6 +462,99 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func addWatchHistory(email: String, id: String, token: String)-> AnyPublisher<Bool,Never>{
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+        }
+        
+        let encodeData = EncodeData(email: email, videoID: id)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/viewVideo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                return true
+            }
+            .assertNoFailure()
+            .eraseToAnyPublisher()
+    }
+    
+    func getWatchedHistory(email: String, token: String) -> AnyPublisher<[Exercise],Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/getVideoHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: [VideoFormat].self, decoder: JSONDecoder())
+            
+            .map{result in
+                var watchedVideos : [Exercise] = []
+                
+                for video in result{
+                    
+                    var uploadCategory: Exercise.Category = Exercise.Category.cycling
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall == video.videoCategory{
+                            uploadCategory=category
+                        }
+                    }
+                    let excercise = self.videoToExercise(upload: video, uploadCategory: uploadCategory)
+                    
+                    watchedVideos.append(excercise)
+                }
+                
+                return watchedVideos
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func clearWatchedHistory(email:String, token: String)->AnyPublisher<Bool,Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/clearVideoHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                return true
+            }
+            .assertNoFailure()
+            .eraseToAnyPublisher()
+        
+    }
     
     func getLikedVideos(email: String, token: String) -> AnyPublisher<[Exercise],Never>{
         struct EncodeData: Codable{
@@ -660,6 +753,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    
     func addWorkoutHistory(workout: Workout, token: String, email: String)->AnyPublisher<Bool,Never>{
         
         struct EncodeData: Codable{
@@ -694,6 +788,32 @@ class NetworkQueryController {
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         //        print(String(data: encode, encoding: .utf8)!)
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    func clearWorkoutHistory(token: String, email: String)->AnyPublisher<Bool,Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/clearExerciseHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{

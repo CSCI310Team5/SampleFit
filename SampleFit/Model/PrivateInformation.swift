@@ -12,6 +12,7 @@ import Combine
 class PrivateInformation: ObservableObject {
     
     var authenticationToken: String = ""
+    var email: String = ""
     
     /// Flat array of exercises that should provide to the user as the browse exercise feeds.
     @PublishedCollection var exerciseFeeds: [Exercise] = []
@@ -29,6 +30,11 @@ class PrivateInformation: ObservableObject {
     private var _FollowStatusChangeCancellable: AnyCancellable?
     private var _LikeStatusChangeCancellable: AnyCancellable?
     private var _getlikedVideosCancellable: AnyCancellable?
+    private var _addHistoryCancellable: AnyCancellable?
+    private var _getWatchedHistoryCancellable: AnyCancellable?
+    private var _emptyWatchedHistoryCancellable: AnyCancellable?
+    private var _emptyWorkoutHistoryCancellable: AnyCancellable?
+
     
     // MARK: - Initializers
     init() {
@@ -38,30 +44,57 @@ class PrivateInformation: ObservableObject {
         
     }
     
+    //used for logout data emptying
+    func removeProfile(){
+        self.exerciseFeeds.removeAll()
+        self.watchedExercises.removeAll()
+        self.followedUsers.removeAll()
+        self.favoriteExercises.removeAll()
+        self.workoutHistory.removeAll()
+    }
+    
     func emptyWorkoutHistory(){
-        //FIXME: API
-        workoutHistory.removeAll()
+        _emptyWorkoutHistoryCancellable = networkQueryController.clearWorkoutHistory(token: authenticationToken, email: email)
+            .receive(on: DispatchQueue.main)
+            .sink{ [unowned self] result in
+                workoutHistory.removeAll()
+            }
     }
     
     func emptyWatchHistory(){
-        //FIXME: API
-        watchedExercises.removeAll()
+        _emptyWatchedHistoryCancellable = networkQueryController.clearWatchedHistory(email: email, token: authenticationToken)
+            .receive(on: DispatchQueue.main)
+            .sink{ [unowned self] result in
+                watchedExercises.removeAll()
+            }
     }
     
-    func addHistory(exercise: Exercise){
-        //FIXME: API
-        
-        var i=0
-        
-        while i<watchedExercises.count{
-            if watchedExercises[i].id == exercise.id{
-                watchedExercises.remove(at: i)
+    func addHistory(exercise: Exercise, email: String){
+        //add newly watched video
+        _addHistoryCancellable = networkQueryController.addWatchHistory(email: email , id: exercise.id, token: authenticationToken)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] result in
+                var i=0
+                
+                while i<watchedExercises.count{
+                    if watchedExercises[i].id == exercise.id{
+                        watchedExercises.remove(at: i)
+                    }
+                    i+=1
+                }
+                watchedExercises.append(exercise)
             }
-            i+=1
-        }
-        
-        watchedExercises.append(exercise)
     }
+    
+    func getWatchedHistory(){
+        _getWatchedHistoryCancellable=networkQueryController.getWatchedHistory(email: email, token: authenticationToken)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] videos in
+                watchedExercises=videos
+            }
+    }
+    
+
     
     func getFavoriteExercises(email: String, token: String){
         _getlikedVideosCancellable=networkQueryController.getLikedVideos(email: email, token: token)
