@@ -884,7 +884,7 @@ class NetworkQueryController {
             .map{result in
                 var videos: [Exercise]=[]
                 for video in result{
-                    var category = Exercise.Category.identify(networkCall: video.videoCategory)
+                    let category = Exercise.Category.identify(networkCall: video.videoCategory)
                     let tmp = self.videoToExercise(upload:video, uploadCategory: category)
                     videos.append(tmp)
                 }
