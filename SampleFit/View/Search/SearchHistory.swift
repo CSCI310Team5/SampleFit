@@ -17,8 +17,8 @@ struct SearchHistory: View {
                 index in
                 Button(action: {
                     searchState.searchText=privateInformation.searchHistory[index]
-                    searchState.searchStatus = .hasResults
-                    searchState.isSearchBarActive=true
+//                    searchState.searchStatus = .hasResults
+//                    searchState.isSearchBarActive=true
                     searchState.beginSearchIfNeededAndSetSearchStatus(email: privateInformation.email,token: privateInformation.authenticationToken)
                 }, label: {
                     Text(privateInformation.searchHistory[index])

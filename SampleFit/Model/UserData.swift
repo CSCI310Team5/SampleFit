@@ -195,8 +195,9 @@ class UserData: ObservableObject {
         
         privateInformation.getFollowList(token: token, email: identifier)
         privateInformation.getFavoriteExercises(email: identifier, token: token)
-        privateInformation.getSearchHistory(token: token, email: identifier)
-        
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.3){[unowned self] in
+            privateInformation.getSearchHistory(token: token, email: identifier)
+        }
         
     }
     
