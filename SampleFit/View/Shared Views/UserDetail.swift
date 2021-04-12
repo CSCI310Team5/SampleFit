@@ -63,7 +63,7 @@ struct UserDetail: View {
 struct UserDetail_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UserDetail(user: PublicProfile.exampleProfiles[0], privateInformation: PrivateInformation.examplePrivateInformation)
+            UserDetail(user: PublicProfile.exampleProfiles[0], privateInformation: PrivateInformation.examplePrivateInformation).environmentObject(UserData())
         }
     }
 }

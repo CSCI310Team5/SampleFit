@@ -123,6 +123,7 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _imageLoadingCancellable: AnyCancellable?
     private var _livestreamDeletionCancellable: AnyCancellable?
     private var _fetchNewProfileCancellable: AnyCancellable?
+    private var _removeExerciseCancellable: AnyCancellable?
     
     func removeProfile(){
         self.image=UIImage(systemName: "person.fill.questionmark")
@@ -140,7 +141,14 @@ class PublicProfile: Identifiable, ObservableObject {
     
     /// Remove exercises from uploads at specified index set. You should use this method to handle list onDelete events.
     func removeExerciseFromUploads(at indices: IndexSet) {
-        uploadedExercises.remove(atOffsets: indices)
+        
+        let exercise: Exercise = uploadedExercises[indices.first!]
+        _removeExerciseCancellable=networkQueryController.removeVideo(email: identifier, token: authenticationToken, videoId: exercise.id)
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] success in
+                uploadedExercises.remove(atOffsets: indices)
+            }
+        
     }
     
     // MARK: - Instance methods

@@ -10,7 +10,6 @@ import Combine
 import AVKit
 
 struct ExerciseDetail: View {
-    @EnvironmentObject var userData: UserData
     @ObservedObject var privateInformation: PrivateInformation
     @State var exercise: Exercise
     @State private var hideThumbnail = false
@@ -25,7 +24,7 @@ struct ExerciseDetail: View {
                     
                     VideoPlayer(player: AVPlayer(url:URL(string: exercise.contentLink)!))
                         .frame(height: 250).onAppear(perform: {
-                            privateInformation.addHistory(exercise: exercise, email: userData.publicProfile.identifier)
+                            privateInformation.addHistory(exercise: exercise)
                         })
                     
                 }else{
@@ -65,7 +64,7 @@ struct ExerciseDetail: View {
                         
                         if exercise.playbackType == .recordedVideo{
                             // favorite button
-                            Button(action: { privateInformation.toggleExerciseInFavorites(exercise, email: userData.publicProfile.identifier, token: userData.token) }) {
+                            Button(action: { privateInformation.toggleExerciseInFavorites(exercise) }) {
                                 if privateInformation.hasFavorited(exercise) {
                                     Image(systemName: "star.fill")
                                         .resizable()

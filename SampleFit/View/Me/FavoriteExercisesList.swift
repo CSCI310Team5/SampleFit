@@ -44,6 +44,6 @@ struct FavoritesList_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
             FavoriteExercisesList(privateInformation: PrivateInformation.examplePrivateInformation)
-        }
+        }.environmentObject(UserData())
     }
 }

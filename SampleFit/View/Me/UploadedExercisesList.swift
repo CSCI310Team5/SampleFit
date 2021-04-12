@@ -65,7 +65,7 @@ struct UploadedExercisesList: View {
 struct UploadedExercisesList_Previews: PreviewProvider {
     static var previews: some View {
         MultiplePreview(embedInNavigationView: true) {
-            UploadedExercisesList( publicProfile: PublicProfile.exampleProfile, privateProfile: PrivateInformation.examplePrivateInformation)
+            UploadedExercisesList( publicProfile: PublicProfile.exampleProfile, privateProfile: PrivateInformation.examplePrivateInformation).environmentObject(UserData())
         }
     }
 }

@@ -20,6 +20,7 @@ class PrivateInformation: ObservableObject {
     @Published var followedUsers: [PublicProfile] = []
     @Published var workoutHistory: [Workout] = []
     @Published var watchedExercises: [Exercise] = []
+    @Published var searchHistory: [String] = []
     
     //MARK: - Asynchronous tasks
     private var networkQueryController = NetworkQueryController()
@@ -34,7 +35,11 @@ class PrivateInformation: ObservableObject {
     private var _getWatchedHistoryCancellable: AnyCancellable?
     private var _emptyWatchedHistoryCancellable: AnyCancellable?
     private var _emptyWorkoutHistoryCancellable: AnyCancellable?
-
+    private var getSearchHistoryCancellable: AnyCancellable?
+    private var addSearchHistoryCancellable: AnyCancellable?
+    private var emptySearchHistoryCancellable: AnyCancellable?
+    
+    
     
     // MARK: - Initializers
     init() {
@@ -44,6 +49,7 @@ class PrivateInformation: ObservableObject {
         
     }
     
+    
     //used for logout data emptying
     func removeProfile(){
         self.exerciseFeeds.removeAll()
@@ -51,6 +57,37 @@ class PrivateInformation: ObservableObject {
         self.followedUsers.removeAll()
         self.favoriteExercises.removeAll()
         self.workoutHistory.removeAll()
+        self.searchHistory.removeAll()
+    }
+    
+    
+    func getSearchHistory(token:String, email:String){
+        self.getSearchHistoryCancellable = networkQueryController.getSearchHistory(email: email, token: token)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] returnedList in
+                searchHistory=returnedList
+            }
+    }
+    
+    func addSearchHistory(searchText:String){
+        
+        guard !searchText.isEmpty else {
+            return
+        }
+        
+        self.addSearchHistoryCancellable = networkQueryController.addSearchHistory(email: email, searchText: searchText, token: authenticationToken)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] success in
+                searchHistory.insert(searchText, at: 0)
+            }
+    }
+    
+    func emptySearchHistory(){
+        emptySearchHistoryCancellable = networkQueryController.clearSearchHistory(email: email, token: authenticationToken)
+            .receive(on: DispatchQueue.main)
+            .sink{ [unowned self] result in
+                searchHistory.removeAll()
+            }
     }
     
     func emptyWorkoutHistory(){
@@ -69,7 +106,7 @@ class PrivateInformation: ObservableObject {
             }
     }
     
-    func addHistory(exercise: Exercise, email: String){
+    func addHistory(exercise: Exercise){
         //add newly watched video
         _addHistoryCancellable = networkQueryController.addWatchHistory(email: email , id: exercise.id, token: authenticationToken)
             .receive(on: DispatchQueue.main)
@@ -167,10 +204,10 @@ class PrivateInformation: ObservableObject {
     func removeFollowedUser(at indicies: IndexSet) {
         followedUsers.remove(atOffsets: indicies)
     }
-    func toggleExerciseInFavorites(_ exercise: Exercise, email: String, token: String) {
+    func toggleExerciseInFavorites(_ exercise: Exercise) {
         if self.hasFavorited(exercise) {
             
-            _LikeStatusChangeCancellable=networkQueryController.unlikeVideo(email: email, videoId: exercise.id, token: token).receive(on: DispatchQueue.main)
+            _LikeStatusChangeCancellable=networkQueryController.unlikeVideo(email: email, videoId: exercise.id, token: authenticationToken).receive(on: DispatchQueue.main)
                 .sink{[unowned self] success in
                     if success{
                         favoriteExercises.removeAll { $0 == exercise }
@@ -178,7 +215,7 @@ class PrivateInformation: ObservableObject {
                 }
         } else {
             
-            _LikeStatusChangeCancellable=networkQueryController.likeVideo(email: email, videoId: exercise.id, token: token).receive(on: DispatchQueue.main)
+            _LikeStatusChangeCancellable=networkQueryController.likeVideo(email: email, videoId: exercise.id, token: authenticationToken).receive(on: DispatchQueue.main)
                 .sink{[unowned self] success in
                     if success{
                         _addExerciseToFavorites(exercise)

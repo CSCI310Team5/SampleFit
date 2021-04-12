@@ -60,7 +60,7 @@ struct Livestream: Codable{
 }
 
 
-// FIXME: maybe inform backend that video has timelength too?
+
 struct VideoFormat: Codable{
     var videoID: String = ""
     var videoName: String = ""
@@ -69,4 +69,5 @@ struct VideoFormat: Codable{
     var videoImage: String = ""
     var videoURL: String = ""
     var email: String = ""
+    var likes: Int = 0
 }

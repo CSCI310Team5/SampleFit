@@ -40,7 +40,7 @@ class NetworkQueryController {
         excercise.peopleLimit=0
         excercise.contentLink=upload.videoURL
         excercise.description=upload.description
-        
+        excercise.likes=upload.likes
         
         return excercise
     }
@@ -1156,7 +1156,84 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func addSearchHistory(email: String, searchText: String, token:String) -> AnyPublisher<Bool,Never>{
+        struct EncodeData: Codable{
+            var email: String
+            var keyword: String
+        }
+        let encodeData = EncodeData(email: email, keyword: searchText)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/search/addHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                return true
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
     
+    func getSearchHistory(email: String, token: String)->AnyPublisher<[String],Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        struct DecodeData: Codable{
+            var keyword: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/search/getHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: [DecodeData].self, decoder: JSONDecoder())
+            .map{result in
+                var returnedList:[String]=[]
+                for s in result{
+                    returnedList.append(s.keyword)
+                }
+                return returnedList
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func clearSearchHistory(email:String, token: String)->AnyPublisher<Bool,Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/search/clearHistory")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                return true
+            }
+            .assertNoFailure()
+            .eraseToAnyPublisher()
+    }
     /// Returns a publisher that publishes image values if success and nil values if an eror occured.
     func loadImage(fromURL url: URL) -> AnyPublisher<UIImage?, Never> {
         
@@ -1313,6 +1390,39 @@ class NetworkQueryController {
                 //                    }
                 //                    .sink { _ in }
             }
+    }
+    
+    func removeVideo(email: String, token: String, videoId: String) -> AnyPublisher<Bool,Never>{
+        
+//        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+        }
+        
+        let encodeData = EncodeData(email: email, videoID: videoId)
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/user/deleteVideo")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        
+        //                print(String(data: encode, encoding: .utf8)!)
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
     }
     
     

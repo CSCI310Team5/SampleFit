@@ -24,6 +24,7 @@ class Exercise: Identifiable, ObservableObject {
     @Published var peopleLimit: Int
     @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
+    @Published var likes: Int? = 0
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }
@@ -234,6 +235,6 @@ extension Exercise: Equatable {
     }
     static func < (lhs: Exercise, rhs: Exercise) -> Bool {
         
-        return (lhs.playbackType.rawValue < rhs.playbackType.rawValue) || (true)    // FIXME: Change this true to the checking of like numbers
+        return (lhs.playbackType.rawValue < rhs.playbackType.rawValue) || (lhs.likes! > rhs.likes!) 
     }
 }

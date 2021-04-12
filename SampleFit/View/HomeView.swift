@@ -45,7 +45,7 @@ struct HomeView: View {
                 }
                 .tag(Tab.me)
             
-            SearchView()
+            SearchView(privateInformation: userData.privateInformation)
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")
                 }

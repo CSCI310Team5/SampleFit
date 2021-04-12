@@ -48,10 +48,12 @@ class SearchState: ObservableObject {
     @Published var searchStatus: SearchStatus = .notStarted
     @Published var exerciseSearchResults: [Exercise] = []
     @Published var userSearchResults: [PublicProfile] = []
+    
+        
     var searchCancellable: AnyCancellable?
     var searchStatusCancellable: AnyCancellable?
     
-    func beginSearchIfNeededAndSetSearchStatus() {
+    func beginSearchIfNeededAndSetSearchStatus(email:String,token:String) {
         self.searchCancellable?.cancel()
         self.searchStatusCancellable?.cancel()
         self.exerciseSearchResults = []
@@ -93,6 +95,7 @@ class SearchState: ObservableObject {
         }
     }
     
+   
     private func setSearchStatus(newSearchText: String, newSearchCategory: SearchCategory?) {
         if newSearchText.isEmpty && newSearchCategory == nil {
             searchStatus = .notStarted
