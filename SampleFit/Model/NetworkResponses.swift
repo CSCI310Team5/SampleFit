@@ -69,5 +69,5 @@ struct VideoFormat: Codable{
     var videoImage: String = ""
     var videoURL: String = ""
     var email: String = ""
-    var likes: Int = 0
+    var likes: Int? = 0
 }

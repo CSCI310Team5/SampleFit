@@ -502,6 +502,13 @@ class NetworkQueryController {
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
+                        .handleEvents(receiveOutput: { outputValue in
+                            print("This is the OutPUT!!!: \( outputValue)")
+                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                            print(String(data: outputValue.data, encoding: .utf8))
+                            let decode = try! JSONDecoder().decode([VideoFormat].self, from: outputValue.data)
+                            print("\(decode)")
+                        })
             .map{
                 $0.data
             }

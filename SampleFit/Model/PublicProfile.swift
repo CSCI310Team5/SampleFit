@@ -131,6 +131,7 @@ class PublicProfile: Identifiable, ObservableObject {
         self._mass=nil
         self.nickname=""
         self._birthday=nil
+        self.uploadedExercises.removeAll()
     }
     
     func fetchProfile(){
@@ -143,10 +144,10 @@ class PublicProfile: Identifiable, ObservableObject {
     func removeExerciseFromUploads(at indices: IndexSet) {
         
         let exercise: Exercise = uploadedExercises[indices.first!]
+        uploadedExercises.remove(atOffsets: indices)
         _removeExerciseCancellable=networkQueryController.removeVideo(email: identifier, token: authenticationToken, videoId: exercise.id)
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] success in
-                uploadedExercises.remove(atOffsets: indices)
             }
         
     }
