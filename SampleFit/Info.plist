@@ -58,5 +58,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Allow Calendar access to schedule workout events on the calendar.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Allow Contact access to choose a specific calendar.</string>
 </dict>
 </plist>

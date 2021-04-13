@@ -64,28 +64,43 @@ struct MeView: View {
                 }
             }
             
-            Section(header: Text("History").font(.title2).bold().foregroundColor(.primary).textCase(.none)) {
-                NavigationLink(
-                    destination: WorkoutHistoryView(privateInformation: privateInformation),
-                    label: {
-                        Text("🔥Workout History🔥")
-                    })
+            Section {
+                NavigationLink(destination: WorkoutHistoryView(privateInformation: privateInformation)) {
+                    Label {
+                        Text("Workout History")
+                    } icon: {
+                        Image(systemName: "flame.fill")
+                    }
+                }
                 
-                NavigationLink(
-                    destination: WatchHistoryView(privateInformation: privateInformation),
-                    label: {
+                
+                
+                NavigationLink(destination: WatchHistoryView(privateInformation: privateInformation)) {
+                    Label {
                         Text("Video Watching History")
-                    })
+                    } icon: {
+                        Image(systemName: "clock")
+                            .font(Font.body.bold())
+                    }
+                }
+                
+                NavigationLink(destination: WorkoutCalendar(privateInformation: privateInformation)) {
+                    Label {
+                        Text("Workout Calendar")
+                    } icon: {
+                        Image(systemName: "calendar")
+                            .font(Font.body.bold())
+                    }
+                }
             }
-            
-    
-            
             
             Section{
                 Button(action: { userData.signOut() }) {
                     Text("Sign Out")
                 }
-
+            }
+            
+            Section {
                 Button(action: {showingAlert.toggle()}, label: {
                     Text("Delete Account").foregroundColor(.red)
                 }).alert(isPresented:$showingAlert) {

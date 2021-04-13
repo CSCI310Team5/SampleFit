@@ -76,6 +76,9 @@
 		F6CEBC6426140E7D00F7AF7B /* UploadUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6CEBC6326140E7D00F7AF7B /* UploadUITests.swift */; };
 		F6CEBC6C2614168D00F7AF7B /* SearchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6CEBC6B2614168D00F7AF7B /* SearchUITests.swift */; };
 		F6CEBC712614181600F7AF7B /* LikeListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6CEBC702614181600F7AF7B /* LikeListUITests.swift */; };
+		F6D7E7AB262544A8009D30A8 /* WorkoutHistoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E7AA262544A8009D30A8 /* WorkoutHistoryList.swift */; };
+		F6D7E7B326254968009D30A8 /* WorkoutCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E7B226254968009D30A8 /* WorkoutCalendar.swift */; };
+		F6D7E7C026255180009D30A8 /* AddCalendarWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E7BF26255180009D30A8 /* AddCalendarWorkoutView.swift */; };
 		F6DC3FFB25E87EB200A1CD00 /* ExerciseSearchResultList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */; };
 		F6DC400025E87EC200A1CD00 /* UserSearchResultList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC3FFF25E87EC200A1CD00 /* UserSearchResultList.swift */; };
 		F6DC400525E87F6200A1CD00 /* FavoriteExercisesList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */; };
@@ -190,6 +193,9 @@
 		F6CEBC6326140E7D00F7AF7B /* UploadUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadUITests.swift; sourceTree = "<group>"; };
 		F6CEBC6B2614168D00F7AF7B /* SearchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUITests.swift; sourceTree = "<group>"; };
 		F6CEBC702614181600F7AF7B /* LikeListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeListUITests.swift; sourceTree = "<group>"; };
+		F6D7E7AA262544A8009D30A8 /* WorkoutHistoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutHistoryList.swift; sourceTree = "<group>"; };
+		F6D7E7B226254968009D30A8 /* WorkoutCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutCalendar.swift; sourceTree = "<group>"; };
+		F6D7E7BF26255180009D30A8 /* AddCalendarWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCalendarWorkoutView.swift; sourceTree = "<group>"; };
 		F6DC3FFA25E87EB200A1CD00 /* ExerciseSearchResultList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSearchResultList.swift; sourceTree = "<group>"; };
 		F6DC3FFF25E87EC200A1CD00 /* UserSearchResultList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchResultList.swift; sourceTree = "<group>"; };
 		F6DC400425E87F6200A1CD00 /* FavoriteExercisesList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteExercisesList.swift; sourceTree = "<group>"; };
@@ -282,7 +288,10 @@
 				F6171A1F25E8B4A300C09CE9 /* WorkoutDisplayItem.swift */,
 				18E1D869261D53F700614A26 /* WatchHistoryView.swift */,
 				18E1D86A261D53F700614A26 /* WorkoutHistoryView.swift */,
+				F6D7E7AA262544A8009D30A8 /* WorkoutHistoryList.swift */,
 				1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */,
+				F6D7E7B226254968009D30A8 /* WorkoutCalendar.swift */,
+				F6D7E7BF26255180009D30A8 /* AddCalendarWorkoutView.swift */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -667,6 +676,7 @@
 				F691AFC825F6097E00283CE5 /* DetailedProfileSummary.swift in Sources */,
 				F691AFBE25F6006F00283CE5 /* MiniProfileSummary.swift in Sources */,
 				F6E8AF0E25F82F7300EF4BE4 /* UsernameTextField.swift in Sources */,
+				F6D7E7C026255180009D30A8 /* AddCalendarWorkoutView.swift in Sources */,
 				1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */,
 				F669335625E0DB7E000D9442 /* SearchResult.swift in Sources */,
 				F61BA69225D6358F00249ED1 /* HomeView.swift in Sources */,
@@ -686,8 +696,10 @@
 				F6E3095425E4DBE400F4B7A6 /* LoadingView.swift in Sources */,
 				F664175C26081671002C78C0 /* LivestreamStatusView.swift in Sources */,
 				F6E8AF1325F839AF00EF4BE4 /* PasswordTextField.swift in Sources */,
+				F6D7E7AB262544A8009D30A8 /* WorkoutHistoryList.swift in Sources */,
 				F6DC400025E87EC200A1CD00 /* UserSearchResultList.swift in Sources */,
 				18DB4EB425FAD70C005BB894 /* BrowseView.swift in Sources */,
+				F6D7E7B326254968009D30A8 /* WorkoutCalendar.swift in Sources */,
 				F691AFF425F7008F00283CE5 /* MassEditor.swift in Sources */,
 				F6171A2525E8B4BE00C09CE9 /* Workout.swift in Sources */,
 				F6F9DFD125D4CC4700B578B3 /* ContentView.swift in Sources */,
