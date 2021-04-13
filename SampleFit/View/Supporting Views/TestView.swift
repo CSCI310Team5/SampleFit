@@ -8,21 +8,22 @@
 import SwiftUI
 
 struct TestView: View {
-    @State private var selection = 0
-        @State private var selection2 = 0
-        @State private var selection3 = 0
-        let numbers = [Int](1000...1040)
+    @State private var selectedDate = Date()
+    let dateFormatter: DateFormatter = {
+       let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter
+    }()
+    
+    var body: some View {
+        VStack {
+            DatePicker("", selection: $selectedDate, displayedComponents: [.date])
+                .datePickerStyle(GraphicalDatePickerStyle())
 
-        var body: some View {
-            Picker("Number", selection: $selection) {
-                ForEach(0..<numbers.count) { index in
-                    Text("\(self.numbers[index])")
-                }
-            }
-//            .labelsHidden()
-            .frame(width: 20)
-
+            Text("\(selectedDate, formatter: dateFormatter)")
         }
+        
+    }
 }
 
 

@@ -26,23 +26,22 @@ struct SearchView: View {
                 })
                 .navigationTitle("Search")
         } onBegin: {
-            searchState.isSearchBarActive = true
+            searchState.searchDidBegin()
         } onCancel: {
-            searchState.isSearchBarActive = false
-            searchState.searchText = ""
+            searchState.searchDidCancel()
         } onSearchClicked: {
-            searchState.beginSearchIfNeededAndSetSearchStatus(email: privateInformation.email,token: privateInformation.authenticationToken)
+            searchState.beginSearchIfNeededAndSetSearchStatus()
             privateInformation.addSearchHistory(searchText: searchState.searchText)
         } onScopeChange: { (newScope) in
             searchState.scope = newScope
             if newScope == .user {
                 searchCategoryTokenController.removeAllTokens()
             }
-            searchState.beginSearchIfNeededAndSetSearchStatus(email: privateInformation.email,token: privateInformation.authenticationToken)
+            searchState.beginSearchIfNeededAndSetSearchStatus()
             privateInformation.addSearchHistory(searchText: searchState.searchText)
         } onTokenItemsChange: { (newTokenItems) in
             searchState.searchCategory = newTokenItems.map { $0 as! Exercise.Category }.first ?? nil
-            searchState.beginSearchIfNeededAndSetSearchStatus(email: privateInformation.email,token: privateInformation.authenticationToken)
+            searchState.beginSearchIfNeededAndSetSearchStatus()
             privateInformation.addSearchHistory(searchText: searchState.searchText)
         }
         .edgesIgnoringSafeArea(.all)

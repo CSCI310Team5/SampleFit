@@ -53,7 +53,17 @@ class SearchState: ObservableObject {
     var searchCancellable: AnyCancellable?
     var searchStatusCancellable: AnyCancellable?
     
-    func beginSearchIfNeededAndSetSearchStatus(email:String,token:String) {
+    func searchDidBegin() {
+        isSearchBarActive = true
+    }
+    
+    func searchDidCancel() {
+        isSearchBarActive = false
+        searchText = ""
+        searchStatus = .notStarted
+    }
+    
+    func beginSearchIfNeededAndSetSearchStatus() {
         self.searchCancellable?.cancel()
         self.searchStatusCancellable?.cancel()
         self.exerciseSearchResults = []

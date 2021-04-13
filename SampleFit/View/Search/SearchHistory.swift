@@ -19,7 +19,7 @@ struct SearchHistory: View {
                     searchState.searchText=privateInformation.searchHistory[index]
 //                    searchState.searchStatus = .hasResults
 //                    searchState.isSearchBarActive=true
-                    searchState.beginSearchIfNeededAndSetSearchStatus(email: privateInformation.email,token: privateInformation.authenticationToken)
+                    searchState.beginSearchIfNeededAndSetSearchStatus()
                 }, label: {
                     Text(privateInformation.searchHistory[index])
                 })
