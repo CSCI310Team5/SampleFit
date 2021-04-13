@@ -18,10 +18,9 @@ struct SearchView: View {
             SearchContent(searchState: searchState)
                 .navigationTitle("Search")
         } onBegin: {
-            searchState.isSearchBarActive = true
+            searchState.searchDidBegin()
         } onCancel: {
-            searchState.isSearchBarActive = false
-            searchState.searchText = ""
+            searchState.searchDidCancel()
         } onSearchClicked: {
             searchState.beginSearchIfNeededAndSetSearchStatus()
         } onScopeChange: { (newScope) in
