@@ -178,7 +178,8 @@ class PrivateInformation: ObservableObject {
                     
                     workoutHistory.append(newHistory)
                 }
-            }}
+            }
+    }
     
     func addWorkoutHistory(workout: Workout, token: String, email: String){
         _addWorkoutHistoryCancellable=networkQueryController.addWorkoutHistory(workout: workout, token: token, email: email)
@@ -274,5 +275,10 @@ extension PrivateInformation {
         } else {
             return liveExercises
         }
+    }
+    
+    func workoutHistory(for date: Date) -> [Workout] {
+        let calendar = Calendar.current
+        return workoutHistory.filter { calendar.isDate($0.date, inSameDayAs: date) }
     }
 }

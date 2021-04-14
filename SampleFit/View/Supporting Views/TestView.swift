@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct TestView: View {
+    @ObservedObject var privateInformation: PrivateInformation
     @State private var selectedDate = Date()
     let dateFormatter: DateFormatter = {
-       let formatter = DateFormatter()
+        let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter
     }()
@@ -19,8 +20,21 @@ struct TestView: View {
         VStack {
             DatePicker("", selection: $selectedDate, displayedComponents: [.date])
                 .datePickerStyle(GraphicalDatePickerStyle())
-
-            Text("\(selectedDate, formatter: dateFormatter)")
+            
+            Divider()
+            
+            
+            VStack(spacing: 8) {
+                HStack {
+                    Text("\(selectedDate, formatter: dateFormatter)")
+                        .font(.headline)
+                        .textCase(.uppercase)
+                }
+                .padding(.horizontal)
+                WorkoutHistoryList(workoutHistory: privateInformation.workoutHistory(for: selectedDate))
+            }
+            
+            Spacer()
         }
         
     }
@@ -30,6 +44,8 @@ struct TestView: View {
 struct TestView_Previews: PreviewProvider {
     @State static var text: String = ""
     static var previews: some View {
-        TestView()
+        MultiplePreview(embedInNavigationView: true) {
+            TestView(privateInformation: PrivateInformation.examplePrivateInformation)
+        }
     }
 }

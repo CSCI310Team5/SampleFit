@@ -11,29 +11,15 @@ struct WorkoutHistoryView: View {
     @ObservedObject var privateInformation: PrivateInformation
     @State private var showingAlert: Bool = false;
     var body: some View {
-        
-        VStack{
-            if !privateInformation.workoutHistory.isEmpty {
-                VStack(){
-                    ForEach(privateInformation.workoutHistory.reversed()) { workout in
-                        WorkoutDisplayItem(workout: workout)
-                    }
-                    Spacer()
-                }.padding(25)
-            }else{
-                NoResults(title: "No History", description: "No exercise history yet, start workout today!")
-                    .animation(.easeInOut)
-                    .transition(.opacity)
-            }
-        }
-        .toolbar(content: {
-            Button(action: {
-                print("clicked")
-                showingAlert.toggle()
-            }, label: {
-                Text("Empty")
+        WorkoutHistoryList(workoutHistory: privateInformation.workoutHistory)
+            .toolbar(content: {
+                Button(action: {
+                    print("clicked")
+                    showingAlert.toggle()
+                }, label: {
+                    Text("Empty")
+                })
             })
-        })
         .alert(isPresented:$showingAlert) {
             Alert(
                 title: Text("Are you sure you want to empty your history?"),
@@ -45,13 +31,13 @@ struct WorkoutHistoryView: View {
             )
         }
         .navigationBarTitle("Workout History", displayMode: .inline)
-        
-        
     }
 }
 
 struct WorkoutHistoryView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutHistoryView(privateInformation: PrivateInformation.examplePrivateInformation)
+        MultiplePreview(embedInNavigationView: true) {
+            WorkoutHistoryView(privateInformation: PrivateInformation.examplePrivateInformation)
+        }
     }
 }
