@@ -74,12 +74,13 @@ class PrivateInformation: ObservableObject {
         guard !searchText.isEmpty else {
             return
         }
-        
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.2){[unowned self] in
         self.addSearchHistoryCancellable = networkQueryController.addSearchHistory(email: email, searchText: searchText, token: authenticationToken)
             .receive(on: DispatchQueue.main)
             .sink{[unowned self] success in
                 searchHistory.insert(searchText, at: 0)
             }
+        }
     }
     
     func emptySearchHistory(){
