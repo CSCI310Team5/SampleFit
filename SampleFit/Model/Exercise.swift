@@ -234,7 +234,15 @@ extension Exercise: Equatable {
         return lhs.id == rhs.id
     }
     static func < (lhs: Exercise, rhs: Exercise) -> Bool {
-        
-        return (lhs.playbackType.rawValue < rhs.playbackType.rawValue) || (lhs.likes! > rhs.likes!) 
+        if lhs.playbackType == rhs.playbackType {
+            if lhs.playbackType == .recordedVideo {
+                return lhs.likes! > rhs.likes!
+            } else {
+                // do not sort if both are live
+                return true
+            }
+        } else {
+            return lhs.playbackType.rawValue < rhs.playbackType.rawValue
+        }
     }
 }
