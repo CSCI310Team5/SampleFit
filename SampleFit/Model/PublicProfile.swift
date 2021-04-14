@@ -145,11 +145,18 @@ class PublicProfile: Identifiable, ObservableObject {
         
         let exercise: Exercise = uploadedExercises[indices.first!]
         uploadedExercises.remove(atOffsets: indices)
-        _removeExerciseCancellable=networkQueryController.removeVideo(email: identifier, token: authenticationToken, videoId: exercise.id)
-            .receive(on: DispatchQueue.main)
-            .sink { [unowned self] success in
-            }
-        
+        if exercise.playbackType == .recordedVideo{
+            _removeExerciseCancellable=networkQueryController.removeVideo(email: identifier, token: authenticationToken, videoId: exercise.id)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                }
+        }
+        else{
+            _removeExerciseCancellable=networkQueryController.deleteLivestream(zoomLink: exercise.contentLink, token: authenticationToken)
+                .receive(on: DispatchQueue.main)
+                .sink { [unowned self] success in
+                }
+        }
     }
     
     // MARK: - Instance methods
