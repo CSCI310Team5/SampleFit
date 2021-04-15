@@ -25,6 +25,7 @@ class Exercise: Identifiable, ObservableObject {
     @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
     @Published var likes: Int? = 0
+    @Published var comment: Bool? = false
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }

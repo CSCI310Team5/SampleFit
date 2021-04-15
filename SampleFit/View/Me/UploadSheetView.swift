@@ -30,6 +30,8 @@ struct UploadSheetView: View  {
     @State private var isVideoPickerPresented = false
     @State private var isVideoLoading = false
     @State private var videoURL: URL?
+    @State private var comment = false
+    
     @ObservedObject var newUpload: Exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: "", description: "", category: .pushup, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 2, unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: 0, contentlink: "")
     
     let pickerController = UIImagePickerController()
@@ -54,6 +56,7 @@ struct UploadSheetView: View  {
                         newUpload.playbackType = Exercise.PlaybackType.recordedVideo
                         newUpload.image=image
                         newUpload.contentLink = videoURL!.absoluteString
+                        newUpload.comment=comment
                     }
                     publicProfile.createExercise(newExercise: newUpload, token: userData.token)
                     isPresented = false
@@ -116,6 +119,16 @@ struct UploadSheetView: View  {
                                 }
                             }
                         }
+                        
+                        HStack {
+                            Text("Comment Allowed")
+                            Spacer()
+                            Text("No")
+                            Toggle("", isOn: $isLivestream)
+                                .labelsHidden()
+                            Text("Yes")
+                        }
+                        
                     }
                     
                     
