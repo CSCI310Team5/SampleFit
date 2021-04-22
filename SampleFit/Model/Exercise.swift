@@ -46,6 +46,7 @@ class Exercise: Identifiable, ObservableObject {
         case pushup
         case cycling
         case jogging
+        case situp
         case other
       
         
@@ -85,7 +86,10 @@ class Exercise: Identifiable, ObservableObject {
                 return "CY"
             case .other:
                 return "O"
+            case .situp:
+                return "SU"
             }
+        
             
         }
         

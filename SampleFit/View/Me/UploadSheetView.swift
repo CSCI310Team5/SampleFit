@@ -124,7 +124,7 @@ struct UploadSheetView: View  {
                             Text("Comment Allowed")
                             Spacer()
                             Text("No")
-                            Toggle("", isOn: $isLivestream)
+                            Toggle("", isOn: $comment)
                                 .labelsHidden()
                             Text("Yes")
                         }

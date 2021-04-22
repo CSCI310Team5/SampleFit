@@ -70,4 +70,5 @@ struct VideoFormat: Codable{
     var videoURL: String = ""
     var email: String = ""
     var likes: Int? = 0
+    var enableComments: Bool = true
 }

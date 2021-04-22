@@ -151,7 +151,13 @@ struct ExerciseDetail: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
             
+            
+            if exercise.comment ?? false{
+                Text("Comment")
+            }
+            
         }
+        
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{

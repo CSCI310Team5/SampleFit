@@ -41,6 +41,7 @@ class NetworkQueryController {
         excercise.contentLink=upload.videoURL
         excercise.description=upload.description
         excercise.likes=upload.likes
+        excercise.comment=upload.enableComments
         
         return excercise
     }
@@ -1338,6 +1339,7 @@ class NetworkQueryController {
                 httpBody.appendString(convertFormField(named: "videoName", value: exercise.name, using: boundary))
                 httpBody.appendString(convertFormField(named: "description", value: exercise.description, using: boundary))
                 httpBody.appendString(convertFormField(named: "videoCategory", value: exercise.category.networkCall, using: boundary))
+        
                 httpBody.append(convertFileData(fieldName: "videoFile",
                                                 fileName: videoFilename,
                                                 mimeType: videoMimeType,
@@ -1348,6 +1350,8 @@ class NetworkQueryController {
                                                 mimeType: imgMimeType,
                                                 fileData: previewImageData,
                                                 using: boundary))
+                
+                httpBody.appendString(convertFormField(named: "enableComments", value: String(exercise.comment!).capitalized, using: boundary))
                 
                 httpBody.appendString("--\(boundary)--")
                 request.httpBody = httpBody as Data
