@@ -155,6 +155,7 @@ class Exercise: Identifiable, ObservableObject {
     }
     
     func checkExpiration() {
+        if _startTime == nil { _startTime = Date() }
         // checking locally if the event expired
         if playbackType == .live {
             self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
@@ -216,6 +217,8 @@ class Exercise: Identifiable, ObservableObject {
         
         Exercise(sampleExerciseInCategory: .other, playbackType: .recordedVideo, previewImageID: 4),
     ]
+    
+    static let exampleExercise = Exercise(id: "example", name: "Example", description: "", category: .cycling, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 5, unit: UnitDuration.minutes), previewImageIdentifier: "cycling-3", peoplelimt: 3, contentlink: "https://google.com")
 }
 
 // MARK: - View Model
