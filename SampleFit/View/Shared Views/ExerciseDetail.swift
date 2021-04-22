@@ -11,9 +11,9 @@ import AVKit
 
 struct ExerciseDetail: View {
     @ObservedObject var privateInformation: PrivateInformation
-    @State var exercise: Exercise
-    @State private var hideThumbnail = false
+    @ObservedObject var exercise: Exercise
     @Environment(\.openURL) var openURL
+    @State private var hideThumbnail = false
     @State private var livestreamOverlayIsPresented = false
     
     var body: some View {
@@ -162,6 +162,7 @@ struct ExerciseDetail: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
             exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
+            exercise.checkExpiration()
         }
         // when live stream overlay changes to not presented, we are leaving the livestream
         .onReceive(Just(livestreamOverlayIsPresented)) {
@@ -177,11 +178,7 @@ struct ExerciseDetail: View {
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
-    @ObservedObject static var exercise: Exercise = Exercise.exampleExercisesFull[0]
-    
     static var previews: some View {
-        MultiplePreview(embedInNavigationView: true) {
-            ExerciseDetail(privateInformation: PrivateInformation.examplePrivateInformation, exercise: exercise)
-        }
+        ExerciseDetail(privateInformation: PrivateInformation.examplePrivateInformation, exercise: Exercise.exampleExercise)
     }
 }
