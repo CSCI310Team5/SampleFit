@@ -82,8 +82,8 @@ struct CommentView: View {
                         
                         HStack{
                             Button("\(item.email)", action: {
-                                commentHelper.commentEmail=item.email
-                                showUser.toggle()
+//                                commentHelper.commentEmail=item.email
+//                                showUser.toggle()
                                 
                             })
                             Spacer()
@@ -109,20 +109,13 @@ struct CommentView: View {
             exercise.comments.comments.removeAll()
             page=0
         }
-        .sheet(isPresented: $showUser, content: {
-           
-            let user = PublicProfile(identifier: commentHelper.commentEmail, fullName: nil)
-           
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                user.getRemainingUserInfo(userEmail: user.identifier)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                user.getExerciseUploads(userEmail: user.identifier)
-            }
-           
-            CommentHelperView(user: user, privateInformation: privateInformation)
-            
-        })
+        
+        //to be fixed
+//        .sheet(isPresented: $showUser, content: {
+//
+//            CommentHelperView(user: PublicProfile(identifier: commentHelper.commentEmail, fullName: nil), privateInformation: privateInformation)
+//
+//        })
     }
 }
 
