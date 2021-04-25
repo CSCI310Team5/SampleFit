@@ -72,3 +72,18 @@ struct VideoFormat: Codable{
     var likes: Int? = 0
     var enableComments: Bool = true
 }
+
+struct Comments: Codable{
+    
+    struct comment: Codable{
+        var id: String
+        var email: String
+        var createTime: String
+        var content: String
+    }
+    
+    var comments: [comment]
+    
+    var page_number: Int
+
+}

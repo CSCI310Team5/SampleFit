@@ -11,10 +11,13 @@ class specialWorkoutTimer: ObservableObject{
     @Published var isWorkingout = false
     @Published var calories: Double = 0
     
-    func start(mass: Double, index: Double) {
+    func start(mass: Double, index: Double, category: String, privateInformation:PrivateInformation) {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             self.seconds += 1
             self.calories = Double(self.seconds)*3.5/12000*mass*index
+            if self.seconds==30{
+                privateInformation.addWorkoutHistory(workout: self.stop(category: category), token: privateInformation.authenticationToken, email: privateInformation.email)
+            }
         }
     }
     
@@ -35,7 +38,7 @@ struct SpecialWorkoutView: View {
     var categoryName: String
     var categoryIndex: Double
     
-    @ObservedObject var timer=workoutTimer()
+    @ObservedObject var timer=specialWorkoutTimer()
     
     func asString(second: Int) -> String{
         let formatter = DateComponentsFormatter()
@@ -51,17 +54,28 @@ struct SpecialWorkoutView: View {
             Text("🔥Let's Do \(categoryName)🔥").font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/).bold()
             
             VStack{
+                
+                Text("This Workout Session Automatically Stops After Completing 15 Situps ").padding().multilineTextAlignment(.center)
+                
+                VStack{
+                    Text("We Will Count For You:")
+                    
+                    Text("\(timer.seconds/2) Sit Up")
+                }
+                
                 Text("Time Exercised: \(asString(second: timer.seconds))").padding()
                 
                 if publicInformation.massDescription != nil {
                     Text("Calories Burned So Far: \((String(format: "%.2f", timer.calories)) ) Cal")
                 }else{
-                    Text("Set your weight in your profile page to start recording your workout time and calorie burned").foregroundColor(.red)
+                    Text("Set your weight in your profile page to start recording your workout time and calorie burned").foregroundColor(.red).padding().multilineTextAlignment(.center)
                 }
             }.padding(.vertical,100)
+            
+           
             Button(action: {
                 timer.isWorkingout ? privateInformation.addWorkoutHistory(workout: self.timer.stop(category: categoryName), token: userData.token, email: publicInformation.identifier)
-                    : self.timer.start(mass: publicInformation.getMass ?? 0, index: categoryIndex)
+                    : self.timer.start(mass: publicInformation.getMass ?? 0, index: categoryIndex, category: categoryName, privateInformation:privateInformation)
                 withAnimation {timer.isWorkingout.toggle()}
             }) {
                 Group {

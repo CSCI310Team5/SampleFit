@@ -247,13 +247,13 @@ class NetworkQueryController {
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
-                        .handleEvents(receiveOutput: { outputValue in
-                            print("This is the OutPUT!!!: \( outputValue)")
-                            print( (outputValue.response as! HTTPURLResponse ).statusCode)
-                            print(String(data: outputValue.data, encoding: .utf8))
-                            let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
-                            print("\(decode)")
-                        })
+            .handleEvents(receiveOutput: { outputValue in
+                print("This is the OutPUT!!!: \( outputValue)")
+                print( (outputValue.response as! HTTPURLResponse ).statusCode)
+                print(String(data: outputValue.data, encoding: .utf8))
+                let decode = try! JSONDecoder().decode(ProfileData.self, from: outputValue.data)
+                print("\(decode)")
+            })
             .map{
                 $0.data
             }
@@ -414,9 +414,11 @@ class NetworkQueryController {
         request.httpBody=encode
         
         return URLSession.shared.dataTaskPublisher(for: request)
+            
             .map{
                 $0.data
             }
+             
             .decode(type: DecodeData.self, decoder: JSONDecoder())
             .map{result in
                 var exercises: [Exercise]=[]
@@ -435,7 +437,7 @@ class NetworkQueryController {
                 }
                 
                 for video in result.livestreams{
-
+                    
                     let formatter = DateFormatter()
                     formatter.timeStyle = .short
                     formatter.dateStyle = .short
@@ -602,7 +604,7 @@ class NetworkQueryController {
     
     func likeVideo(email: String, videoId: String, token: String)-> AnyPublisher<Bool, Never>{
         
-//        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        //        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
         struct EncodeData: Codable{
             var email: String
             var videoID: String
@@ -920,7 +922,7 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         print("Birthday!")
-                        print(String(data: encode, encoding: .utf8)!)
+        print(String(data: encode, encoding: .utf8)!)
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
@@ -950,7 +952,7 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         print("Weight!")
-                        print(String(data: encode, encoding: .utf8)!)
+        print(String(data: encode, encoding: .utf8)!)
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
@@ -980,7 +982,7 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         print("Height!")
-                        print(String(data: encode, encoding: .utf8)!)
+        print(String(data: encode, encoding: .utf8)!)
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
                 $0.data
@@ -1339,7 +1341,7 @@ class NetworkQueryController {
                 httpBody.appendString(convertFormField(named: "videoName", value: exercise.name, using: boundary))
                 httpBody.appendString(convertFormField(named: "description", value: exercise.description, using: boundary))
                 httpBody.appendString(convertFormField(named: "videoCategory", value: exercise.category.networkCall, using: boundary))
-        
+                
                 httpBody.append(convertFileData(fieldName: "videoFile",
                                                 fileName: videoFilename,
                                                 mimeType: videoMimeType,
@@ -1397,7 +1399,7 @@ class NetworkQueryController {
     
     func removeVideo(email: String, token: String, videoId: String) -> AnyPublisher<Bool,Never>{
         
-//        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        //        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
         struct EncodeData: Codable{
             var email: String
             var videoID: String
@@ -1428,6 +1430,69 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    
+    func addComment(email:String, token:String, videoID: String, content:String )-> AnyPublisher<Bool,Never>{
+        
+        //        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+            var content: String
+        }
+        
+        let encodeData = EncodeData(email: email, videoID: videoID, content: content)
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/video/addComment")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        //                print(String(data: encode, encoding: .utf8)!)
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    
+    func getComment(videoID: String, page: Int?)-> AnyPublisher<Comments,Never>{
+        
+        //        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var videoID: String
+            var pageNumber: Int?
+        }
+        
+        let encodeData = EncodeData(videoID: videoID, pageNumber: page)
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/video/getComments")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        
+        //                print(String(data: encode, encoding: .utf8)!)
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: Comments.self, decoder: JSONDecoder())
+            .map{result in
+                return result
+            }
+            .assertNoFailure()
+            .eraseToAnyPublisher()
+    }
     
     static let shared = NetworkQueryController()
 }

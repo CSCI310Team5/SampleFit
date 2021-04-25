@@ -151,9 +151,12 @@ struct ExerciseDetail: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
             
+            Divider()
+                .padding(.horizontal, 20)
+            
             
             if exercise.comment ?? false{
-                Text("Comment")
+                CommentView(exercise: exercise,privateInformation: privateInformation)
             }
             
         }
@@ -161,7 +164,7 @@ struct ExerciseDetail: View {
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
+//            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
             exercise.checkExpiration()
         }
         // when live stream overlay changes to not presented, we are leaving the livestream

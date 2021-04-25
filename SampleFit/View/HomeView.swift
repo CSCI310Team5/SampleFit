@@ -11,6 +11,7 @@ import Combine
 struct HomeView: View {
     @EnvironmentObject var userData: UserData
     @State private var selection: Tab = .me
+    @State private var workoutNotification: Bool = false
     
     enum Tab: String {
         case workout = "Exercise"
@@ -20,6 +21,8 @@ struct HomeView: View {
     }
     
     var body: some View {
+        
+        
         TabView(selection: $selection) {
             
             BrowseView(privateInformation: userData.privateInformation)
@@ -59,6 +62,18 @@ struct HomeView: View {
                 print("on Receive: fetching new exercise feedsd")
             }
         })
+        
+        .actionSheet(isPresented: $workoutNotification, content: {
+       
+            ActionSheet(title: Text("Your Workout Suggestion"), message: Text("The latest workout you did was \(userData.privateInformation.workoutHistory.last!.categories)\n You Could Continue Your Glory!"), buttons: [.default(Text("Dismiss"))])
+        })
+        
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                workoutNotification=userData.privateInformation.workoutHistory.count != 0
+            }
+        }
+        
     }
 }
 

@@ -54,8 +54,10 @@ struct UserDetail: View {
         .navigationTitle("\(user.identifier)")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
+            
             //before the opening of this view, all publicprofile of other users don't have [exercise] for uploadedvideo， thus calling the function to get this specific user's uploaded list just now -- memory saving
             user.getExerciseUploads(userEmail: user.identifier)
+            user.getRemainingUserInfo(userEmail: user.identifier)
         }
     }
 }

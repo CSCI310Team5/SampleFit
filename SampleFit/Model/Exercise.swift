@@ -26,6 +26,7 @@ class Exercise: Identifiable, ObservableObject {
     fileprivate var previewImageIdentifier: String
     @Published var likes: Int? = 0
     @Published var comment: Bool? = false
+    @Published var comments: Comments = Comments(comments: [],page_number: 0)
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }
@@ -34,7 +35,10 @@ class Exercise: Identifiable, ObservableObject {
     
     private var _imageLoadingCancellable: AnyCancellable?
     private var _livestreamExpirationCheckCancellable: AnyCancellable?
+    private var getCommentCancellable: AnyCancellable?
+    private var addCommentCancellable: AnyCancellable?
     var livestreamDeleteOnExpirationCancellable: AnyCancellable?
+    
     
     enum PlaybackType: Int, CaseIterable {
         case live = 1
@@ -170,6 +174,26 @@ class Exercise: Identifiable, ObservableObject {
                 .filter { $0 == true && self.isExpired == false }
                 .assign(to: \.isExpired, on: self)
         }
+    }
+    
+    func getComment(page:Int){
+        self.getCommentCancellable = NetworkQueryController.shared.getComment(videoID: id, page: page) .receive(on: DispatchQueue.main)
+            .sink{[unowned self] comments in
+                self.comments.comments.append(contentsOf: comments.comments)
+                self.comments.page_number=comments.page_number
+            }
+    }
+    
+    func addComment(email:String, token:String, content: String){
+        self.addCommentCancellable = NetworkQueryController.shared.addComment(email: email, token: token, videoID: id, content: content)
+            .receive(on: DispatchQueue.main)
+            .sink{ [unowned self] success in
+                let formatter = DateFormatter()
+                let date=Date()
+                formatter.dateFormat="YYYY-MM-dd mm:ss"
+                let stringDate = formatter.string(from: date)
+                self.comments.comments.insert(Comments.comment(id: id, email: email, createTime: stringDate, content: content), at: 0)
+            }
     }
     
     

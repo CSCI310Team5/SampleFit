@@ -38,6 +38,7 @@ class PrivateInformation: ObservableObject {
     private var getSearchHistoryCancellable: AnyCancellable?
     private var addSearchHistoryCancellable: AnyCancellable?
     private var emptySearchHistoryCancellable: AnyCancellable?
+  
     
     
     
@@ -59,6 +60,9 @@ class PrivateInformation: ObservableObject {
         self.workoutHistory.removeAll()
         self.searchHistory.removeAll()
     }
+    
+    
+  
     
     
     func getSearchHistory(token:String, email:String){
@@ -281,3 +285,5 @@ extension PrivateInformation {
         return workoutHistory.filter { calendar.isDate($0.date, inSameDayAs: date) }
     }
 }
+
+
