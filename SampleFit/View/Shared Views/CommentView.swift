@@ -28,7 +28,18 @@ struct CommentView: View {
     
     @State private var showUser=false
     
-
+    @State var showingAlert: Bool = false
+    @State var index: IndexSet?
+    
+    @State var editComments: Bool = false
+    
+    func reset(){
+        exercise.comments.comments.removeAll()
+        page=0
+        showComment=false
+        viewComment=false
+    }
+    
     var body: some View {
         VStack{
             
@@ -53,7 +64,7 @@ struct CommentView: View {
                     Button("Submit", action: {
                         if comment.count != 0{
                             errorChecking=false
-                        exercise.addComment(email: privateInformation.email, token: privateInformation.authenticationToken, content: comment)
+                            exercise.addComment(email: privateInformation.email, token: privateInformation.authenticationToken, content: comment)
                             comment=""}
                         else{
                             errorChecking=true
@@ -62,28 +73,39 @@ struct CommentView: View {
                     .frame(width:70, height: 35, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/).background(/*@START_MENU_TOKEN@*//*@PLACEHOLDER=View@*/Color.blue/*@END_MENU_TOKEN@*/).foregroundColor(.white)
                 }.padding(.horizontal, 10)
             }
+            HStack{
+                
+                if(viewComment){
+                    Button("Hide Comments", action: {viewComment.toggle()})
+                }
+                else{
+                    Button("View Comments", action: {
+                        if(page==0){
+                            exercise.getComment(page: 0)
+                            page+=1
+                        }
+                        viewComment.toggle()
+                    })
+                }
+                Spacer()
+                
+                Button("My Comments", action: {
+                    exercise.getMyComment(email: privateInformation.email)
+                    editComments.toggle()
+                    reset()
+                }
+                )
+                
+            }.padding()
             
-            if(viewComment){
-                Button("Hide Comments", action: {viewComment.toggle()})
-            }
-            else{
-                Button("View Comments", action: {
-                    if(page==0){
-                        exercise.getComment(page: 0)
-                        page+=1
-                    }
-                    viewComment.toggle()
-                    
-                })
-            }
             if(viewComment){
                 VStack{
                     ForEach(exercise.comments.comments, id: \.id) {item in
                         
                         HStack{
                             Button("\(item.email)", action: {
-//                                commentHelper.commentEmail=item.email
-//                                showUser.toggle()
+                                //                                commentHelper.commentEmail=item.email
+                                //                                showUser.toggle()
                                 
                             })
                             Spacer()
@@ -102,20 +124,63 @@ struct CommentView: View {
                     }
                 }.padding(.vertical, 10)
             }
-
-        
+            
+            
         }.padding()
         .onDisappear{
-            exercise.comments.comments.removeAll()
-            page=0
+            reset()
         }
         
+        .sheet(isPresented:$editComments , content: {
+            VStack{
+                HStack{
+                    Button("Go Back", action: {editComments.toggle()})
+                    Spacer()
+                } .padding(.horizontal)
+                .padding(.vertical, 20)
+                
+          
+                Text("My Comments").bold().padding(.bottom,10)
+                
+                Divider()
+                
+                VStack(alignment: .center) {
+                    if(exercise.userComments.count==0){
+                        NoResults(title: "No Comments", description: "You don't have any comment for this video yet.")
+                            .animation(.easeInOut)
+                            .transition(.opacity)
+                    }
+                    List {
+                        ForEach(exercise.userComments, id: \.id) { item in
+                            CommentHelperView(item: item)
+                                .alert(isPresented:$showingAlert) {
+                                    Alert(
+                                        title: Text("Are you sure you want to empty your history?"),
+                                        message: Text("There is no undo"),
+                                        primaryButton: .destructive(Text("Yes")) {
+                                            exercise.removeComment(email: privateInformation.email, token: privateInformation.authenticationToken, at: index!)
+                                        },
+                                        secondaryButton: .cancel()
+                                    )
+                                }
+                        }
+                        .onDelete {
+                            index=$0
+                            showingAlert.toggle()
+                        }
+                    }
+                }
+                
+            }
+            
+        })
+        
         //to be fixed
-//        .sheet(isPresented: $showUser, content: {
-//
-//            CommentHelperView(user: PublicProfile(identifier: commentHelper.commentEmail, fullName: nil), privateInformation: privateInformation)
-//
-//        })
+        //        .sheet(isPresented: $showUser, content: {
+        //
+        //            CommentHelperView(user: PublicProfile(identifier: commentHelper.commentEmail, fullName: nil), privateInformation: privateInformation)
+        //
+        //        })
     }
 }
 

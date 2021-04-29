@@ -62,6 +62,7 @@ struct ExerciseDetail: View {
                         
                         Spacer()
                         
+                        
                         if exercise.playbackType == .recordedVideo{
                             // favorite button
                             Button(action: { privateInformation.toggleExerciseInFavorites(exercise) }) {
@@ -80,6 +81,16 @@ struct ExerciseDetail: View {
                             }
                             .offset(x: 20, y: -15)
                             .padding(.trailing, 6)}
+                    }
+                    
+                    if(exercise.playbackType == .recordedVideo){
+                        HStack{
+                            Spacer()
+                            Text("Likes: \(exercise.likes ?? 0)").foregroundColor(.gray)
+                        }
+                        .offset(y:-10)
+                        .padding(.top, -10)
+
                     }
                     
                     if exercise.playbackType == .live {

@@ -75,7 +75,7 @@ struct VideoFormat: Codable{
 
 struct Comments: Codable{
     
-    struct comment: Codable{
+    struct comment: Codable, Identifiable{
         var id: String
         var email: String
         var createTime: String

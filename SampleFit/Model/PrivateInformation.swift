@@ -216,6 +216,7 @@ class PrivateInformation: ObservableObject {
                 .sink{[unowned self] success in
                     if success{
                         favoriteExercises.removeAll { $0 == exercise }
+                        exercise.likes!-=1
                     }
                 }
         } else {
@@ -224,6 +225,7 @@ class PrivateInformation: ObservableObject {
                 .sink{[unowned self] success in
                     if success{
                         _addExerciseToFavorites(exercise)
+                        exercise.likes!+=1
                     }
                 }
         }

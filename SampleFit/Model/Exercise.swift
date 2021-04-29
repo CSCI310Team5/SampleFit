@@ -27,6 +27,7 @@ class Exercise: Identifiable, ObservableObject {
     @Published var likes: Int? = 0
     @Published var comment: Bool? = false
     @Published var comments: Comments = Comments(comments: [],page_number: 0)
+    @Published var userComments: [Comments.comment] = []
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }
@@ -193,6 +194,21 @@ class Exercise: Identifiable, ObservableObject {
                 formatter.dateFormat="YYYY-MM-dd mm:ss"
                 let stringDate = formatter.string(from: date)
                 self.comments.comments.insert(Comments.comment(id: id, email: email, createTime: stringDate, content: content), at: 0)
+            }
+    }
+    
+    func getMyComment(email:String){
+        self.getCommentCancellable = NetworkQueryController.shared.getUserComment(videoID: id, userEmail: email).receive(on: DispatchQueue.main)
+            .sink{[unowned self] comments in
+                userComments=comments
+            }
+    }
+    
+    func removeComment(email:String, token:String, at: IndexSet){
+        let commentId = userComments[at.first!].id
+        userComments.remove(atOffsets: at)
+        self.getCommentCancellable = NetworkQueryController.shared.removeComment(email: email, token: token, videoID: id, id: commentId)
+            .sink{[unowned self] comments in
             }
     }
     

@@ -1493,6 +1493,72 @@ class NetworkQueryController {
             .assertNoFailure()
             .eraseToAnyPublisher()
     }
+
+    func getUserComment(videoID:String, userEmail:String) -> AnyPublisher<[Comments.comment],Never>{
+        struct EncodeData: Codable{
+            var videoID: String
+            var pageNumber: Int?
+        }
+        
+        let encodeData = EncodeData(videoID: videoID, pageNumber: -1)
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/video/getComments")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        
+        //                print(String(data: encode, encoding: .utf8)!)
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: Comments.self, decoder: JSONDecoder())
+            .map{result in
+                var commentList: [Comments.comment] = []
+                for comment in result.comments{
+                    if comment.email == userEmail {
+                        commentList.append(comment)
+                    }
+                }
+                return commentList
+            }
+            .assertNoFailure()
+            .eraseToAnyPublisher()
+    }
+    
+    func removeComment(email:String, token:String, videoID: String, id:String )-> AnyPublisher<Bool,Never>{
+        
+        //        let dataThing = "email=\(email)&videoID=\(videoId)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var email: String
+            var videoID: String
+            var id: String
+        }
+        
+        let encodeData = EncodeData(email: email, videoID: videoID, id: id)
+        let encode = try! JSONEncoder().encode(encodeData)
+        
+        let url = URL(string: "http://127.0.0.1:8000/video/deleteComment")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        //                print(String(data: encode, encoding: .utf8)!)
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
     
     static let shared = NetworkQueryController()
 }
