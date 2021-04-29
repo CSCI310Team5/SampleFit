@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import MobileCoreServices
 import Combine
 import Foundation
-
+import AVKit
 
 
 struct UploadSheetView: View  {
@@ -30,6 +29,7 @@ struct UploadSheetView: View  {
     @State private var isVideoPickerPresented = false
     @State private var isVideoLoading = false
     @State private var videoURL: URL?
+    @State private var videoUploadPromptText: String = ""
     @ObservedObject var newUpload: Exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: "", description: "", category: .pushup, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 2, unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: 0, contentlink: "")
     
     let pickerController = UIImagePickerController()
@@ -110,9 +110,7 @@ struct UploadSheetView: View  {
                                     ProgressView()
                                         .progressViewStyle(CircularProgressViewStyle())
                                 } else {
-                                    if videoURL != nil {
-                                        Text(videoURL!.lastPathComponent)
-                                    }
+                                    Text(videoUploadPromptText)
                                 }
                             }
                         }
@@ -156,11 +154,43 @@ struct UploadSheetView: View  {
                 .sheet(isPresented: $isVideoPickerPresented) {
                     VideoPicker(videoURL: $videoURL, isLoading: $isVideoLoading, isPresented: $isVideoPickerPresented)
                 }
+                .onReceive(Just(videoURL).filter { $0 != nil}) {
+                    verifyVideoSize(at: $0)
+                }
             }
             Spacer()
         }
         .sheet(isPresented: $isImagePickerPresented) {
             ImagePicker(image: $image, isPresented: $isImagePickerPresented)
+        }
+    }
+    
+    func verifyVideoSize(at url: URL?) {
+        guard let url = url else { return }
+        videoUploadPromptText = url.lastPathComponent
+        
+        // limit video file size
+        let kFileSizeLimitInMegaBytes = 30.0
+        let fileSizeInBytes = try! url.resourceValues(forKeys: [.fileSizeKey]).fileSize!
+        let sizeMeasurement = Measurement(value: Double(fileSizeInBytes), unit: UnitInformationStorage.bytes)
+        let fileSizeInMegaBytes = sizeMeasurement.converted(to: .megabytes).value
+        
+        // if file size exceeded maximum limit, then tell the user to choose again.
+        if fileSizeInMegaBytes > kFileSizeLimitInMegaBytes {
+            videoURL = nil
+            videoUploadPromptText = "Video size too large."
+            return
+        }
+        
+        // limit video duration
+        let kVideoDurationLimitInSeconds = 60.0
+        let videoAsset = AVAsset(url: url)
+        let durationInSeconds = videoAsset.duration.seconds
+        
+        if durationInSeconds > kVideoDurationLimitInSeconds {
+            videoURL = nil
+            videoUploadPromptText = "Video length too long."
+            return
         }
     }
 }
