@@ -33,11 +33,11 @@ class NetworkQueryController {
         formatter.dateStyle = .short
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         formatter.timeZone = TimeZone(abbreviation: "UTC")
-        let UTCdate = formatter.date(from: live.createTime!)!
-        let sourceOffset = (TimeZone(abbreviation: "UTC")?.secondsFromGMT(for: UTCdate))!
-        let destinationOffset = TimeZone.current.secondsFromGMT(for: UTCdate)
-        let timeInterval = TimeInterval(destinationOffset - sourceOffset)
-        let date = Date(timeInterval: timeInterval, since: UTCdate)
+        let date = formatter.date(from: live.createTime!)!
+//        let sourceOffset = (TimeZone(abbreviation: "UTC")?.secondsFromGMT(for: UTCdate))!
+//        let destinationOffset = TimeZone.current.secondsFromGMT(for: UTCdate)
+//        let timeInterval = TimeInterval(destinationOffset - sourceOffset)
+//        let date = Date(timeInterval: timeInterval, since: UTCdate)
         let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "\(category.rawValue)-\(Int.random(in: 1...3))", peoplelimt: live.peopleLimit, contentlink: live.zoom_link,startTime: date)
         return exercise
     }
@@ -762,6 +762,9 @@ class NetworkQueryController {
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: {
+                print(String(data: $0.data, encoding: .utf8))
+            })
             .map{
                 $0.data
             }
@@ -775,7 +778,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func quitLivestream(zoomLink: String, token: String, email: String)-> AnyPublisher<Bool, Never>{
+    func quitLivestream(zoomLink: String, token: String, email: String) {
         
         struct EncodeData: Codable{
             var email: String
@@ -789,18 +792,11 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .map{
-                $0.data
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(#function), \(error)")
             }
-            .decode(type: SignUpData.self, decoder: JSONDecoder())
-            .map{result in
-                if(result.OK==1){
-                    return true}
-                return false
-            }
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
+        }.resume()
     }
     
     func getWorkoutHistory(token: String, email: String)->AnyPublisher<[WorkoutHistory],Never>{

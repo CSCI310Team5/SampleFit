@@ -15,6 +15,7 @@ struct ExerciseDetail: View {
     @Environment(\.openURL) var openURL
     @State private var hideThumbnail = false
     @State private var livestreamOverlayIsPresented = false
+    @State private var isLivestreamAtFullCapacityAlertPresented = false
     
     var body: some View {
 
@@ -96,8 +97,7 @@ struct ExerciseDetail: View {
                     if exercise.playbackType == .live {
                         if URL(string: exercise.contentLink) != nil {
                             Button("Join Live Stream") {
-                                openURL(URL(string: exercise.contentLink)!)
-                                livestreamOverlayIsPresented = true
+                                joinLivestream()
                             }
                             .font(.headline)
                             .foregroundColor(Color.systemBackground)
@@ -155,6 +155,7 @@ struct ExerciseDetail: View {
             
             .sheet(isPresented: $livestreamOverlayIsPresented, onDismiss: {}) {
                 LivestreamStatusView(isPresented: $livestreamOverlayIsPresented, exercise: exercise)
+                    .environmentObject(privateInformation)
             }
             
             // description
@@ -171,23 +172,33 @@ struct ExerciseDetail: View {
             }
             
         }
+        .alert(isPresented: $isLivestreamAtFullCapacityAlertPresented, content: {
+            Alert(title: Text("The room is full. Try again later."))
+        })
         
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-//            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
             exercise.checkExpiration()
-        }
-        // when live stream overlay changes to not presented, we are leaving the livestream
-        .onReceive(Just(livestreamOverlayIsPresented)) {
-            if $0 == false {
-                self.leaveLivestream()
-            }
         }
     }
     
-    func leaveLivestream() {
-        // FIXME: Implement this
+    var joinLivestreamCancellable: AnyCancellable?
+    
+    func joinLivestream() {
+        // check if we should allow user to join livestream
+        // FIXME: Make call to network query controller. If returning false, don't execute the following code.
+        exercise.joinLivestream(authenticationToken: privateInformation.authenticationToken, email: privateInformation.email)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if exercise.canJoinLivestream {
+                print("Can join livestream")
+                openURL(URL(string: exercise.contentLink)!)
+                livestreamOverlayIsPresented = true
+            } else {
+                print("No can do.")
+                isLivestreamAtFullCapacityAlertPresented = true
+            }
+        }
     }
 }
 
