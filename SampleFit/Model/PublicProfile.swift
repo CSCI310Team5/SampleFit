@@ -93,7 +93,7 @@ class PublicProfile: Identifiable, ObservableObject {
                         .map { $0 == Int(exercise._endTime?.timeIntervalSinceReferenceDate ?? 0) }
                         .filter { $0 }
                         .sink { _ in
-                            exercise.livestreamDeleteOnExpirationCancellable = NetworkQueryController.shared.deleteLivestream(zoomLink: exercise.contentLink, token: self.authenticationToken).sink { returnValue in
+                            exercise.livestreamDeleteOnExpirationCancellable = NetworkQueryController.shared.deleteLivestream(zoomLink: exercise.contentLink, token: self.authenticationToken, email: identifier).sink { returnValue in
                                 print("Delete livestream ok?: \(returnValue)")
                             }
                         }
@@ -152,7 +152,7 @@ class PublicProfile: Identifiable, ObservableObject {
                 }
         }
         else{
-            _removeExerciseCancellable=networkQueryController.deleteLivestream(zoomLink: exercise.contentLink, token: authenticationToken)
+            _removeExerciseCancellable=networkQueryController.deleteLivestream(zoomLink: exercise.contentLink, token: authenticationToken,email: identifier)
                 .receive(on: DispatchQueue.main)
                 .sink { [unowned self] success in
                 }

@@ -28,14 +28,24 @@ class NetworkQueryController {
     
     private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
         
-        let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "\(category.rawValue)-\(Int.random(in: 1...3))", peoplelimt: live.peopleLimit, contentlink: live.zoom_link)
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        let UTCdate = formatter.date(from: live.createTime!)!
+        let sourceOffset = (TimeZone(abbreviation: "UTC")?.secondsFromGMT(for: UTCdate))!
+        let destinationOffset = TimeZone.current.secondsFromGMT(for: UTCdate)
+        let timeInterval = TimeInterval(destinationOffset - sourceOffset)
+        let date = Date(timeInterval: timeInterval, since: UTCdate)
+        let exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: live.title, description: live.description, category: category, playbackType: Exercise.PlaybackType.live, owningUser: PublicProfile(identifier: live.email, fullName: nil), duration: Measurement(value: Double(live.timeLimit), unit: UnitDuration.minutes), previewImageIdentifier: "\(category.rawValue)-\(Int.random(in: 1...3))", peoplelimt: live.peopleLimit, contentlink: live.zoom_link,startTime: date)
         return exercise
     }
     
     private func videoToExercise(upload: VideoFormat, uploadCategory: Exercise.Category)->Exercise{
         
         
-        let excercise = Exercise(id: upload.videoID, name: upload.videoName, description: upload.description, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: PublicProfile(identifier: upload.email, fullName: nil), duration: nil, previewImageIdentifier: upload.videoImage)
+        let excercise = Exercise(id: upload.videoID, name: upload.videoName, description: upload.description, category: uploadCategory, playbackType: Exercise.PlaybackType.recordedVideo, owningUser: PublicProfile(identifier: upload.email, fullName: nil), duration: nil, previewImageIdentifier: upload.videoImage, startTime: nil)
         
         excercise.peopleLimit=0
         excercise.contentLink=upload.videoURL
@@ -418,7 +428,7 @@ class NetworkQueryController {
             .map{
                 $0.data
             }
-             
+            
             .decode(type: DecodeData.self, decoder: JSONDecoder())
             .map{result in
                 var exercises: [Exercise]=[]
@@ -438,25 +448,28 @@ class NetworkQueryController {
                 
                 for video in result.livestreams{
                     
-                    let formatter = DateFormatter()
-                    formatter.timeStyle = .short
-                    formatter.dateStyle = .short
-                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
-                    let date = formatter.date(from: video.createTime)!
-                    let endDate = date.advanced(by: Double(video.timeLimit*60))
-                    let currentDate = Date()
-                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
-                        var uploadCategory = Exercise.Category.hiit
-                        
-                        for category in Exercise.Category.allCases{
-                            if category.networkCall == video.category{
-                                uploadCategory=category
-                            }}
-                        
-                        let tmp = self.livestreamToExercise(live: video, category: uploadCategory)
-                        exercises.append(tmp)
-                        
-                    }
+                    //                    let formatter = DateFormatter()
+                    //                    formatter.timeStyle = .short
+                    //                    formatter.dateStyle = .short
+                    //                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    //                    formatter.timeZone = TimeZone(abbreviation: "UTC")
+                    //                    let UTCdate = formatter.date(from: video.createTime!)!
+                    //                    dateFormatter.timeZone = TimeZone.current
+                    //                    let date = formatter.date(from: <#T##String#>)
+                    //                    let endDate = date.advanced(by: Double(video.timeLimit*60))
+                    //                    let currentDate = Date()
+                    //                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
+                    var uploadCategory = Exercise.Category.hiit
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall == video.category{
+                            uploadCategory=category
+                        }}
+                    
+                    let tmp = self.livestreamToExercise(live: video, category: uploadCategory)
+                    exercises.append(tmp)
+                    
+                    //                    }
                 }
                 
                 return exercises
@@ -677,11 +690,11 @@ class NetworkQueryController {
         encodeData.timeLimit=Int((exercise.duration?.converted(to: .minutes).value)!)
         encodeData.peopleLimit=exercise.peopleLimit
         
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .short
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
-        encodeData.createTime=formatter.string(from: Date())
+        //        let formatter = DateFormatter()
+        //        formatter.timeStyle = .short
+        //        formatter.dateStyle = .short
+        //        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        //        encodeData.createTime=formatter.string(from: Date())
         
         let encode = try! JSONEncoder().encode(encodeData)
         let url = URL(string: "http://127.0.0.1:8000/user/createLivestream")!
@@ -706,13 +719,18 @@ class NetworkQueryController {
     }
     
     
-    func deleteLivestream(zoomLink: String, token: String)-> AnyPublisher<Bool, Never>{
+    func deleteLivestream(zoomLink: String, token: String, email: String)-> AnyPublisher<Bool, Never>{
         
-        let dataThing = "zoom_link=\(zoomLink)".data(using: .utf8)
+        struct EncodeData: Codable{
+            var email: String
+            var zoom_link: String
+        }
+        let encodeData = EncodeData(email: email, zoom_link: zoomLink)
+        let encode = try! JSONEncoder().encode(encodeData)
         let url = URL(string: "http://127.0.0.1:8000/user/deleteLiveStream")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
-        request.httpBody=dataThing
+        request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
@@ -729,6 +747,61 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    func joinLivestream(zoomLink: String, token: String, email: String)-> AnyPublisher<Bool, Never>{
+        
+        struct EncodeData: Codable{
+            var email: String
+            var zoom_link: String
+        }
+        let encodeData = EncodeData(email: email, zoom_link: zoomLink)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/joinLiveStream")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
+    
+    func quitLivestream(zoomLink: String, token: String, email: String)-> AnyPublisher<Bool, Never>{
+        
+        struct EncodeData: Codable{
+            var email: String
+            var zoom_link: String
+        }
+        let encodeData = EncodeData(email: email, zoom_link: zoomLink)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/quitLiveStream")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: SignUpData.self, decoder: JSONDecoder())
+            .map{result in
+                if(result.OK==1){
+                    return true}
+                return false
+            }
+            .replaceError(with: false)
+            .eraseToAnyPublisher()
+    }
     
     func getWorkoutHistory(token: String, email: String)->AnyPublisher<[WorkoutHistory],Never>{
         
@@ -1011,19 +1084,19 @@ class NetworkQueryController {
             .map{result in
                 var livestreams: [Exercise]=[]
                 for live in result{
-                    let formatter = DateFormatter()
-                    formatter.timeStyle = .short
-                    formatter.dateStyle = .short
-                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
-                    print(live.createTime)
-                    let date = formatter.date(from: live.createTime)!
-                    let endDate = date.advanced(by: Double(live.timeLimit*60))
-                    let currentDate = Date()
-                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
-                        let category = Exercise.Category.identify(networkCall: live.category)
-                        let tmp = self.livestreamToExercise(live: live, category: category)
-                        livestreams.append(tmp)
-                    }
+                    //                    let formatter = DateFormatter()
+                    //                    formatter.timeStyle = .short
+                    //                    formatter.dateStyle = .short
+                    //                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    //                    print(live.createTime)
+                    //                    let date = formatter.date(from: live.createTime ?? "")!
+                    //                    let endDate = date.advanced(by: Double(live.timeLimit*60))
+                    //                    let currentDate = Date()
+                    //                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
+                    let category = Exercise.Category.identify(networkCall: live.category)
+                    let tmp = self.livestreamToExercise(live: live, category: category)
+                    livestreams.append(tmp)
+                    //                    }
                 }
                 return livestreams
             }
@@ -1105,25 +1178,25 @@ class NetworkQueryController {
                 
                 for video in result.livestreams{
                     
-                    let formatter = DateFormatter()
-                    formatter.timeStyle = .short
-                    formatter.dateStyle = .short
-                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
-                    let date = formatter.date(from: video.createTime)!
-                    let endDate = date.advanced(by: Double(video.timeLimit*60))
-                    let currentDate = Date()
-                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
-                        var uploadCategory = Exercise.Category.hiit
-                        
-                        for category in Exercise.Category.allCases{
-                            if category.networkCall == video.category{
-                                uploadCategory=category
-                            }}
-                        
-                        let tmp = self.livestreamToExercise(live: video, category: uploadCategory)
-                        exercises.append(tmp)
-                        
-                    }
+                    //                    let formatter = DateFormatter()
+                    //                    formatter.timeStyle = .short
+                    //                    formatter.dateStyle = .short
+                    //                    formatter.dateFormat = "yyyy-MM-dd HH:mm"
+                    //                    let date = formatter.date(from: video.createTime ?? "")!
+                    //                    let endDate = date.advanced(by: Double(video.timeLimit*60))
+                    //                    let currentDate = Date()
+                    //                    if Int(currentDate.timeIntervalSinceReferenceDate) < Int(endDate.timeIntervalSinceReferenceDate){
+                    var uploadCategory = Exercise.Category.hiit
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall == video.category{
+                            uploadCategory=category
+                        }}
+                    
+                    let tmp = self.livestreamToExercise(live: video, category: uploadCategory)
+                    exercises.append(tmp)
+                    
+                    //                    }
                 }
                 
                 return exercises
@@ -1493,7 +1566,7 @@ class NetworkQueryController {
             .assertNoFailure()
             .eraseToAnyPublisher()
     }
-
+    
     func getUserComment(videoID:String, userEmail:String) -> AnyPublisher<[Comments.comment],Never>{
         struct EncodeData: Codable{
             var videoID: String

@@ -113,7 +113,7 @@ class Exercise: Identifiable, ObservableObject {
     
     // MARK: - Initializers
     
-    init(id: String, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "") {
+    init(id: String, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "", startTime: Date?) {
         self.id = id
         self.name = name
         self.description = description
@@ -128,6 +128,7 @@ class Exercise: Identifiable, ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
         
+        self._startTime = startTime
         checkExpiration()
     }
     
@@ -146,7 +147,7 @@ class Exercise: Identifiable, ObservableObject {
                   owningUser: owningUser,
                   duration: Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes),
                   previewImageIdentifier: "\(category.rawValue)-\(previewImageID)",
-                  peoplelimt:5)
+                  peoplelimt:5, startTime: nil)
     }
     
     
@@ -263,7 +264,7 @@ class Exercise: Identifiable, ObservableObject {
         Exercise(sampleExerciseInCategory: .other, playbackType: .recordedVideo, previewImageID: 4),
     ]
     
-    static let exampleExercise = Exercise(id: "example", name: "Example", description: "", category: .cycling, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 5, unit: UnitDuration.minutes), previewImageIdentifier: "cycling-3", peoplelimt: 3, contentlink: "https://google.com")
+    static let exampleExercise = Exercise(id: "example", name: "Example", description: "", category: .cycling, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 5, unit: UnitDuration.minutes), previewImageIdentifier: "cycling-3", peoplelimt: 3, contentlink: "https://google.com", startTime: nil)
 }
 
 // MARK: - View Model
