@@ -28,6 +28,7 @@ class Exercise: Identifiable, ObservableObject {
     @Published var comment: Bool? = false
     @Published var comments: Comments = Comments(comments: [],page_number: 0)
     @Published var userComments: [Comments.comment] = []
+    @Published var canJoinLivestream = false
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }
@@ -39,6 +40,7 @@ class Exercise: Identifiable, ObservableObject {
     private var getCommentCancellable: AnyCancellable?
     private var addCommentCancellable: AnyCancellable?
     var livestreamDeleteOnExpirationCancellable: AnyCancellable?
+    private var _joinLivestreamCancellable: AnyCancellable?
     
     
     enum PlaybackType: Int, CaseIterable {
@@ -167,6 +169,11 @@ class Exercise: Identifiable, ObservableObject {
     
     func checkExpiration() {
         if _startTime == nil { _startTime = Date() }
+        if playbackType == .live &&
+            _startTime!.timeIntervalSinceReferenceDate > self._endTime?.timeIntervalSinceReferenceDate ?? 9000000000 {
+            self.isExpired = true
+            return
+        }
         // checking locally if the event expired
         if playbackType == .live {
             self._livestreamExpirationCheckCancellable = Timer.publish(every: 1, on: RunLoop.main, in: .default)
@@ -211,6 +218,17 @@ class Exercise: Identifiable, ObservableObject {
         self.getCommentCancellable = NetworkQueryController.shared.removeComment(email: email, token: token, videoID: id, id: commentId)
             .sink{[unowned self] comments in
             }
+    }
+    
+    func joinLivestream(authenticationToken: String, email: String) {
+        print("joining livestream... \(email)")
+        _joinLivestreamCancellable = NetworkQueryController.shared.joinLivestream(zoomLink: self.contentLink, token: authenticationToken, email: email)
+            .assign(to: \.canJoinLivestream, on: self)
+    }
+    
+    func quitLivestream(authenticationToken: String, email: String) {
+        print("quiting livestream... \(email)")
+        NetworkQueryController.shared.quitLivestream(zoomLink: self.contentLink, token: authenticationToken, email: email)
     }
     
     

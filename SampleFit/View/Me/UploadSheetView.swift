@@ -29,8 +29,9 @@ struct UploadSheetView: View  {
     @State private var isVideoPickerPresented = false
     @State private var isVideoLoading = false
     @State private var videoURL: URL?
+    @State private var comment: Bool = false
     @State private var videoUploadPromptText: String = ""
-    @ObservedObject var newUpload: Exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: "", description: "", category: .pushup, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 2, unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: 0, contentlink: "")
+    @ObservedObject var newUpload: Exercise = Exercise(id: String(Int.random(in: Int.min...Int.max)), name: "", description: "", category: .pushup, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 2, unit: UnitDuration.minutes), previewImageIdentifier: "", peoplelimt: 0, contentlink: "", startTime: nil)
     
     let pickerController = UIImagePickerController()
     

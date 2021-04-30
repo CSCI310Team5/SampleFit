@@ -775,7 +775,7 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
-    func quitLivestream(zoomLink: String, token: String, email: String)-> AnyPublisher<Bool, Never>{
+    func quitLivestream(zoomLink: String, token: String, email: String) {
         
         struct EncodeData: Codable{
             var email: String
@@ -789,18 +789,11 @@ class NetworkQueryController {
         request.httpBody=encode
         request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
-        return URLSession.shared.dataTaskPublisher(for: request)
-            .map{
-                $0.data
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(#function), \(error)")
             }
-            .decode(type: SignUpData.self, decoder: JSONDecoder())
-            .map{result in
-                if(result.OK==1){
-                    return true}
-                return false
-            }
-            .replaceError(with: false)
-            .eraseToAnyPublisher()
+        }.resume()
     }
     
     func getWorkoutHistory(token: String, email: String)->AnyPublisher<[WorkoutHistory],Never>{

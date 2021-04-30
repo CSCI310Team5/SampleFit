@@ -154,6 +154,7 @@ struct ExerciseDetail: View {
             
             .sheet(isPresented: $livestreamOverlayIsPresented, onDismiss: {}) {
                 LivestreamStatusView(isPresented: $livestreamOverlayIsPresented, exercise: exercise)
+                    .environmentObject(privateInformation)
             }
             
             // description
@@ -174,7 +175,6 @@ struct ExerciseDetail: View {
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-//            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
             exercise.checkExpiration()
         }
         // when live stream overlay changes to not presented, we are leaving the livestream
@@ -185,12 +185,21 @@ struct ExerciseDetail: View {
         }
     }
     
+    var joinLivestreamCancellable: AnyCancellable?
+    
     func joinLivestream() {
         // check if we should allow user to join livestream
         // FIXME: Make call to network query controller. If returning false, don't execute the following code.
-        
-        openURL(URL(string: exercise.contentLink)!)
-        livestreamOverlayIsPresented = true
+        exercise.joinLivestream(authenticationToken: privateInformation.authenticationToken, email: privateInformation.email)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if exercise.canJoinLivestream {
+                print("Can join livestream")
+                openURL(URL(string: exercise.contentLink)!)
+                livestreamOverlayIsPresented = true
+            } else {
+                print("No can do.")
+            }
+        }
     }
     
     func leaveLivestream() {

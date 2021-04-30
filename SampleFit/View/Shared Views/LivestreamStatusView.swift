@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LivestreamStatusView: View {
+    @EnvironmentObject var privateInformation: PrivateInformation
     @Binding var isPresented: Bool
     @ObservedObject var exercise: Exercise
     
@@ -20,9 +21,7 @@ struct LivestreamStatusView: View {
             Text("Host: \(exercise.owningUser.identifier)")
             
             VStack {
-                Button("Leave Room") {
-                    isPresented = false
-                }
+                Button("Leave Room", action: quitLivestream)
                 .foregroundColor(Color.systemBackground)
                 .frame(minWidth: 100, maxWidth: 150)
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -34,16 +33,19 @@ struct LivestreamStatusView: View {
             }
             .padding()
         }
-        
-        
-        
+    }
+    
+    func quitLivestream() {
+        isPresented = false
+        exercise.quitLivestream(authenticationToken: privateInformation.authenticationToken, email: privateInformation.email)
     }
 }
 
 struct LivestreamStatusView_Previews: PreviewProvider {
     static var previews: some View {
-        MultiplePreview(embedInNavigationView: false) {
+        MultiplePreview(embedInNavigationView: true) {
             LivestreamStatusView(isPresented: .constant(true), exercise: Exercise.exampleExercisesFull[0])
         }
+        .environmentObject(PrivateInformation.examplePrivateInformation)
     }
 }
