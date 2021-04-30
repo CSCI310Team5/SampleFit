@@ -170,7 +170,7 @@ class Exercise: Identifiable, ObservableObject {
     func checkExpiration() {
         if _startTime == nil { _startTime = Date() }
         if playbackType == .live &&
-            _startTime!.timeIntervalSinceReferenceDate > self._endTime?.timeIntervalSinceReferenceDate ?? 9000000000 {
+            Date().timeIntervalSinceReferenceDate > self._endTime?.timeIntervalSinceReferenceDate ?? 9000000000 {
             self.isExpired = true
             return
         }

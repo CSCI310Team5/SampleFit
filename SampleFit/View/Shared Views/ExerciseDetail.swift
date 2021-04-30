@@ -15,6 +15,7 @@ struct ExerciseDetail: View {
     @Environment(\.openURL) var openURL
     @State private var hideThumbnail = false
     @State private var livestreamOverlayIsPresented = false
+    @State private var isLivestreamAtFullCapacityAlertPresented = false
     
     var body: some View {
 
@@ -171,17 +172,14 @@ struct ExerciseDetail: View {
             }
             
         }
+        .alert(isPresented: $isLivestreamAtFullCapacityAlertPresented, content: {
+            Alert(title: Text("The room is full. Try again later."))
+        })
         
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
             exercise.checkExpiration()
-        }
-        // when live stream overlay changes to not presented, we are leaving the livestream
-        .onReceive(Just(livestreamOverlayIsPresented)) {
-            if $0 == false {
-                self.leaveLivestream()
-            }
         }
     }
     
@@ -198,14 +196,10 @@ struct ExerciseDetail: View {
                 livestreamOverlayIsPresented = true
             } else {
                 print("No can do.")
+                isLivestreamAtFullCapacityAlertPresented = true
             }
         }
     }
-    
-    func leaveLivestream() {
-        // FIXME: Make call the network query controller. If returninng false, handle error.
-    }
-    
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
