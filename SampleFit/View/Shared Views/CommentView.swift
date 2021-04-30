@@ -107,7 +107,7 @@ struct CommentView: View {
                                 //                                commentHelper.commentEmail=item.email
                                 //                                showUser.toggle()
                                 
-                            })
+                            }).disabled(true)
                             Spacer()
                             Text(item.createTime).font(.caption2)
                         }
