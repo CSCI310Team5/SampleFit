@@ -56,7 +56,7 @@ struct Livestream: Codable{
     var description: String = ""
     var timeLimit: Int = 0
     var peopleLimit: Int = 0
-    var createTime: String=""
+    var createTime: String?
 }
 
 
@@ -70,4 +70,20 @@ struct VideoFormat: Codable{
     var videoURL: String = ""
     var email: String = ""
     var likes: Int? = 0
+    var enableComments: Bool = true
+}
+
+struct Comments: Codable{
+    
+    struct comment: Codable, Identifiable{
+        var id: String
+        var email: String
+        var createTime: String
+        var content: String
+    }
+    
+    var comments: [comment]
+    
+    var page_number: Int
+
 }

@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1803ADEE2634959700BCB073 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803ADED2634959700BCB073 /* CommentView.swift */; };
+		1803AE082634EC3000BCB073 /* CommentHelpertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803AE072634EC3000BCB073 /* CommentHelpertView.swift */; };
 		181A237F26054C6F008A02D2 /* RetrivePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */; };
 		1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */; };
+		184BE4242630ACA800A9E8A6 /* SpecialWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184BE4232630ACA800A9E8A6 /* SpecialWorkoutView.swift */; };
 		186AB63F2613CC2D00F01BD9 /* PersonalProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AB63E2613CC2D00F01BD9 /* PersonalProfileUITests.swift */; };
 		186AB64D2614159D00F01BD9 /* WorkoutInterfaceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AB64C2614159D00F01BD9 /* WorkoutInterfaceUITests.swift */; };
 		186AB65226141BBE00F01BD9 /* PersonalInterfaceUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AB65126141BBE00F01BD9 /* PersonalInterfaceUITest.swift */; };
@@ -124,8 +127,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1803ADED2634959700BCB073 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		1803AE072634EC3000BCB073 /* CommentHelpertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentHelpertView.swift; sourceTree = "<group>"; };
 		181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrivePasswordView.swift; sourceTree = "<group>"; };
 		1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSheetView.swift; sourceTree = "<group>"; };
+		184BE4232630ACA800A9E8A6 /* SpecialWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialWorkoutView.swift; sourceTree = "<group>"; };
 		186AB63E2613CC2D00F01BD9 /* PersonalProfileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalProfileUITests.swift; sourceTree = "<group>"; };
 		186AB64C2614159D00F01BD9 /* WorkoutInterfaceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutInterfaceUITests.swift; sourceTree = "<group>"; };
 		186AB65126141BBE00F01BD9 /* PersonalInterfaceUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInterfaceUITest.swift; sourceTree = "<group>"; };
@@ -261,6 +267,7 @@
 				18DB4EC625FAD7A8005BB894 /* WoroutBrowseView.swift */,
 				18DB4EC725FAD7A8005BB894 /* CategorySquareView.swift */,
 				18DB4EC825FAD7A8005BB894 /* WorkoutView.swift */,
+				184BE4232630ACA800A9E8A6 /* SpecialWorkoutView.swift */,
 			);
 			path = Workout;
 			sourceTree = "<group>";
@@ -403,6 +410,8 @@
 				F6E3095E25E4E1C600F4B7A6 /* NoResults.swift */,
 				F6E3097025E635E500F4B7A6 /* FollowButton.swift */,
 				F664175B26081671002C78C0 /* LivestreamStatusView.swift */,
+				1803ADED2634959700BCB073 /* CommentView.swift */,
+				1803AE072634EC3000BCB073 /* CommentHelpertView.swift */,
 			);
 			path = "Shared Views";
 			sourceTree = "<group>";
@@ -645,9 +654,12 @@
 				F6171A2025E8B4A300C09CE9 /* WorkoutDisplayItem.swift in Sources */,
 				F6C7A3BB25D5F9630023D250 /* TestView.swift in Sources */,
 				F6E3095F25E4E1C600F4B7A6 /* NoResults.swift in Sources */,
+				184BE4242630ACA800A9E8A6 /* SpecialWorkoutView.swift in Sources */,
 				18DB4ECB25FAD7A8005BB894 /* WorkoutView.swift in Sources */,
 				F669339A25E10334000D9442 /* UserDetail.swift in Sources */,
 				F6F9DFCD25D4CC4700B578B3 /* AppDelegate.swift in Sources */,
+				1803AE082634EC3000BCB073 /* CommentHelpertView.swift in Sources */,
+				1803ADEE2634959700BCB073 /* CommentView.swift in Sources */,
 				F61BA69725D639AF00249ED1 /* MultiplePreview.swift in Sources */,
 				F66932F425DF749B000D9442 /* PropertyWrapper+Helpers.swift in Sources */,
 				F66E6C1E25F5E7AC00F36D9D /* UploadedExercisesList.swift in Sources */,

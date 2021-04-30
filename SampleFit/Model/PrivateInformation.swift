@@ -38,6 +38,7 @@ class PrivateInformation: ObservableObject {
     private var getSearchHistoryCancellable: AnyCancellable?
     private var addSearchHistoryCancellable: AnyCancellable?
     private var emptySearchHistoryCancellable: AnyCancellable?
+  
     
     
     
@@ -59,6 +60,9 @@ class PrivateInformation: ObservableObject {
         self.workoutHistory.removeAll()
         self.searchHistory.removeAll()
     }
+    
+    
+  
     
     
     func getSearchHistory(token:String, email:String){
@@ -212,6 +216,7 @@ class PrivateInformation: ObservableObject {
                 .sink{[unowned self] success in
                     if success{
                         favoriteExercises.removeAll { $0 == exercise }
+                        exercise.likes!-=1
                     }
                 }
         } else {
@@ -220,6 +225,7 @@ class PrivateInformation: ObservableObject {
                 .sink{[unowned self] success in
                     if success{
                         _addExerciseToFavorites(exercise)
+                        exercise.likes!+=1
                     }
                 }
         }
@@ -281,3 +287,5 @@ extension PrivateInformation {
         return workoutHistory.filter { calendar.isDate($0.date, inSameDayAs: date) }
     }
 }
+
+

@@ -25,6 +25,9 @@ class Exercise: Identifiable, ObservableObject {
     @Published var contentLink: String
     fileprivate var previewImageIdentifier: String
     @Published var likes: Int? = 0
+    @Published var comment: Bool? = false
+    @Published var comments: Comments = Comments(comments: [],page_number: 0)
+    @Published var userComments: [Comments.comment] = []
     
     var _endTime: Date? {
         guard let startTime = _startTime, let duration = duration else { return nil }
@@ -33,7 +36,10 @@ class Exercise: Identifiable, ObservableObject {
     
     private var _imageLoadingCancellable: AnyCancellable?
     private var _livestreamExpirationCheckCancellable: AnyCancellable?
+    private var getCommentCancellable: AnyCancellable?
+    private var addCommentCancellable: AnyCancellable?
     var livestreamDeleteOnExpirationCancellable: AnyCancellable?
+    
     
     enum PlaybackType: Int, CaseIterable {
         case live = 1
@@ -45,6 +51,7 @@ class Exercise: Identifiable, ObservableObject {
         case pushup
         case cycling
         case jogging
+        case situp
         case other
       
         
@@ -84,7 +91,10 @@ class Exercise: Identifiable, ObservableObject {
                 return "CY"
             case .other:
                 return "O"
+            case .situp:
+                return "SU"
             }
+        
             
         }
         
@@ -103,7 +113,7 @@ class Exercise: Identifiable, ObservableObject {
     
     // MARK: - Initializers
     
-    init(id: String, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "") {
+    init(id: String, name: String, description: String = "", category: Category, playbackType: PlaybackType, owningUser: PublicProfile, duration: Measurement<UnitDuration>?, previewImageIdentifier: String, peoplelimt: Int = 0, contentlink: String = "", startTime: Date?) {
         self.id = id
         self.name = name
         self.description = description
@@ -118,6 +128,7 @@ class Exercise: Identifiable, ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: \.image, on: self)
         
+        self._startTime = startTime
         checkExpiration()
     }
     
@@ -136,7 +147,7 @@ class Exercise: Identifiable, ObservableObject {
                   owningUser: owningUser,
                   duration: Measurement(value: Double.random(in: 1...120), unit: UnitDuration.minutes),
                   previewImageIdentifier: "\(category.rawValue)-\(previewImageID)",
-                  peoplelimt:5)
+                  peoplelimt:5, startTime: nil)
     }
     
     
@@ -165,6 +176,41 @@ class Exercise: Identifiable, ObservableObject {
                 .filter { $0 == true && self.isExpired == false }
                 .assign(to: \.isExpired, on: self)
         }
+    }
+    
+    func getComment(page:Int){
+        self.getCommentCancellable = NetworkQueryController.shared.getComment(videoID: id, page: page) .receive(on: DispatchQueue.main)
+            .sink{[unowned self] comments in
+                self.comments.comments.append(contentsOf: comments.comments)
+                self.comments.page_number=comments.page_number
+            }
+    }
+    
+    func addComment(email:String, token:String, content: String){
+        self.addCommentCancellable = NetworkQueryController.shared.addComment(email: email, token: token, videoID: id, content: content)
+            .receive(on: DispatchQueue.main)
+            .sink{ [unowned self] success in
+                let formatter = DateFormatter()
+                let date=Date()
+                formatter.dateFormat="YYYY-MM-dd mm:ss"
+                let stringDate = formatter.string(from: date)
+                self.comments.comments.insert(Comments.comment(id: id, email: email, createTime: stringDate, content: content), at: 0)
+            }
+    }
+    
+    func getMyComment(email:String){
+        self.getCommentCancellable = NetworkQueryController.shared.getUserComment(videoID: id, userEmail: email).receive(on: DispatchQueue.main)
+            .sink{[unowned self] comments in
+                userComments=comments
+            }
+    }
+    
+    func removeComment(email:String, token:String, at: IndexSet){
+        let commentId = userComments[at.first!].id
+        userComments.remove(atOffsets: at)
+        self.getCommentCancellable = NetworkQueryController.shared.removeComment(email: email, token: token, videoID: id, id: commentId)
+            .sink{[unowned self] comments in
+            }
     }
     
     
@@ -218,7 +264,7 @@ class Exercise: Identifiable, ObservableObject {
         Exercise(sampleExerciseInCategory: .other, playbackType: .recordedVideo, previewImageID: 4),
     ]
     
-    static let exampleExercise = Exercise(id: "example", name: "Example", description: "", category: .cycling, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 5, unit: UnitDuration.minutes), previewImageIdentifier: "cycling-3", peoplelimt: 3, contentlink: "https://google.com")
+    static let exampleExercise = Exercise(id: "example", name: "Example", description: "", category: .cycling, playbackType: .live, owningUser: PublicProfile.exampleProfile, duration: Measurement(value: 5, unit: UnitDuration.minutes), previewImageIdentifier: "cycling-3", peoplelimt: 3, contentlink: "https://google.com", startTime: nil)
 }
 
 // MARK: - View Model

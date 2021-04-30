@@ -54,6 +54,7 @@ struct UploadSheetView: View  {
                         newUpload.playbackType = Exercise.PlaybackType.recordedVideo
                         newUpload.image=image
                         newUpload.contentLink = videoURL!.absoluteString
+                        newUpload.comment=comment
                     }
                     publicProfile.createExercise(newExercise: newUpload, token: userData.token)
                     isPresented = false
@@ -114,6 +115,16 @@ struct UploadSheetView: View  {
                                 }
                             }
                         }
+                        
+                        HStack {
+                            Text("Comment Allowed")
+                            Spacer()
+                            Text("No")
+                            Toggle("", isOn: $comment)
+                                .labelsHidden()
+                            Text("Yes")
+                        }
+                        
                     }
                     
                     

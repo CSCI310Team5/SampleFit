@@ -62,6 +62,7 @@ struct ExerciseDetail: View {
                         
                         Spacer()
                         
+                        
                         if exercise.playbackType == .recordedVideo{
                             // favorite button
                             Button(action: { privateInformation.toggleExerciseInFavorites(exercise) }) {
@@ -80,6 +81,16 @@ struct ExerciseDetail: View {
                             }
                             .offset(x: 20, y: -15)
                             .padding(.trailing, 6)}
+                    }
+                    
+                    if(exercise.playbackType == .recordedVideo){
+                        HStack{
+                            Spacer()
+                            Text("Likes: \(exercise.likes ?? 0)").foregroundColor(.gray)
+                        }
+                        .offset(y:-10)
+                        .padding(.top, -10)
+
                     }
                     
                     if exercise.playbackType == .live {
@@ -150,11 +161,20 @@ struct ExerciseDetail: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 20)
             
+            Divider()
+                .padding(.horizontal, 20)
+            
+            
+            if exercise.comment ?? false{
+                CommentView(exercise: exercise,privateInformation: privateInformation)
+            }
+            
         }
+        
         .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .onAppear{
-            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
+//            exercise.owningUser.getRemainingUserInfo(userEmail: exercise.owningUser.identifier)
             exercise.checkExpiration()
         }
         // when live stream overlay changes to not presented, we are leaving the livestream

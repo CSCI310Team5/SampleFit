@@ -21,8 +21,16 @@ struct WorkoutBrowseView: View {
                 
                 LazyVGrid(columns: columns, spacing:15 ){
                     ForEach(Exercise.Category.allCases, id: \.self) { category in
-                        NavigationLink(destination: WorkoutView(privateInformation: privateInformation,publicInformation: userData.publicProfile, categoryName:category.description, categoryIndex: category.index)) {
-                            CategorySquareView(categoryName: category.description)
+                        
+                        if category == Exercise.Category.situp{
+                            NavigationLink(destination: SpecialWorkoutView(privateInformation: privateInformation,publicInformation: userData.publicProfile, categoryName:category.description, categoryIndex: category.index)) {
+                                CategorySquareView(categoryName: category.description)
+                            }
+                        }
+                        else{
+                            NavigationLink(destination: WorkoutView(privateInformation: privateInformation,publicInformation: userData.publicProfile, categoryName:category.description, categoryIndex: category.index)) {
+                                CategorySquareView(categoryName: category.description)
+                            }
                         }
                     }
                     

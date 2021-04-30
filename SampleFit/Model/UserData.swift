@@ -49,6 +49,7 @@ class UserData: ObservableObject {
     
     @Published var changeDone: Int = 0
     
+ 
     func retrievePassword(email:String){
         
         _retrievePasswordCancellable = networkQueryController.retrievePassword(email)
@@ -170,6 +171,8 @@ class UserData: ObservableObject {
     func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
         
         privateInformation.storeWorkoutHistory(token: token, email: identifier)
+        
+
         
         _profileCancellable = networkQueryController.getProfile(email: identifier, token: token)
             .receive(on: DispatchQueue.main)
