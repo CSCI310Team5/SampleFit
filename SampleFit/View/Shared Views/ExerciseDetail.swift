@@ -87,7 +87,7 @@ struct ExerciseDetail: View {
                     if(exercise.playbackType == .recordedVideo){
                         HStack{
                             Spacer()
-                            Text("Likes: \(exercise.likes ?? 0)").foregroundColor(.gray)
+//                            Text("Likes: \(exercise.likes ?? 0)").foregroundColor(.gray)
                         }
                         .offset(y:-10)
                         .padding(.top, -10)

@@ -61,7 +61,7 @@ struct UploadSheetView: View  {
                     isPresented = false
                 }) {
                     Text("Confirm").bold()
-                }.disabled( name.isEmpty || name.count > 25 || description.isEmpty || (image == PublicProfile.exampleProfile.image && !isLivestream) || (isLivestream && contentLink.isEmpty))
+                }.disabled(isConfirmButtonDisabled)
             }
             .padding(.horizontal)
             .padding(.vertical, 20)
@@ -177,6 +177,35 @@ struct UploadSheetView: View  {
         }
     }
     
+    var isConfirmButtonDisabled: Bool {
+        if name.isEmpty || name.count > 25 {
+            return true
+        }
+        
+        if description.isEmpty {
+            return true
+        }
+        
+        if isLivestream {
+            if contentLink.isEmpty {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if isLivestream == false {
+            if image == PublicProfile.exampleProfile.image || videoURL == nil {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        print("Unexpected case.")
+        return false
+    }
+    
     func verifyVideoSize(at url: URL?) {
         guard let url = url else { return }
         videoUploadPromptText = url.lastPathComponent
@@ -190,6 +219,7 @@ struct UploadSheetView: View  {
         // if file size exceeded maximum limit, then tell the user to choose again.
         if fileSizeInMegaBytes > kFileSizeLimitInMegaBytes {
             videoURL = nil
+            newUpload.contentLink = ""
             videoUploadPromptText = "Video size too large."
             return
         }
@@ -201,6 +231,7 @@ struct UploadSheetView: View  {
         
         if durationInSeconds > kVideoDurationLimitInSeconds {
             videoURL = nil
+            newUpload.contentLink = ""
             videoUploadPromptText = "Video length too long."
             return
         }

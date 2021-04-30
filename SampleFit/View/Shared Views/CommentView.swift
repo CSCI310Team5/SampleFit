@@ -116,7 +116,7 @@ struct CommentView: View {
                         Divider()
                     }
                     
-                    if page != exercise.comments.page_number {
+                    if page < exercise.comments.page_number {
                         Button("View More", action:{
                             exercise.getComment(page: page)
                             page+=1

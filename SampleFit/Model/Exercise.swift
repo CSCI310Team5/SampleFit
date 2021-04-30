@@ -201,7 +201,7 @@ class Exercise: Identifiable, ObservableObject {
                 let date=Date()
                 formatter.dateFormat="YYYY-MM-dd mm:ss"
                 let stringDate = formatter.string(from: date)
-                self.comments.comments.insert(Comments.comment(id: id, email: email, createTime: stringDate, content: content), at: 0)
+                self.comments.comments.insert(Comments.comment(id: UUID().uuidString, email: email, createTime: stringDate, content: content), at: 0)
             }
     }
     
