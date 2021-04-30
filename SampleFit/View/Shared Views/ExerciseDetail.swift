@@ -85,8 +85,7 @@ struct ExerciseDetail: View {
                     if exercise.playbackType == .live {
                         if URL(string: exercise.contentLink) != nil {
                             Button("Join Live Stream") {
-                                openURL(URL(string: exercise.contentLink)!)
-                                livestreamOverlayIsPresented = true
+                                joinLivestream()
                             }
                             .font(.headline)
                             .foregroundColor(Color.systemBackground)
@@ -166,9 +165,18 @@ struct ExerciseDetail: View {
         }
     }
     
-    func leaveLivestream() {
-        // FIXME: Implement this
+    func joinLivestream() {
+        // check if we should allow user to join livestream
+        // FIXME: Make call to network query controller. If returning false, don't execute the following code.
+        
+        openURL(URL(string: exercise.contentLink)!)
+        livestreamOverlayIsPresented = true
     }
+    
+    func leaveLivestream() {
+        // FIXME: Make call the network query controller. If returninng false, handle error.
+    }
+    
 }
 
 struct ExerciseDetail_Previews: PreviewProvider {
