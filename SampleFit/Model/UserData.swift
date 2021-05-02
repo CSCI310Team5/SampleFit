@@ -45,6 +45,7 @@ class UserData: ObservableObject {
     private var _avatarCancellable: AnyCancellable?
     private var _fetchLivestreamCancellable : AnyCancellable?
     private var _fetchVideoCancellable : AnyCancellable?
+    private var _fectchFolloweeUploadsCancellable: AnyCancellable?
     private var _deleteAccountCancellable : AnyCancellable?
     
     @Published var changeDone: Int = 0
@@ -164,14 +165,12 @@ class UserData: ObservableObject {
         _storeProfile(identifier: identifier, fullName: fullName)
         // change sign in status
         manageSignInStatusAfterSignIn(true)
-        // fetch social information
-        fetchExerciseFeeds()
     }
     
     func _storeProfile(identifier: String, fullName: PersonNameComponents? = nil) {
         
         privateInformation.storeWorkoutHistory(token: token, email: identifier)
-        
+        privateInformation.email = identifier
 
         
         _profileCancellable = networkQueryController.getProfile(email: identifier, token: token)
@@ -200,6 +199,8 @@ class UserData: ObservableObject {
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.5){[unowned self] in
                     privateInformation.getSearchHistory(token: self.token, email: identifier)
                     
+                    // fetch social information
+                    fetchExerciseFeeds()
                 }
             }
         
@@ -227,6 +228,7 @@ class UserData: ObservableObject {
         }
         self.fetchLiveFeeds(token: token)
         self.fetchVideoFeeds(token: token)
+        self.fetchFolloweeVideoUploads()
     }
     
     func fetchLiveFeeds( token: String) {
@@ -245,6 +247,15 @@ class UserData: ObservableObject {
                 DispatchQueue.main.async {
                     self.privateInformation.exerciseFeeds.append(contentsOf: newExercises)
                 }
+            }
+    }
+    
+    private func fetchFolloweeVideoUploads() {
+        // FIXME: - Implement this
+        _fectchFolloweeUploadsCancellable = networkQueryController.getFolloweeVideoUploads(token: token, email: publicProfile.identifier)
+            .receive(on: DispatchQueue.main)
+            .sink {
+                self.privateInformation.followeeVideoUploads = $0
             }
     }
     

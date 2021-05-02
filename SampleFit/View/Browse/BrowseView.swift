@@ -17,11 +17,16 @@ struct BrowseView: View {
                 VStack {
                     FeaturedExercisesView(privateInformation: privateInformation)
                     
-                    // iterating category instead of the actual items to prevent ForEach from making a copy of the items array which could fail in rerendering
-                    ForEach(Exercise.Category.allCases, id: \.self) { category in
-                        if privateInformation.exerciseInCategory[category] != nil{
-                            ExerciseCategoryRow(categoryName: category.description, items: privateInformation.exerciseInCategory[category]!)
-                        }}
+                    VStack {
+                        // iterating category instead of the actual items to prevent ForEach from making a copy of the items array which could fail in rerendering
+                        ForEach(Exercise.Category.allCases, id: \.self) { category in
+                            if privateInformation.exerciseInCategory[category] != nil{
+                                ExerciseCategoryRow(categoryName: category.description, items: privateInformation.exerciseInCategory[category]!)
+                            }}
+                    }
+                    
+                    ExerciseCategoryRow(categoryName: "Followee Uploads", items: privateInformation.followeeVideoUploads)
+                    
                     
                 }
             }
