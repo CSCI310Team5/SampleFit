@@ -25,6 +25,8 @@ struct MessagedError: Error {
 /// Handles asynchronous networking tasks.
 class NetworkQueryController {
     
+    let baseURL = URL(string: "http://127.0.0.1:8000")!
+    
     
     private func livestreamToExercise(live: Livestream, category: Exercise.Category)->Exercise{
         
@@ -1123,6 +1125,30 @@ class NetworkQueryController {
             .replaceError(with: [])
             .eraseToAnyPublisher()
     }
+        
+    func getFolloweeVideoUploads(token: String, email: String) -> AnyPublisher<[Exercise], Never> {
+        let url = baseURL.appendingPathComponent("user").appendingPathComponent("getAllFolloweeVideos")
+
+        let request = try! url.urlRequestWithToken(token)
+                                .withBody([
+                                    "email": email
+                                ])
+        
+        return URLSession.shared.debugDataTaskPublisher(for: request)
+            .map { $0.data }
+            .decode(type: [VideoFormat].self, decoder: JSONDecoder())
+            .map { result in
+                var videos: [Exercise]=[]
+                for video in result{
+                    let category = Exercise.Category.identify(networkCall: video.videoCategory)
+                    let tmp = self.videoToExercise(upload:video, uploadCategory: category)
+                    videos.append(tmp)
+                }
+                return videos
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
     
     
     
@@ -1630,4 +1656,35 @@ class NetworkQueryController {
     }
     
     static let shared = NetworkQueryController()
+}
+
+// MARK: - Helper extensions
+
+extension URL {
+    func urlRequestWithToken(_ token: String) -> URLRequest {
+        var request = URLRequest(url: self)
+        request.httpMethod="POST"
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return request
+    }
+}
+
+extension URLRequest {
+    static let jsonEncoder = JSONEncoder()
+    func withBody<T: Encodable>(_ dictionary: [String: T]) throws -> URLRequest {
+        var newRequest = self
+        let data = try Self.jsonEncoder.encode(dictionary)
+        newRequest.httpBody = data
+        return newRequest
+    }
+}
+
+extension URLSession {
+    func debugDataTaskPublisher(for request: URLRequest) -> AnyPublisher<DataTaskPublisher.Output, DataTaskPublisher.Failure> {
+        return self.dataTaskPublisher(for: request)
+            .handleEvents(receiveOutput: {
+                print(String(data: $0.data, encoding: .utf8) as Any)
+            })
+            .eraseToAnyPublisher()
+    }
 }

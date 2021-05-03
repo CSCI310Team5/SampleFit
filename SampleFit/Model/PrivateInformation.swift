@@ -21,6 +21,7 @@ class PrivateInformation: ObservableObject {
     @Published var workoutHistory: [Workout] = []
     @Published var watchedExercises: [Exercise] = []
     @Published var searchHistory: [String] = []
+    @Published var followeeVideoUploads: [Exercise] = []
     
     //MARK: - Asynchronous tasks
     private var networkQueryController = NetworkQueryController()

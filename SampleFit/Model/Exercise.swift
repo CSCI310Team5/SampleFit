@@ -95,6 +95,8 @@ class Exercise: Identifiable, ObservableObject {
                 return "O"
             case .situp:
                 return "SU"
+            default:
+                fatalError("Unhandled category")
             }
         
             
