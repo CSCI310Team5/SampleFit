@@ -49,6 +49,18 @@ struct UserDetail: View {
                 }
             }.padding()
             
+            
+            if user.workoutHistory.isEmpty{
+                Section{
+                NoResults(title: "No Workout History", description: "\(user.identifier) has not done any excercise")
+                }.padding()
+            }
+            else{
+                Section(header: Text("Workout History").font(.title2).bold().foregroundColor(.primary).textCase(.none)){
+                    WorkoutHistoryList(workoutHistory: user.workoutHistory)
+                }.padding()
+            }
+            
             Spacer()
         }
         .navigationTitle("\(user.identifier)")
@@ -58,6 +70,7 @@ struct UserDetail: View {
             //before the opening of this view, all publicprofile of other users don't have [exercise] for uploadedvideo， thus calling the function to get this specific user's uploaded list just now -- memory saving
             user.getExerciseUploads(userEmail: user.identifier)
             user.getRemainingUserInfo(userEmail: user.identifier)
+            user.getWorkoutHistory()
         }
     }
 }

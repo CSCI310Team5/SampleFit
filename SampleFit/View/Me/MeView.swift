@@ -62,6 +62,14 @@ struct MeView: View {
                         Image(systemName: "person.2.fill")
                     }
                 }
+                
+                NavigationLink(destination: FollowerListView(privateInformation: privateInformation)) {
+                    Label {
+                        Text("Followers")
+                    } icon: {
+                        Image(systemName: "person.2.circle")
+                    }
+                }
             }
             
             Section {

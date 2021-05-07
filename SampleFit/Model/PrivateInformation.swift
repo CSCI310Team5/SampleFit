@@ -22,6 +22,7 @@ class PrivateInformation: ObservableObject {
     @Published var watchedExercises: [Exercise] = []
     @Published var searchHistory: [String] = []
     @Published var followeeVideoUploads: [Exercise] = []
+    @Published var followers: [PublicProfile] = []
     
     //MARK: - Asynchronous tasks
     private var networkQueryController = NetworkQueryController()
@@ -39,7 +40,7 @@ class PrivateInformation: ObservableObject {
     private var getSearchHistoryCancellable: AnyCancellable?
     private var addSearchHistoryCancellable: AnyCancellable?
     private var emptySearchHistoryCancellable: AnyCancellable?
-  
+    private var _getFollowersCancellable: AnyCancellable?
     
     
     
@@ -60,6 +61,7 @@ class PrivateInformation: ObservableObject {
         self.favoriteExercises.removeAll()
         self.workoutHistory.removeAll()
         self.searchHistory.removeAll()
+        self.followers.removeAll()
     }
     
     
@@ -162,26 +164,20 @@ class PrivateInformation: ObservableObject {
             }
     }
     
+    func getFollowers(){
+        _getFollowersCancellable = networkQueryController.getFollowers(email:email, token: authenticationToken)
+            .receive(on: DispatchQueue.main)
+            .sink{[unowned self] returnedList in
+                followers = returnedList
+            }
+    }
+    
     func storeWorkoutHistory(token: String, email: String){
-        workoutHistory=[]
-        _getWorkoutHistoryCancellable = networkQueryController.getWorkoutHistory(token: token, email: email)
+        workoutHistory.removeAll()
+        _getWorkoutHistoryCancellable = networkQueryController.getWorkoutHistory(email: email)
             .receive(on: DispatchQueue.main)
             .sink{[unowned self] workouts in
-                for workout in workouts{
-                    var newHistory = Workout(caloriesBurned: Double(workout.calories)!, date: Date(), categories: "", duration: Int(workout.duration)!)
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "yyyy-MM-dd"
-                    let date = formatter.date(from: workout.completionTime)
-                    newHistory.date = date!
-                    
-                    for category in Exercise.Category.allCases{
-                        if category.networkCall==workout.category{
-                            newHistory.categories=category.description
-                        }
-                    }
-                    
-                    workoutHistory.append(newHistory)
-                }
+               workoutHistory=workouts
             }
     }
     

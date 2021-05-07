@@ -24,6 +24,7 @@ class PublicProfile: Identifiable, ObservableObject {
     
     @Published var uploadedExercises: [Exercise] = []
     @Published var isUploadedVideoListLoading = false
+    @Published var workoutHistory: [Workout] = []
     
     private var _usesMetricSystem: Bool
     
@@ -124,6 +125,14 @@ class PublicProfile: Identifiable, ObservableObject {
     private var _livestreamDeletionCancellable: AnyCancellable?
     private var _fetchNewProfileCancellable: AnyCancellable?
     private var _removeExerciseCancellable: AnyCancellable?
+    private var _getWorkoutHistoryCancellable: AnyCancellable?
+    
+    func getWorkoutHistory(){
+        self.workoutHistory.removeAll()
+        _getWorkoutHistoryCancellable = networkQueryController.getWorkoutHistory(email: self.identifier).receive(on: DispatchQueue.main).sink{[unowned self] historyList in
+            self.workoutHistory=historyList
+        }
+    }
     
     func removeProfile(){
         self.image=UIImage(systemName: "person.fill.questionmark")

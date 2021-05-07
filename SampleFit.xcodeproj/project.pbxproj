@@ -10,6 +10,7 @@
 		1803ADEE2634959700BCB073 /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803ADED2634959700BCB073 /* CommentView.swift */; };
 		1803AE082634EC3000BCB073 /* CommentHelpertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803AE072634EC3000BCB073 /* CommentHelpertView.swift */; };
 		181A237F26054C6F008A02D2 /* RetrivePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */; };
+		183423262646030400B8E7C1 /* FollowerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183423252646030400B8E7C1 /* FollowerListView.swift */; };
 		1845B9EF26025E0B00AD52F7 /* UploadSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */; };
 		184BE4242630ACA800A9E8A6 /* SpecialWorkoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184BE4232630ACA800A9E8A6 /* SpecialWorkoutView.swift */; };
 		186AB63F2613CC2D00F01BD9 /* PersonalProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AB63E2613CC2D00F01BD9 /* PersonalProfileUITests.swift */; };
@@ -130,6 +131,7 @@
 		1803ADED2634959700BCB073 /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		1803AE072634EC3000BCB073 /* CommentHelpertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentHelpertView.swift; sourceTree = "<group>"; };
 		181A237E26054C6F008A02D2 /* RetrivePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrivePasswordView.swift; sourceTree = "<group>"; };
+		183423252646030400B8E7C1 /* FollowerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerListView.swift; sourceTree = "<group>"; };
 		1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSheetView.swift; sourceTree = "<group>"; };
 		184BE4232630ACA800A9E8A6 /* SpecialWorkoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialWorkoutView.swift; sourceTree = "<group>"; };
 		186AB63E2613CC2D00F01BD9 /* PersonalProfileUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalProfileUITests.swift; sourceTree = "<group>"; };
@@ -299,6 +301,7 @@
 				1845B9EE26025E0B00AD52F7 /* UploadSheetView.swift */,
 				F6D7E7B226254968009D30A8 /* WorkoutCalendar.swift */,
 				F6D7E7BF26255180009D30A8 /* AddCalendarWorkoutView.swift */,
+				183423252646030400B8E7C1 /* FollowerListView.swift */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				F669332025DFB75C000D9442 /* LiveIndicator.swift in Sources */,
 				F66E6C2925F5EB6400F36D9D /* DisclosureIndicator.swift in Sources */,
 				F6DC400525E87F6200A1CD00 /* FavoriteExercisesList.swift in Sources */,
+				183423262646030400B8E7C1 /* FollowerListView.swift in Sources */,
 				F691AFCD25F609C400283CE5 /* ProfileEditor.swift in Sources */,
 				F61BA6C325D7795C00249ED1 /* Color+Helpers.swift in Sources */,
 				F691AFEA25F6FFE600283CE5 /* BirthdayEditor.swift in Sources */,

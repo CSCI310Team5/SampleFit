@@ -408,6 +408,40 @@ class NetworkQueryController {
             .eraseToAnyPublisher()
     }
     
+    
+    func getFollowers(email: String, token: String)-> AnyPublisher<[PublicProfile], Never>{
+        struct EncodeData: Codable{
+            var email: String
+        }
+        let encodeData = EncodeData(email: email)
+        let encode = try! JSONEncoder().encode(encodeData)
+        let url = URL(string: "http://127.0.0.1:8000/user/followList")!
+        var request = URLRequest(url: url)
+        request.httpMethod="POST"
+        request.httpBody=encode
+        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map{
+                $0.data
+            }
+            .decode(type: [OtherUserProfile].self, decoder: JSONDecoder())
+            .map{result in
+                var followers: [PublicProfile] = []
+                for r in result{
+                    let profile = PublicProfile(identifier: r.email, fullName: nil)
+                    profile.nickname = r.nickname
+                    profile.uploadedExercises = []
+                    if r.avatar != nil && !r.avatar!.isEmpty{
+                        profile.loadAvatar(url: r.avatar!)
+                    }
+                    followers.append(profile)
+                }
+                return followers
+            }
+            .replaceError(with: [])
+            .eraseToAnyPublisher()
+    }
+    
     func getUserUploads(email: String, nickname: String, avatar: UIImage) -> AnyPublisher<[Exercise],Never>{
         struct EncodeData: Codable{
             var email: String
@@ -801,7 +835,7 @@ class NetworkQueryController {
         }.resume()
     }
     
-    func getWorkoutHistory(token: String, email: String)->AnyPublisher<[WorkoutHistory],Never>{
+    func getWorkoutHistory(email: String)->AnyPublisher<[Workout],Never>{
         
         struct EncodeData: Codable{
             var email: String
@@ -812,15 +846,31 @@ class NetworkQueryController {
         var request = URLRequest(url: url)
         request.httpMethod="POST"
         request.httpBody = encode
-        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
+//        request.addValue("Token \(token)", forHTTPHeaderField: "Authorization")
         
         return URLSession.shared.dataTaskPublisher(for: request)
             .map{
                 $0.data
             }
             .decode(type: [WorkoutHistory].self, decoder: JSONDecoder())
-            .map{result in
-                return result
+            .map{workouts in
+                var workoutHistory: [Workout] = []
+                for workout in workouts{
+                    var newHistory = Workout(caloriesBurned: Double(workout.calories)!, date: Date(), categories: "", duration: Int(workout.duration)!)
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-dd"
+                    let date = formatter.date(from: workout.completionTime)
+                    newHistory.date = date!
+                    
+                    for category in Exercise.Category.allCases{
+                        if category.networkCall==workout.category{
+                            newHistory.categories=category.description
+                        }
+                    }
+                    
+                    workoutHistory.append(newHistory)
+                }
+                return workoutHistory
             }
             .replaceError(with: [])
             .eraseToAnyPublisher()
@@ -1654,6 +1704,7 @@ class NetworkQueryController {
             .replaceError(with: false)
             .eraseToAnyPublisher()
     }
+    
     
     static let shared = NetworkQueryController()
 }
