@@ -415,7 +415,7 @@ class NetworkQueryController {
         }
         let encodeData = EncodeData(email: email)
         let encode = try! JSONEncoder().encode(encodeData)
-        let url = URL(string: "http://127.0.0.1:8000/user/followList")!
+        let url = URL(string: "http://127.0.0.1:8000/user/followerList")!
         var request = URLRequest(url: url)
         request.httpMethod="POST"
         request.httpBody=encode
